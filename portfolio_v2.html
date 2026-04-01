@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huihao Xing | Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --space-bg: #030712;
+    --grid-color: rgba(0, 240, 255, 0.04);
+    --cyan: #00f0ff;
+    --cyan-dim: rgba(0, 240, 255, 0.25);
+    --purple: #bd00ff;
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --hud-bg: rgba(3, 7, 18, 0.85); /* 严格保留原版背景色 */
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background-color: var(--space-bg);
+    font-family: var(--font-mono);
+    color: var(--text-main);
+    overflow: hidden;
+  }
+
+  .app-container {
+    display: flex; flex-direction: row;
+    width: 100vw; height: 100vh; overflow: hidden;
+  }
+
+  /* --- DYNAMIC BACKGROUND --- */
+  #bg-layers { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  #starfield { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .star {
+    position: absolute; background: white; border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite alternate var(--del);
+  }
+  @keyframes twinkle {
+    0% { opacity: 0.1; transform: scale(0.8); }
+    100% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 6px rgba(255,255,255,0.6); }
+  }
+
+  .shooting-star {
+    position: absolute; width: 150px; height: 1.5px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,1));
+    border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 20px var(--cyan);
+    animation: shoot 25s linear infinite; opacity: 0; pointer-events: none;
+  }
+  .ss-1 { top: 10%; left: -20%; animation-delay: 2s; }
+  .ss-2 { top: 35%; left: -20%; animation-delay: 14s; }
+  @keyframes shoot {
+    0% { transform: translateX(0) translateY(0) rotate(20deg); opacity: 1; }
+    30% { transform: translateX(120vw) translateY(45vw) rotate(20deg); opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* --- AMBIENT TERMINAL --- */
+  #terminal {
+    position: absolute; bottom: 20px; left: 20px; z-index: 10;
+    width: 250px; height: 80px; overflow: hidden;
+    font-size: 0.6rem; color: var(--cyan); opacity: 0.5; pointer-events: none;
+  }
+  .term-line { margin-bottom: 2px; }
+
+  /* --- LEFT: UNIVERSE --- */
+  #universe { 
+    flex: 1; position: relative; display: flex; justify-content: center; align-items: center; 
+    overflow: hidden; z-index: 5; cursor: crosshair;
+  }
+
+  .sun {
+    position: absolute; z-index: 10; width: 110px; height: 110px;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .sun:hover { transform: scale(1.15); }
+  
+  .holo-wrapper {
+    position: absolute; inset: 0; display: flex; justify-content: center; align-items: center;
+    transform-style: preserve-3d; animation: core-spin 20s linear infinite;
+  }
+  @keyframes core-spin { 100% { transform: rotateY(360deg) rotateX(360deg); } }
+
+  .holo-ring {
+    position: absolute; width: 85px; height: 85px; border: 2px solid var(--cyan); border-radius: 4px;
+    background: rgba(0, 240, 255, 0.03); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.2);
+  }
+  .r1 { transform: rotateX(0deg) rotateY(0deg); }
+  .r2 { transform: rotateX(60deg) rotateY(45deg); border-color: var(--purple); }
+  .r3 { transform: rotateX(-60deg) rotateY(45deg); }
+
+  .core-text { position: relative; z-index: 15; text-align: center; }
+  .core-text h1 { font-size: 1.1rem; color: #fff; text-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan); font-weight: 800; line-height: 1.2; margin-bottom: 5px;}
+  .core-text span { font-size: 0.45rem; color: #000; font-weight: 700; background: rgba(0, 240, 255, 0.9); padding: 2px 6px; border-radius: 4px; display: inline-block; box-shadow: 0 0 10px var(--cyan); letter-spacing: 1px;}
+
+  .ring {
+    position: absolute; border-radius: 50%; border: 1px dashed var(--cyan-dim);
+    pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;
+  }
+  .ring-label {
+    position: absolute; left: 50%; transform: translateX(-50%); top: -10px;
+    color: var(--cyan); font-size: 0.75rem; letter-spacing: 4px;
+    text-shadow: 0 0 10px var(--cyan); font-weight: 600; background: var(--space-bg); padding: 0 10px;
+  }
+
+  .ring-1 { width: 30vh; height: 30vh; }
+  .ring-2 { width: 54vh; height: 54vh; }
+  .ring-3 { width: 78vh; height: 78vh; }
+
+  .planet-container {
+    position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; 
+    margin-top: -50px; margin-left: -50px; display: flex; justify-content: center; align-items: center; flex-direction: column;
+    z-index: 10; cursor: pointer;
+  }
+  
+  /* Hover Enhancements */
+  .planet-container:hover { animation-play-state: paused !important; z-index: 100; }
+  .planet-container:hover .planet-visual { transform: scale(1.6); box-shadow: 0 0 30px #fff; }
+  .planet-container:hover .planet-label { color: #fff; text-shadow: 0 0 10px var(--cyan); transform: translateY(10px); }
+  .planet-container:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+
+  @keyframes orbit-1 { from { transform: rotate(0deg) translateX(15vh) rotate(0deg); } to { transform: rotate(360deg) translateX(15vh) rotate(-360deg); } }
+  @keyframes orbit-2-rev { from { transform: rotate(360deg) translateX(27vh) rotate(-360deg); } to { transform: rotate(0deg) translateX(27vh) rotate(0deg); } }
+  @keyframes orbit-3 { from { transform: rotate(0deg) translateX(39vh) rotate(0deg); } to { transform: rotate(360deg) translateX(39vh) rotate(-360deg); } }
+
+  .o1 { animation: orbit-1 45s linear infinite; }
+  .o2 { animation: orbit-2-rev 55s linear infinite; }
+  .o3 { animation: orbit-3 75s linear infinite; }
+
+  .planet-visual { position: absolute; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;}
+  .project-planet { width: 26px; height: 26px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 20px var(--purple); border: 2px solid #fff; }
+  .exp-star { width: 22px; height: 22px; background: #fbbf24; box-shadow: 0 0 20px #fbbf24; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+  .skill-moon { width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
+
+  .planet-label {
+    position: absolute; top: 65px; white-space: nowrap; font-size: 0.7rem; font-weight: 600;
+    color: var(--text-dim); text-shadow: 0 0 5px rgba(0,240,255,0.3); transition: all 0.3s; pointer-events: none; 
+  }
+
+  /* NEW: Tooltip Logic */
+  .tooltip {
+    position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(0);
+    background: rgba(0, 240, 255, 0.15); border: 1px solid var(--cyan);
+    padding: 4px 10px; border-radius: 4px; opacity: 0; pointer-events: none;
+    transition: 0.3s; backdrop-filter: blur(5px); color: #fff; font-size: 0.65rem;
+    white-space: nowrap; box-shadow: 0 0 15px var(--cyan-dim); z-index: 150;
+  }
+  .tooltip b { color: var(--cyan); animation: pulse-text 1.5s infinite alternate; }
+  @keyframes pulse-text { from { text-shadow: 0 0 2px var(--cyan); } to { text-shadow: 0 0 10px var(--cyan); } }
+
+  /* --- HUD --- */
+  #hud {
+    width: 0; opacity: 0; transform: translateX(50px);
+    height: 100vh; background: var(--hud-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex; flex-direction: column; position: relative; overflow: hidden; z-index: 50; box-shadow: -10px 0 40px rgba(0, 240, 255, 0.15);
+  }
+  #hud.open { width: 520px; opacity: 1; transform: translateX(0); border-left: 1px solid var(--cyan-dim); }
+  
+  #hud::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0, 240, 255, 0.05) 51%); background-size: 100% 4px; z-index: 100; }
+
+  .close-btn {
+    position: absolute; top: 20px; right: 25px; z-index: 110;
+    background: rgba(0, 240, 255, 0.05); border: 1px solid var(--cyan-dim); color: var(--cyan);
+    width: 32px; height: 32px; border-radius: 4px; font-size: 1.5rem; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s;
+  }
+  .close-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan); }
+
+  .hud-header { padding: 35px 40px 20px; border-bottom: 1px solid var(--cyan-dim); background: rgba(0, 240, 255, 0.02); }
+  .sys-status { font-size: 0.75rem; color: var(--cyan); line-height: 1.8; letter-spacing: 1px;}
+
+  .hud-main { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; }
+
+  .data-type { color: var(--purple); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; font-weight: 700; letter-spacing: 2px;}
+  .data-title { font-size: 1.7rem; font-weight: 800; margin-bottom: 25px; color: #fff; line-height: 1.2;}
+  .data-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 30px; }
+  
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+  .metric-box { border: 1px solid var(--cyan-dim); background: rgba(0, 240, 255, 0.05); padding: 12px; border-radius: 4px; border-left: 4px solid var(--cyan); }
+  .metric-val { font-size: 1.2rem; color: var(--cyan); font-weight: 700; }
+  .metric-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; margin-top: 5px; }
+
+  .tag { display: inline-block; font-size: 0.7rem; padding: 4px 10px; border: 1px solid var(--purple); color: #e9d5ff; background: rgba(189, 0, 255, 0.15); margin: 0 5px 5px 0; border-radius: 3px; }
+
+  /* CONTACT PRORITY UI */
+  .contact-box { margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px dashed var(--cyan-dim); }
+  .contact-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 8px 12px; }
+  .contact-label { color: var(--cyan); font-size: 0.65rem; font-weight: 800; width: 65px;}
+  .contact-val { color: #fff; font-size: 0.8rem; text-decoration: none; flex: 1;}
+  .copy-btn { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 2px 8px; font-size: 0.6rem; cursor: pointer; border-radius: 2px; transition: 0.2s;}
+  .copy-btn:hover { background: var(--cyan); color: #000; }
+  .dl-btn { display: block; background: var(--cyan); color: #000; padding: 12px; text-align: center; text-decoration: none; font-weight: 800; margin-top: 15px; font-size: 0.8rem; box-shadow: 0 0 15px rgba(0,240,255,0.3); }
+
+  .type-cursor::after { content: '█'; margin-left: 5px; color: var(--cyan); animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* DEEP DIVE */
+  .deep-toggle { margin: 20px 0 0; padding: 10px 14px; border: 1px dashed var(--cyan-dim); cursor: pointer; border-radius: 4px; background: rgba(0,240,255,0.03); transition: 0.2s; }
+  .deep-toggle:hover { background: rgba(0,240,255,0.08); border-color: var(--cyan); }
+  .deep-toggle-label { color: var(--cyan); font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; }
+  .deep-panel { margin-top: 15px; border-left: 2px solid var(--cyan-dim); padding-left: 15px; }
+  .deep-block { margin-bottom: 18px; }
+  .deep-label { color: var(--purple); font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .deep-text { font-size: 0.82rem; color: var(--text-dim); line-height: 1.65; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+  /* GITHUB BUTTON */
+  .github-btn { display: block; margin-top: 20px; padding: 10px 14px; border: 1px solid var(--cyan-dim); color: var(--cyan); text-decoration: none; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; background: rgba(0,240,255,0.03); border-radius: 4px; transition: 0.2s; text-align: center; }
+  .github-btn:hover { background: rgba(0,240,255,0.1); border-color: var(--cyan); box-shadow: 0 0 15px var(--cyan-dim); }
+
+  /* PERSISTENT STATUS BAR */
+  #status-bar { position: absolute; top: 18px; right: 20px; z-index: 20; display: flex; gap: 12px; align-items: center; pointer-events: none; }
+  .status-pill { font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 3px; border: 1px solid; }
+  .status-open { color: #4ade80; border-color: rgba(74,222,128,0.4); background: rgba(74,222,128,0.08); }
+  .status-opt { color: var(--cyan); border-color: var(--cyan-dim); background: rgba(0,240,255,0.06); }
+  .status-kaggle { color: #f59e0b; border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.06); }
+
+  /* COMPETITION PLANET */
+  .comp-gem { width: 20px; height: 20px; background: #f59e0b; clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); box-shadow: 0 0 18px #f59e0b; }
+
+</style>
+</head>
+<body onclick="handleGlobalClick(event)">
+
+<div id="bg-layers">
+  <div id="starfield"></div>
+  <div class="grid-overlay"></div>
+  <div class="shooting-star ss-1"></div>
+  <div class="shooting-star ss-2"></div>
+</div>
+
+<div id="terminal"></div>
+
+<div class="app-container">
+  <div id="universe">
+    <!-- PERSISTENT STATUS BAR -->
+    <div id="status-bar">
+      <span class="status-pill status-open">OPEN TO WORK</span>
+      <span class="status-pill status-opt">OPT ACTIVE</span>
+      <span class="status-pill status-kaggle">KAGGLE TOP 3%</span>
+    </div>
+
+    <div class="sun" onclick="loadData('profile'); event.stopPropagation();">
+      <div class="holo-wrapper">
+        <div class="holo-ring r1"></div><div class="holo-ring r2"></div><div class="holo-ring r3"></div>
+      </div>
+      <div class="core-text"><h1>HUIHAO<br>XING</h1><span>DATA SCIENTIST</span></div>
+    </div>
+
+    <div class="ring ring-1"><div class="ring-label">SKILLS</div></div>
+    <div class="planet-container o1" style="animation-delay:0s;" onclick="loadData('s_python'); event.stopPropagation();">
+      <div class="tooltip">Advanced <b>SQL / ETL</b></div>
+      <div class="planet-visual skill-moon"></div><div class="planet-label">Python / SQL</div>
+    </div>
+    <div class="planet-container o1" style="animation-delay:-15s;" onclick="loadData('s_ml'); event.stopPropagation();">
+      <div class="tooltip"><b>XGBoost / Ensemble</b></div>
+      <div class="planet-visual skill-moon"></div><div class="planet-label">Machine Learning</div>
+    </div>
+    <div class="planet-container o1" style="animation-delay:-30s;" onclick="loadData('s_stat'); event.stopPropagation();">
+      <div class="tooltip"><b>Power Analysis / MDE</b></div>
+      <div class="planet-visual skill-moon"></div><div class="planet-label">A/B Testing</div>
+    </div>
+
+    <div class="ring ring-2"><div class="ring-label">PROJECTS</div></div>
+    <div class="planet-container o2" style="animation-delay:0s;" onclick="loadData('p_gbh'); event.stopPropagation();">
+      <div class="tooltip"><b>Equity Analysis</b> · NPR</div>
+      <div class="planet-visual project-planet" style="background:#00f0ff; box-shadow: 0 0 20px #00f0ff;"></div><div class="planet-label">Boston Bus Equity</div>
+    </div>
+    <div class="planet-container o2" style="animation-delay:-10s;" onclick="loadData('p_mbta'); event.stopPropagation();">
+      <div class="tooltip">Model MAE: <b>3.56 min</b></div>
+      <div class="planet-visual project-planet"></div><div class="planet-label">MBTA Prediction</div>
+    </div>
+    <div class="planet-container o2" style="animation-delay:-20s;" onclick="loadData('p_viral'); event.stopPropagation();">
+      <div class="tooltip">Model AUC: <b>0.884</b></div>
+      <div class="planet-visual project-planet"></div><div class="planet-label">Content Predictor</div>
+    </div>
+    <div class="planet-container o2" style="animation-delay:-30s;" onclick="loadData('p_ab'); event.stopPropagation();">
+      <div class="tooltip">CTR Lift: <b>+4pp</b></div>
+      <div class="planet-visual project-planet"></div><div class="planet-label">Title A/B Test</div>
+    </div>
+    <div class="planet-container o2" style="animation-delay:-40s;" onclick="loadData('p_ecom'); event.stopPropagation();">
+      <div class="tooltip"><b>Funnel · CVR</b> Analysis</div>
+      <div class="planet-visual project-planet"></div><div class="planet-label">GMV Analysis</div>
+    </div>
+    <div class="planet-container o2" style="animation-delay:-50s;" onclick="loadData('p_kaggle'); event.stopPropagation();">
+      <div class="tooltip">Rank: <b>123 / 4143</b></div>
+      <div class="planet-visual comp-gem"></div><div class="planet-label">Kaggle Top 3%</div>
+    </div>
+
+    <div class="ring ring-3"><div class="ring-label">EXPERIENCE</div></div>
+    <div class="planet-container o3" style="animation-delay:0s;" onclick="loadData('e_bu'); event.stopPropagation();">
+      <div class="tooltip"><b>M.S. Data Science</b></div>
+      <div class="planet-visual exp-star"></div><div class="planet-label">Boston University</div>
+    </div>
+    <div class="planet-container o3" style="animation-delay:-18.7s;" onclick="loadData('e_tencent'); event.stopPropagation();">
+      <div class="tooltip">Efficiency: <b>+35%</b></div>
+      <div class="planet-visual exp-star"></div><div class="planet-label">Tencent Internship</div>
+    </div>
+    <div class="planet-container o3" style="animation-delay:-37.5s;" onclick="loadData('e_gbh'); event.stopPropagation();">
+      <div class="tooltip"><b>NPR / PBS</b> DS Consulting</div>
+      <div class="planet-visual exp-star"></div><div class="planet-label">GBH Consulting</div>
+    </div>
+    <div class="planet-container o3" style="animation-delay:-56.2s;" onclick="loadData('e_syr'); event.stopPropagation();">
+      <div class="tooltip">GPA: <b>3.7 / Top 10%</b></div>
+      <div class="planet-visual exp-star"></div><div class="planet-label">Syracuse University</div>
+    </div>
+  </div>
+
+  <div id="hud">
+    <button class="close-btn" onclick="closeHUD()">✕</button>
+    <div class="hud-header">
+      <div class="sys-status">USER: HUIHAO_XING<br>STATUS: <span style="color:#4ade80;">OPT ACTIVE</span><br>SYSTEM: ONLINE <span class="blink">_</span></div>
+    </div>
+    <div class="hud-main" id="display-area"></div>
+  </div>
+</div>
+
+<script>
+  // Twinkle Starfield Init
+  const starfield = document.getElementById('starfield');
+  for(let i=0; i<100; i++) {
+    let star = document.createElement('div'); star.className = 'star';
+    let sz = Math.random() * 2.5 + 0.5; star.style.width = sz + 'px'; star.style.height = sz + 'px';
+    star.style.left = Math.random() * 100 + 'vw'; star.style.top = Math.random() * 100 + 'vh';
+    star.style.setProperty('--dur', (Math.random() * 4 + 2) + 's'); star.style.setProperty('--del', (Math.random() * 5 * -1) + 's');
+    starfield.appendChild(star);
+  }
+
+  // Ambient Terminal Engine
+  const terminal = document.getElementById('terminal');
+  const logs = [
+    "> Initialize cluster...", "> Connecting to Azure Data Lake...", "> Load Scikit-learn Success.",
+    "> Executing SQL Window functions...", "> [p < 0.05] Significance detected.", "> TF-IDF Vectorizing titles...",
+    "> Random Forest: n_estimators=100", "> Spark ETL job complete.", "> Optimizing MDE parameters..."
+  ];
+  let logIdx = 0;
+  function addLog() {
+    const line = document.createElement('div');
+    line.className = 'term-line';
+    line.innerText = logs[logIdx];
+    terminal.appendChild(line);
+    if (terminal.childNodes.length > 5) terminal.removeChild(terminal.firstChild);
+    logIdx = (logIdx + 1) % logs.length;
+    setTimeout(addLog, Math.random() * 2000 + 1000);
+  }
+  addLog();
+
+  const DB = {
+    'profile': {
+      type: 'IDENTITY CORE', title: 'Huihao Xing',
+      desc: 'M.S. Data Science, Boston University (Jan 2026). Specialized in machine learning, A/B experimentation, and scalable data engineering. Open to DS / DA / Strategy Ops roles · OPT Active.',
+      metrics: [ {v: 'M.S. DS', l: 'Boston University'}, {v: 'OPT', l: 'Active · Immediate'} ],
+      tags: ['Data Science', 'Data Analytics', 'Strategy Ops'],
+      isProfile: true
+    },
+    'p_kaggle': {
+      type: 'COMPETITION', title: 'Kaggle: Telco Churn',
+      desc: 'Ranked 123 / 4,143 (top 3%) in Kaggle Playground S6E3. Built a three-model stacking pipeline (XGBoost + CatBoost + LightGBM) with 10-fold stratified CV, inner-fold target encoding to prevent leakage, and an optimized rank-averaging ensemble. Feature engineering included N-gram category interactions, frequency encoding, and arithmetic charge features.',
+      metrics: [ {v: '123 / 4143', l: 'Leaderboard Rank'}, {v: 'Top 3%', l: 'Percentile'} ],
+      tags: ['XGBoost', 'CatBoost', 'LightGBM', 'Ensemble', 'Feature Engineering'],
+      deep: {
+        why: 'Standard single-model approaches plateau on tabular churn data due to diverse feature types (categorical services + continuous charges). Ensemble stacking captures different bias-variance trade-offs across tree algorithms.',
+        how: '10-fold outer CV + 5-fold inner CV for target encoding (prevents leakage). Three models trained independently; final predictions combined via rank-averaging + scipy-optimized weight search. N-gram bigram/trigram features on service combinations captured interaction effects standard models miss.',
+        finding: 'Rank-averaging consistently outperformed simple averaging. Charges-deviation feature (TotalCharges − tenure × MonthlyCharges) was a top driver—customers whose total spend diverges from expected are higher churn risk.',
+        limitation: 'GPU-accelerated training (CUDA / GPU flags) required; results not fully reproducible on CPU-only environments without adjusting device params.'
+      },
+      github: 'https://github.com/huihaoxing'
+    },
+    'p_gbh': {
+      type: 'PROJECT ARCHIVE', title: 'Boston Bus Equity Analysis',
+      desc: 'Led metric design and 5-year EDA for GBH News (NPR affiliate) to quantify service inequity across MBTA bus routes. Identified that the standard "schedule adherence" metric systematically underestimates passenger wait time when buses depart early—reconstructed a passenger-centric delay metric using next available bus logic.',
+      metrics: [ {v: 'Route 14', l: '>16 min avg delay'}, {v: '5 Years', l: 'Data Analyzed' } ],
+      tags: ['Metric Design', 'EDA', 'Time Series', 'Public Policy', 'Python / SQL'],
+      deep: {
+        why: 'GBH\'s journalism team needed data to support transit equity advocacy. Existing MBTA KPIs (schedule adherence) masked real passenger experience: a bus leaving 2 min early is counted "on time" but strands waiting passengers.',
+        how: 'Constructed available_bus_depart_time variable—earliest bus actually catchable given scheduled arrival. Compared 2019 vs 2022 ridership across route tiers. Joined MBTA performance data with 2023 Passenger Survey demographics to identify which communities bear the worst delays.',
+        finding: 'High-delay routes (14, 23, 28, 111) disproportionately serve lower-income and minority communities. Route 14 averaged >16 min delay. Routes 23 and 28 each improved ~3 min post-COVID; Route 24 worsened by 7 min.',
+        limitation: 'Ridership data covers Fall seasons only—seasonal variation not fully captured. AFC undercounting (passengers not tapping CharlieCards) may bias boardings data.'
+      },
+      github: 'https://github.com/huihaoxing'
+    },
+    'p_mbta': {
+      type: 'PROJECT ARCHIVE', title: 'MBTA Delay Prediction (Azure)',
+      desc: 'Built an end-to-end delay prediction system for the Green Line B branch integrating real-time weather (OpenWeather API) and event data (Ticketmaster API). Designed cloud ETL pipelines on Azure; XGBoost regressor selected by AutoML achieved MAE 3.56 min. Statistically confirmed weather and events as delay drivers via ANOVA and T-test.',
+      metrics: [ {v: '3.56 min', l: 'Model MAE'}, {v: 'F=160.49', l: 'ANOVA (weather)'} ],
+      tags: ['Azure AutoML', 'Apache Spark', 'XGBoost', 'ANOVA / T-Test', 'REST APIs'],
+      deep: {
+        why: 'Standard MBTA delay models ignore external context. Fenway Park and TD Garden events create predictable rider surges—if you can forecast delays from known event schedules + weather forecasts, MBTA can pre-position resources.',
+        how: 'Merged MBTA arrival data with OpenWeather and Ticketmaster event records by timestamp and geo-proximity. ETL via Apache Spark + Azure Data Factory. Azure AutoML evaluated 20+ model configurations; XGBoost Regressor won. ANOVA tested weather category vs delay; independent T-test compared event-present vs no-event hours.',
+        finding: 'Events added ~0.5 min average delay (1.5→2.0 min, t=−14.87, p<0.0001). Snow and smoke were most disruptive weather types. 7PM event peak is the highest-risk window. R²=0.34—model explains one-third of variance; useful for trend forecasting, not exact prediction.',
+        limitation: 'R² of 0.34 reflects that most delay variance comes from unobserved factors (mechanical issues, signal failures). Adding live ridership counts or incident reports would improve significantly.'
+      },
+      github: 'https://github.com/huihaoxing'
+    },
+    'p_viral': {
+      type: 'PROJECT ARCHIVE', title: 'High-Potential Content Predictor',
+      desc: 'Built an XGBoost classifier to identify high-viral-potential tech videos before publication for Tencent News editorial team. Scraped 6,000+ YouTube records; combined TF-IDF title features with TruncatedSVD (50 components) for semantic compression. AUC 0.884 / Recall 84.6% on held-out validation set.',
+      metrics: [ {v: '0.884', l: 'AUC Score'}, {v: '84.6%', l: 'Recall'} ],
+      tags: ['XGBoost', 'TF-IDF', 'TruncatedSVD', 'Python', 'Web Scraping'],
+      deep: {
+        why: 'Editors at Tencent News relied on intuition to pick tech video topics. High-potential content was frequently missed. Goal: build a coarse pre-filter that surfaces top 20% of candidates for human review—maximizing Recall over Precision to minimize miss rate.',
+        how: 'Scraped YouTube Data API for title, views, channel, publish date. Features: TF-IDF on titles → TruncatedSVD (50 dims) for semantic compression + channel historical performance stats. XGBoost chosen over LightGBM because dataset size (~6k) didn\'t require LightGBM\'s speed advantage, and XGBoost provided better regularization control for this feature set.',
+        finding: 'Channel historical features and title semantic features were top-2 drivers. "Contrast/conflict" framing in titles (e.g., "X vs Y", "Why X fails") consistently correlated with viral potential. Top-20% candidate pool captured 84.6% of actual high-potential content.',
+        limitation: 'Training data is YouTube-scraped, not Tencent internal. Cross-platform distribution shift is a real concern. Model intended as editorial filtering tool, not a deployment-ready recommender.'
+      },
+      github: 'https://github.com/huihaoxing'
+    },
+    'p_ab': {
+      type: 'PROJECT ARCHIVE', title: 'Title A/B Experiment (Tencent)',
+      desc: 'Designed a statistically rigorous A/B experiment to test LLM-optimized titles vs. DeepL direct translations for a 400k DAU tech news channel. Full power analysis: baseline CTR=12%, MDE=3%, α=0.05, β=0.2 → 128k samples/group. Simulated result: +4pp CTR lift (p<0.05), completion rate held stable.',
+      metrics: [ {v: '+4pp', l: 'CTR Lift'}, {v: '128k', l: 'Samples / Group'} ],
+      tags: ['A/B Testing', 'Power Analysis', 'Hypothesis Testing', 'LLM Prompt Design'],
+      deep: {
+        why: 'Tencent News tech channel relies heavily on translated foreign content. DeepL produces accurate but literal titles that underperform in Chinese social media CTR. Hypothesis: LLM-rewritten titles with localized framing significantly improve CTR without hurting content integrity (guardrail: completion rate).',
+        how: 'User-level randomization (not article-level) to prevent contamination. Fixed prompt template for LLM group; DeepL baseline for control. Sample size calculated via two-proportion Z-test power formula. CTR as primary metric; completion rate as guardrail to detect quality degradation.',
+        finding: 'Simulated CTR: 12% → 16% (+4pp, p<0.05). Completion rate delta was not statistically significant—suggesting title quality did not mislead users. Supports rolling out LLM-optimized titles as default.',
+        limitation: 'Results are simulated, not from a live experiment. Real-world novelty effects (users clicking LLM titles due to curiosity) could inflate short-term CTR. Recommend 2-week holdout before full rollout.'
+      },
+      github: 'https://github.com/huihaoxing'
+    },
+    'p_ecom': {
+      type: 'PROJECT ARCHIVE', title: 'E-Commerce GMV Attribution',
+      desc: 'Diagnosed declining GMV on an international e-commerce platform by decomposing Traffic × CVR × AOV. Root cause: checkout conversion rate drop. Funnel analysis pinpointed the Browse→Payment stage. Random Forest (via grid search) identified page view depth and new/returning user status as top conversion drivers.',
+      metrics: [ {v: 'CVR Drop', l: 'Root Cause'}, {v: 'RF + Grid', l: 'Model Selection'} ],
+      tags: ['Funnel Analysis', 'Random Forest', 'Grid Search', 'EDA', 'Logistic Regression'],
+      deep: {
+        why: 'GMV = Traffic × CVR × AOV. Most teams jump to ad spend or pricing when GMV drops. Systematic decomposition forces the question: which lever is actually broken? This project trains the structured diagnostic instinct that separates DS from analysts.',
+        how: 'Three-layer metric decomposition first. Funnel: Home→Listing→Cart→Payment—drop concentrated at Cart→Payment. EDA revealed regional and new/returning user conversion gaps. Built Logistic Regression, Decision Tree, and Random Forest classifiers; used grid search (max_depth, n_estimators, min_samples_leaf) to tune; Random Forest selected by F1 on imbalanced test set.',
+        finding: 'New users converted at significantly lower rates. Page view depth (browsing 3+ pages) was the single strongest predictor of purchase. Implication: improving onboarding UX and product discovery for new users > blanket discount campaigns.',
+        limitation: 'Dataset is from a course project (simulated e-commerce data). Feature set lacks session-level behavioral signals (time-on-page, scroll depth) that real conversion models depend on heavily.'
+      },
+      github: 'https://github.com/huihaoxing'
+    },
+    'e_tencent': {
+      type: 'EXPERIENCE LOG', title: 'Operations Intern @ Tencent News',
+      desc: 'Monitored content performance metrics (views, likes, comments) and identified viral keyword-traffic patterns to build a reusable topic evaluation framework. Applied GenAI to streamline content SOPs, cutting manual processing time ~35% and contributing to 300k+ incremental views.',
+      metrics: [ {v: '-35%', l: 'Processing Time'}, {v: '300k+', l: 'Views Driven'} ],
+      tags: ['Content Analytics', 'GenAI', 'Metric Design', 'SOP Optimization']
+    },
+    'e_gbh': {
+      type: 'EXPERIENCE LOG', title: 'Data Science Consultant @ GBH',
+      desc: 'GBH News is Boston\'s NPR and PBS flagship station. Led a 5-person DS team to build a bus equity analysis for the newsroom. Redefined core delay metric to passenger-centric wait time, ran EDA across 5 years of MBTA data, and produced policy-ready findings on service disparities across communities.',
+      metrics: [ {v: 'NPR / PBS', l: 'Client'}, {v: '5 Years', l: 'Data Analyzed'} ],
+      tags: ['Consulting', 'Metric Design', 'EDA', 'Public Policy', 'Python / SQL']
+    },
+    'e_bu': {
+      type: 'EDUCATION LOG', title: 'M.S. Data Science — Boston University',
+      desc: 'Graduated January 2026. Core focus: machine learning (supervised/unsupervised), statistical modeling, linear algebra (SVD, eigendecomposition), and big data engineering. Excellence Admission Scholarship recipient.',
+      metrics: [ {v: 'Jan 2026', l: 'Graduation'}, {v: 'Scholarship', l: 'Excellence Award'} ],
+      tags: ['Machine Learning', 'Statistical Modeling', 'Big Data Engineering']
+    },
+    'e_syr': {
+      type: 'EDUCATION LOG', title: 'B.S. Business Analytics — Syracuse',
+      desc: 'Graduated May 2024. Minor in Computer Science. Summa Cum Laude (GPA 3.7/4.0, Top 10%). Coursework in data mining, predictive modeling, and database management. "Invest in Success" scholarship.',
+      metrics: [ {v: '3.7 / 4.0', l: 'GPA'}, {v: 'Top 10%', l: 'Class Rank'} ],
+      tags: ['Business Analytics', 'Data Mining', 'Computer Science']
+    },
+    's_python': { type: 'SKILL CLUSTER', title: 'Languages & Tools', desc: 'Python (Pandas, NumPy, Scikit-learn), advanced SQL (CTEs, window functions, multi-table joins), Apache Spark, Azure (AutoML, Data Factory). Tableau, Power BI, Plotly.', metrics: [], tags: ['Python', 'Advanced SQL', 'Spark', 'Azure', 'Tableau', 'Power BI'] },
+    's_ml': { type: 'SKILL CLUSTER', title: 'Machine Learning', desc: 'XGBoost, CatBoost, LightGBM, Random Forest, Logistic Regression. Feature engineering, target encoding, grid/random search. Ensemble methods: stacking, rank-averaging, optimized weights.', metrics: [], tags: ['XGBoost', 'LightGBM', 'Random Forest', 'Ensemble', 'Feature Engineering'] },
+    's_stat': { type: 'SKILL CLUSTER', title: 'Stats & Experimentation', desc: 'A/B experiment design, power analysis (MDE, sample size), hypothesis testing (T-test, ANOVA), metric design, causal inference fundamentals.', metrics: [], tags: ['A/B Testing', 'Power Analysis', 'ANOVA / T-Test', 'Metric Design'] }
+  };
+
+  const hud = document.getElementById('hud');
+  const displayArea = document.getElementById('display-area');
+  let typeTimeout;
+
+  function loadData(id) {
+    const data = DB[id]; if(!data) return;
+    hud.classList.add('open');
+    
+    let topSection = "";
+    if(data.isProfile) {
+      topSection = `
+        <div class="contact-box">
+          <div class="contact-row"><span class="contact-label">EMAIL</span><span class="contact-val">jackxing175@gmail.com</span><button class="copy-btn" onclick="copyText('jackxing175@gmail.com', this)">[COPY]</button></div>
+          <div class="contact-row"><span class="contact-label">LINKEDIN</span><span class="contact-val">linkedin.com/in/huihao</span><button class="copy-btn" onclick="copyText('https://www.linkedin.com/in/huihao/', this)">[COPY]</button></div>
+          <a href="Huihao_Xing_Resume.pdf" download class="dl-btn">> DOWNLOAD FULL RESUME .PDF</a>
+        </div>`;
+    }
+
+    let metrics = data.metrics.length ? `<div class="metrics-grid">${data.metrics.map(m=>`<div class="metric-box"><div class="metric-val">${m.v}</div><div class="metric-label">${m.l}</div></div>`).join('')}</div>` : "";
+    let tags = data.tags ? `<div class="tags-container">${data.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : "";
+
+    let deepSection = "";
+    if(data.deep) {
+      deepSection = `
+        <div class="deep-toggle" onclick="toggleDeep(this)">
+          <span class="deep-toggle-label">> DEEP DIVE ↓</span>
+        </div>
+        <div class="deep-panel" style="display:none;">
+          <div class="deep-block"><div class="deep-label">◆ WHY THIS PROBLEM</div><div class="deep-text">${data.deep.why}</div></div>
+          <div class="deep-block"><div class="deep-label">◆ HOW IT WAS BUILT</div><div class="deep-text">${data.deep.how}</div></div>
+          <div class="deep-block"><div class="deep-label">◆ KEY FINDING</div><div class="deep-text">${data.deep.finding}</div></div>
+          <div class="deep-block"><div class="deep-label">◆ LIMITATION / NEXT STEP</div><div class="deep-text">${data.deep.limitation}</div></div>
+        </div>`;
+    }
+
+    let githubBtn = "";
+    if(data.github) {
+      githubBtn = `<a href="${data.github}" target="_blank" class="github-btn">> VIEW CODE ON GITHUB ↗</a>`;
+    }
+
+    displayArea.innerHTML = `
+      ${topSection}
+      <div class="data-type">${data.type}</div>
+      <div class="data-title type-cursor" id="type-target"></div>
+      <div class="data-desc" id="desc-target" style="opacity:0; transition:0.3s;">${data.desc}</div>
+      <div id="meta-target" style="opacity:0; transition:0.3s 0.1s;">${metrics}${tags}${deepSection}${githubBtn}</div>
+    `;
+
+    const target = document.getElementById('type-target');
+    let i = 0; clearTimeout(typeTimeout);
+    function type() {
+      if (i < data.title.length) { target.innerHTML += data.title.charAt(i); i++; typeTimeout = setTimeout(type, 5); }
+      else { target.classList.remove('type-cursor'); document.getElementById('desc-target').style.opacity = 1; document.getElementById('meta-target').style.opacity = 1; }
+    }
+    setTimeout(type, 100);
+  }
+
+  function toggleDeep(el) {
+    const panel = el.nextElementSibling;
+    const label = el.querySelector('.deep-toggle-label');
+    if(panel.style.display === 'none') {
+      panel.style.display = 'block';
+      panel.style.animation = 'fadeIn 0.3s ease';
+      label.textContent = '> DEEP DIVE ↑';
+    } else {
+      panel.style.display = 'none';
+      label.textContent = '> DEEP DIVE ↓';
+    }
+  }
+
+  function handleGlobalClick(e) { if(e.target.id === 'universe') closeHUD(); }
+  function closeHUD() { hud.classList.remove('open'); }
+  function copyText(txt, btn) {
+    navigator.clipboard.writeText(txt).then(() => {
+      const orig = btn.innerText; btn.innerText = '[DONE]'; btn.style.borderColor = '#4ade80';
+      setTimeout(() => { btn.innerText = orig; btn.style.borderColor = 'var(--cyan)'; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>
