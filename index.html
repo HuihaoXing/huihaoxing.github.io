@@ -5,544 +5,1722 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Huihao Xing | Data Scientist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --space-bg: #030712;
-    --grid-color: rgba(0, 240, 255, 0.04);
-    --cyan: #00f0ff;
-    --cyan-dim: rgba(0, 240, 255, 0.25);
-    --purple: #bd00ff;
-    --text-main: #f8fafc;
-    --text-dim: #94a3b8;
-    --hud-bg: rgba(3, 7, 18, 0.85); /* 严格保留原版背景色 */
-    --font-mono: 'JetBrains Mono', monospace;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  /* 基础与主题色 */
+  --bg: #030712;
+  --cyan: #00f0ff;
+  --cyan-dim: rgba(0,240,255,0.2);
+  --cyan-glow: rgba(0,240,255,0.06);
+  --purple: #bd00ff;
+  --amber: #f59e0b;
+  --green: #4ade80;
   
-  body {
-    background-color: var(--space-bg);
-    font-family: var(--font-mono);
-    color: var(--text-main);
-    overflow: hidden;
-  }
+  --text: #f8fafc;
+  --muted: #a8b8cc; 
+  --dim: #b0bec5;   
 
-  .app-container {
-    display: flex; flex-direction: row;
-    width: 100vw; height: 100vh; overflow: hidden;
-  }
+  --bright: #f8fafc;
+  --bright-dim: #e8eef4;
+  --bright-muted: #cbd5e1;
 
-  /* --- DYNAMIC BACKGROUND --- */
-  #bg-layers { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-  #starfield { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-  .star {
-    position: absolute; background: white; border-radius: 50%;
-    animation: twinkle var(--dur) ease-in-out infinite alternate var(--del);
-  }
-  @keyframes twinkle {
-    0% { opacity: 0.1; transform: scale(0.8); }
-    100% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 6px rgba(255,255,255,0.6); }
-  }
+  --rule: rgba(0,240,255,0.15);
+  --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --mono: 'JetBrains Mono', monospace;
+  --sans-zh: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--mono);color:var(--text);overflow-x:hidden}
 
-  .shooting-star {
-    position: absolute; width: 150px; height: 1.5px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,1));
-    border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 20px var(--cyan);
-    animation: shoot 25s linear infinite; opacity: 0; pointer-events: none;
-  }
-  .ss-1 { top: 10%; left: -20%; animation-delay: 2s; }
-  .ss-2 { top: 35%; left: -20%; animation-delay: 14s; }
-  @keyframes shoot {
-    0% { transform: translateX(0) translateY(0) rotate(20deg); opacity: 1; }
-    30% { transform: translateX(120vw) translateY(45vw) rotate(20deg); opacity: 0; }
-    100% { opacity: 0; }
-  }
+/* ── 中文排版专项优化 (放大字号) ── */
+body.lang-zh { font-family: var(--sans-zh); }
+body.lang-zh .hero-eyebrow,
+body.lang-zh .hero-role,
+body.lang-zh .tl-terminal,
+body.lang-zh #eyebrow-text,
+body.lang-zh .eyebrow-cursor,
+body.lang-zh .radar-label{ font-family: var(--mono); }
+body.lang-zh .hero-name { font-family: var(--sans-zh); font-weight: 900; }
 
-  /* --- AMBIENT TERMINAL --- */
-  #terminal {
-    position: absolute; bottom: 20px; left: 20px; z-index: 10;
-    width: 250px; height: 80px; overflow: hidden;
-    font-size: 0.6rem; color: var(--cyan); opacity: 0.5; pointer-events: none;
-  }
-  .term-line { margin-bottom: 2px; }
+/* 中文模式下全局放大可读性字体 */
+body.lang-zh .hero-desc { font-size: 0.96rem; line-height: 1.9; }
+body.lang-zh .pc-desc, body.lang-zh .sk-desc, body.lang-zh .tl-desc { font-size: 0.86rem; line-height: 1.85; }
+body.lang-zh .h-desc, body.lang-zh .db-txt, body.lang-zh .contact-sub { font-size: 0.86rem; line-height: 1.85; }
+body.lang-zh .chip, body.lang-zh .pill { font-size: 0.68rem; padding: 4px 11px; }
+body.lang-zh .nav-links a, body.lang-zh .footer-link { font-size: 0.72rem; }
+body.lang-zh .sn-label { font-size: 0.62rem; }
+body.lang-zh .tl-role, body.lang-zh .pc-title, body.lang-zh .sk-title { font-size: 1.05rem; }
+body.lang-zh .edu-deg { font-size: 1.25rem; }
+body.lang-zh .tooltip { font-size: 0.68rem; padding: 6px 14px; }
+body.lang-zh .planet-label { font-size: 0.72rem; }
+body.lang-zh .ring-label { font-size: 0.75rem; padding: 2px 12px; }
+body.lang-zh .section-label { font-size: 0.7rem; }
+body.lang-zh .btn { font-size: 0.75rem; }
+body.lang-zh .view-detail-btn, body.lang-zh .dl-btn { font-size: 0.75rem; }
+body.lang-zh .cr-lbl { font-size: 0.62rem; width: 75px; }
+body.lang-zh .cr-val { font-size: 0.8rem; }
+body.lang-zh .cr-hint { font-size: 0.55rem; }
 
-  /* --- LEFT: UNIVERSE --- */
-  #universe { 
-    flex: 1; position: relative; display: flex; justify-content: center; align-items: center; 
-    overflow: hidden; z-index: 5; cursor: crosshair;
-  }
+/* ── HIGHLIGHT ANIMATION ── */
+@keyframes card-highlight{
+  0%  {box-shadow:0 0 0 2px var(--cyan),0 0 30px rgba(0,240,255,0.5);transform:translateY(-4px)}
+  70% {box-shadow:0 0 0 2px var(--cyan),0 0 30px rgba(0,240,255,0.5);transform:translateY(-4px)}
+  100%{box-shadow:none;transform:translateY(0)}
+}
+@keyframes tl-highlight{
+  0%  {border-left-color:var(--cyan);background:rgba(0,240,255,0.08);box-shadow:inset 4px 0 20px rgba(0,240,255,0.15)}
+  70% {border-left-color:var(--cyan);background:rgba(0,240,255,0.08);box-shadow:inset 4px 0 20px rgba(0,240,255,0.15)}
+  100%{border-left-color:var(--cyan-dim);background:rgba(3,7,18,0.75);box-shadow:none}
+}
+.card-flash{animation:card-highlight 1.8s var(--apple-ease) forwards}
+.tl-flash{animation:tl-highlight 1.8s var(--apple-ease) forwards}
 
-  .sun {
-    position: absolute; z-index: 10; width: 110px; height: 110px;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .sun:hover { transform: scale(1.15); }
-  
-  .holo-wrapper {
-    position: absolute; inset: 0; display: flex; justify-content: center; align-items: center;
-    transform-style: preserve-3d; animation: core-spin 20s linear infinite;
-  }
-  @keyframes core-spin { 100% { transform: rotateY(360deg) rotateX(360deg); } }
+#back-top{
+  position:fixed;bottom:32px;right:32px;z-index:500;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(3,7,18,0.85);border:1px solid var(--cyan-dim);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:all 0.4s var(--apple-ease);
+  backdrop-filter:blur(12px);
+}
+#back-top.visible{opacity:1;pointer-events:all;}
+#back-top:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,0.3);transform:translateY(-2px)}
+#back-top::after{
+  content:'';display:block;width:8px;height:8px;
+  border-left:2px solid var(--cyan);border-top:2px solid var(--cyan);
+  transform:rotate(45deg) translate(1px,1px);
+}
 
-  .holo-ring {
-    position: absolute; width: 85px; height: 85px; border: 2px solid var(--cyan); border-radius: 4px;
-    background: rgba(0, 240, 255, 0.03); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.2);
-  }
-  .r1 { transform: rotateX(0deg) rotateY(0deg); }
-  .r2 { transform: rotateX(60deg) rotateY(45deg); border-color: var(--purple); }
-  .r3 { transform: rotateX(-60deg) rotateY(45deg); }
+::selection { background: var(--cyan); color: #000; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,240,255,0.7); }
 
-  .core-text { position: relative; z-index: 15; text-align: center; }
-  .core-text h1 { font-size: 1.1rem; color: #fff; text-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan); font-weight: 800; line-height: 1.2; margin-bottom: 5px;}
-  .core-text span { font-size: 0.45rem; color: #000; font-weight: 700; background: rgba(0, 240, 255, 0.9); padding: 2px 6px; border-radius: 4px; display: inline-block; box-shadow: 0 0 10px var(--cyan); letter-spacing: 1px;}
+#global-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: var(--bg); overflow: hidden;
+}
+#starfield-canvas { position:absolute;inset:0;width:100%;height:100%; }
 
-  .ring {
-    position: absolute; border-radius: 50%; border: 1px dashed var(--cyan-dim);
-    pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;
-  }
-  .ring-label {
-    position: absolute; left: 50%; transform: translateX(-50%); top: -10px;
-    color: var(--cyan); font-size: 0.75rem; letter-spacing: 4px;
-    text-shadow: 0 0 10px var(--cyan); font-weight: 600; background: var(--space-bg); padding: 0 10px;
-  }
+.shooting-star{position:absolute;height:1.5px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.95),rgba(180,230,255,0.6),transparent);border-radius:2px;animation:shoot var(--ss-dur) linear infinite;opacity:0;pointer-events:none;width:var(--ss-w);}
+.ss-1{top:12%;left:-10%;--ss-dur:22s;--ss-w:200px;animation-delay:1s;transform:rotate(14deg)}
+.ss-2{top:68%;left:-10%;--ss-dur:28s;--ss-w:160px;animation-delay:10s;transform:rotate(18deg)}
+.ss-3{top:35%;left:-10%;--ss-dur:19s;--ss-w:240px;animation-delay:18s;transform:rotate(10deg)}
+.ss-4{top:50%;left:-10%;--ss-dur:25s;--ss-w:180px;animation-delay:5s;transform:rotate(22deg)}
+@keyframes shoot{
+  0%  {transform:translateX(0)   translateY(0)   rotate(var(--ss-angle,16deg));opacity:0}
+  2%  {opacity:1}
+  20% {transform:translateX(130vw) translateY(38vw) rotate(var(--ss-angle,16deg));opacity:0}
+  100%{opacity:0}
+}
 
-  .ring-1 { width: 30vh; height: 30vh; }
-  .ring-2 { width: 54vh; height: 54vh; }
-  .ring-3 { width: 78vh; height: 78vh; }
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(3,7,18,0.4);
+  backdrop-filter:blur(16px) saturate(180%);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  border-bottom:1px solid var(--rule);
+  transition: all 0.5s var(--apple-ease);
+}
+nav.scrolled { border-bottom: 1px solid rgba(0,240,255,0.25); box-shadow: 0 4px 20px rgba(0,240,255,0.05); }
 
-  .planet-container {
-    position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; 
-    margin-top: -50px; margin-left: -50px; display: flex; justify-content: center; align-items: center; flex-direction: column;
-    z-index: 10; cursor: pointer;
-  }
-  
-  /* Hover Enhancements */
-  .planet-container:hover { animation-play-state: paused !important; z-index: 100; }
-  .planet-container:hover .planet-visual { transform: scale(1.6); box-shadow: 0 0 30px #fff; }
-  .planet-container:hover .planet-label { color: #fff; text-shadow: 0 0 10px var(--cyan); transform: translateY(10px); }
-  .planet-container:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+.nav-id{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;color:var(--cyan);text-shadow:0 0 12px var(--cyan)}
+.nav-links{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:0.65rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--bright-muted);text-decoration:none;transition:color 0.25s var(--apple-ease)}
+.nav-links a:hover{color:var(--cyan)}
+.nav-pills{display:flex;gap:8px}
+.pill{font-size:0.55rem;font-weight:700;letter-spacing:0.1em;padding:3px 10px;border-radius:3px;border:1px solid}
+.pill-green{color:var(--green);border-color:rgba(74,222,128,0.55);background:rgba(74,222,128,0.12)}
+.pill-amber{color:var(--amber);border-color:rgba(245,158,11,0.55);background:rgba(245,158,11,0.12)}
+.lang-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:28px;height:22px;border-radius:3px;border:1px solid rgba(255,255,255,0.15);
+  background:transparent;cursor:pointer;font-size:0.9rem;line-height:1;
+  transition:all 0.3s var(--apple-ease);color:var(--dim);
+}
+.lang-toggle:hover{border-color:var(--cyan);color:#fff;box-shadow:0 0 8px rgba(0,240,255,0.2)}
 
-  @keyframes orbit-1 { from { transform: rotate(0deg) translateX(15vh) rotate(0deg); } to { transform: rotate(360deg) translateX(15vh) rotate(-360deg); } }
-  @keyframes orbit-2-rev { from { transform: rotate(360deg) translateX(27vh) rotate(-360deg); } to { transform: rotate(0deg) translateX(27vh) rotate(0deg); } }
-  @keyframes orbit-3 { from { transform: rotate(0deg) translateX(39vh) rotate(0deg); } to { transform: rotate(360deg) translateX(39vh) rotate(-360deg); } }
+.view-detail-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:0.62rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:#000;background:var(--cyan);
+  border:none;padding:8px 16px;margin-top:12px;
+  cursor:pointer;transition:all 0.3s var(--apple-ease);
+  box-shadow:0 0 16px rgba(0,240,255,0.3);
+}
+.view-detail-btn:hover{box-shadow:0 0 28px rgba(0,240,255,0.55);transform:translateY(-1px)}
+.view-detail-btn:active{transform:scale(0.96)}
 
-  .o1 { animation: orbit-1 45s linear infinite; }
-  .o2 { animation: orbit-2-rev 55s linear infinite; }
-  .o3 { animation: orbit-3 75s linear infinite; }
+#sidenav{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  z-index:300;display:flex;flex-direction:column;align-items:flex-end;gap:0;
+}
+.sn-item{display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 0;position:relative;}
+.sn-label{font-size:0.52rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);transition:all 0.3s var(--apple-ease);opacity:0.75;white-space:nowrap;}
+.sn-item.active .sn-label{color:var(--cyan);opacity:1}
+.sn-item:hover .sn-label{opacity:1;color:#fff}
+.sn-dot{width:6px;height:6px;border-radius:50%;border:1px solid var(--dim);background:transparent;transition:all 0.4s var(--apple-ease);flex-shrink:0;}
+.sn-item.active .sn-dot{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px var(--cyan);width:8px;height:8px;}
+.sn-item:hover .sn-dot{border-color:#fff;transform:scale(1.2)}
+.sn-line{width:1px;height:28px;margin-left:auto;margin-right:3px;background:rgba(0,240,255,0.12);transition:background 0.4s var(--apple-ease);}
+.sn-line.active{background:var(--cyan)}
 
-  .planet-visual { position: absolute; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;}
-  .project-planet { width: 26px; height: 26px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 20px var(--purple); border: 2px solid #fff; }
-  .exp-star { width: 22px; height: 22px; background: #fbbf24; box-shadow: 0 0 20px #fbbf24; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
-  .skill-moon { width: 16px; height: 16px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
+#hero-sticky{
+  position:sticky;top:0;width:100%;height:100vh;
+  overflow:hidden;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;
+}
 
-  .planet-label {
-    position: absolute; top: 65px; white-space: nowrap; font-size: 0.7rem; font-weight: 600;
-    color: var(--text-dim); text-shadow: 0 0 5px rgba(0,240,255,0.3); transition: all 0.3s; pointer-events: none; 
-  }
+#hero-left{
+  position:relative;z-index:20;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 56px 80px 10vw;
+  background: linear-gradient(90deg, rgba(3,7,18,0.85) 0%, rgba(3,7,18,0.0) 100%);
+  transition: opacity 0.4s var(--apple-ease); 
+}
 
-  /* NEW: Tooltip Logic */
-  .tooltip {
-    position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(0);
-    background: rgba(0, 240, 255, 0.15); border: 1px solid var(--cyan);
-    padding: 4px 10px; border-radius: 4px; opacity: 0; pointer-events: none;
-    transition: 0.3s; backdrop-filter: blur(5px); color: #fff; font-size: 0.65rem;
-    white-space: nowrap; box-shadow: 0 0 15px var(--cyan-dim); z-index: 150;
-  }
-  .tooltip b { color: var(--cyan); animation: pulse-text 1.5s infinite alternate; }
-  @keyframes pulse-text { from { text-shadow: 0 0 2px var(--cyan); } to { text-shadow: 0 0 10px var(--cyan); } }
+#hero-identity{transition:opacity 0.6s var(--apple-ease),transform 0.6s var(--apple-ease);position:relative;z-index:20;}
+#hero-hud{
+  position:absolute;inset:0;
+  padding:80px 56px 80px 10vw;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.6s var(--apple-ease), transform 0.6s var(--apple-ease);
+  transform:scale(0.97) translateY(10px);
+  overflow-y:auto;z-index:30;
+}
+.hud-inner { margin: auto 0; width: 100%; padding: 20px 0; }
+#hero-hud.active{opacity:1;pointer-events:all;transform:scale(1) translateY(0);}
+#hero-identity.hidden{opacity:0;transform:scale(0.98) translateY(-12px);pointer-events:none}
 
-  /* --- HUD --- */
-  #hud {
-    width: 0; opacity: 0; transform: translateX(50px);
-    height: 100vh; background: var(--hud-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    display: flex; flex-direction: column; position: relative; overflow: hidden; z-index: 50; box-shadow: -10px 0 40px rgba(0, 240, 255, 0.15);
-  }
-  #hud.open { width: 520px; opacity: 1; transform: translateX(0); border-left: 1px solid var(--cyan-dim); }
-  
-  #hud::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0, 240, 255, 0.05) 51%); background-size: 100% 4px; z-index: 100; }
+.hero-eyebrow{font-size:0.62rem;letter-spacing:0.2em;color:var(--cyan);margin-bottom:20px;line-height:1.8;min-height:1.8em}
+.eyebrow-cursor{color:var(--cyan);animation:blink 1s step-end infinite;margin-left:1px}
+.hero-name{
+  font-size:clamp(40px,5.5vw,76px);font-weight:800;line-height:0.97;letter-spacing:-0.03em;
+  color:#fff; text-shadow:0 0 15px rgba(0,240,255,0.25), 0 0 35px rgba(0,240,255,0.15);
+  margin-bottom:8px; transition: all 0.4s var(--apple-ease);
+}
+.hero-name:hover { text-shadow: 0 0 20px var(--cyan), 0 0 45px rgba(0,240,255,0.5); cursor: default; }
+.hero-role{font-size:clamp(14px,1.6vw,22px);font-weight:400;color:var(--cyan);text-shadow:0 0 12px rgba(0,240,255,0.8);letter-spacing:0.04em;margin-bottom:28px}
+.hero-desc{font-size:0.84rem;color:var(--bright-dim);line-height:1.85;margin-bottom:36px;max-width:400px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
 
-  .close-btn {
-    position: absolute; top: 20px; right: 25px; z-index: 110;
-    background: rgba(0, 240, 255, 0.05); border: 1px solid var(--cyan-dim); color: var(--cyan);
-    width: 32px; height: 32px; border-radius: 4px; font-size: 1.5rem; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s;
-  }
-  .close-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan); }
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;cursor:pointer;padding:11px 22px;transition:all 0.4s var(--apple-ease);border:none}
+.btn-primary{background:var(--cyan);color:#000;box-shadow:0 0 20px rgba(0,240,255,0.3)}
+.btn-primary:hover{box-shadow:0 0 35px rgba(0,240,255,0.55);transform:translateY(-2px)}
+.btn-primary:active{transform:scale(0.95);box-shadow:0 0 10px rgba(0,240,255,0.2)}
+.btn-arrow{display:inline-block;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translate(-1px,-2px);margin-left:4px;}
+.btn-ghost{background:transparent;color:var(--cyan);border:1px solid var(--cyan-dim)}
+.btn-ghost:hover{background:var(--cyan-glow);border-color:var(--cyan)}
+.btn-ghost:active{transform:scale(0.95)}
 
-  .hud-header { padding: 35px 40px 20px; border-bottom: 1px solid var(--cyan-dim); background: rgba(0, 240, 255, 0.02); }
-  .sys-status { font-size: 0.75rem; color: var(--cyan); line-height: 1.8; letter-spacing: 1px;}
+.h-type{color:var(--purple);font-size:0.62rem;text-transform:uppercase;letter-spacing:0.2em;font-weight:700;margin-bottom:8px}
+.h-title{font-size:1.45rem;font-weight:800;color:#fff;margin-bottom:18px;line-height:1.2;min-height:1.8rem}
+.h-title.typing::after{content:'█';margin-left:3px;color:var(--cyan);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.h-desc{font-size:0.8rem;color:var(--bright);line-height:1.8;margin-bottom:20px;font-weight:500;}
+.h-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.h-metric{border:1px solid var(--cyan-dim);background:rgba(0,240,255,0.04);padding:10px 12px;border-left:3px solid var(--cyan)}
+.h-mv{font-size:1.1rem;color:var(--cyan);font-weight:700}
+.h-ml{font-size:0.55rem;color:var(--bright-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:3px;font-weight:600;}
+.h-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:18px}
+.h-tag{font-size:0.6rem;padding:3px 9px;border:1px solid rgba(189,0,255,0.35);color:#e9d5ff;background:rgba(189,0,255,0.1)}
 
-  .hud-main { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; }
+.hud-deep-toggle{font-family:var(--mono); padding:9px 12px;border:1px dashed var(--cyan-dim);cursor:pointer;background:rgba(0,240,255,0.02);transition:all 0.3s var(--apple-ease);margin-bottom:4px}
+.hud-deep-toggle:hover{background:rgba(0,240,255,0.06);border-color:var(--cyan)}
+.hud-deep-toggle:active{transform:scale(0.98)}
+.hud-deep-lbl{color:var(--cyan);font-size:0.68rem;font-weight:700;letter-spacing:0.1em}
+.hud-deep-panel{display:none;border-left:2px solid var(--cyan-dim);padding-left:14px;margin-top:12px;transform-origin:top}
+.hud-deep-panel.open{display:block;animation:slideDown 0.4s var(--apple-ease)}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px) scaleY(0.95)}to{opacity:1;transform:none}}
+.dp-block{margin-bottom:14px}
+.dp-lbl{color:var(--purple);font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:5px}
+.dp-txt{font-size:0.71rem;color:var(--bright-dim);line-height:1.75}
 
-  .data-type { color: var(--purple); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; font-weight: 700; letter-spacing: 2px;}
-  .data-title { font-size: 1.7rem; font-weight: 800; margin-bottom: 25px; color: #fff; line-height: 1.2;}
-  .data-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 30px; }
-  
-  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-  .metric-box { border: 1px solid var(--cyan-dim); background: rgba(0, 240, 255, 0.05); padding: 12px; border-radius: 4px; border-left: 4px solid var(--cyan); }
-  .metric-val { font-size: 1.2rem; color: var(--cyan); font-weight: 700; }
-  .metric-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; margin-top: 5px; }
+.hud-close{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);background:transparent;border:1px solid rgba(255,255,255,0.12);padding:7px 14px;cursor:pointer;transition:all 0.3s var(--apple-ease);margin-bottom:20px}
+.hud-close:hover{color:#fff;border-color:var(--cyan);box-shadow:0 0 10px rgba(0,240,255,0.2)}
+.gh-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan-dim);padding:7px 14px;margin-top:10px;transition:all 0.3s var(--apple-ease)}
+.gh-btn:hover{background:var(--cyan-glow);border-color:var(--cyan)}
+.gh-btn:active{transform:scale(0.95)}
 
-  .tag { display: inline-block; font-size: 0.7rem; padding: 4px 10px; border: 1px solid var(--purple); color: #e9d5ff; background: rgba(189, 0, 255, 0.15); margin: 0 5px 5px 0; border-radius: 3px; }
+.contact-block{margin-bottom:18px;padding-bottom:16px;border-bottom:1px dashed var(--rule)}
+.c-row{display:flex;align-items:center;gap:10px;padding:7px 10px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:2px;margin-bottom:6px}
+.c-lbl{color:var(--cyan);font-size:0.58rem;font-weight:700;width:68px;letter-spacing:0.1em}
+.c-val{color:#fff;font-size:0.72rem;flex:1}
 
-  /* CONTACT PRORITY UI */
-  .contact-box { margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px dashed var(--cyan-dim); }
-  .contact-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 8px 12px; }
-  .contact-label { color: var(--cyan); font-size: 0.65rem; font-weight: 800; width: 65px;}
-  .contact-val { color: #fff; font-size: 0.8rem; text-decoration: none; flex: 1;}
-  .copy-btn { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 2px 8px; font-size: 0.6rem; cursor: pointer; border-radius: 2px; transition: 0.2s;}
-  .copy-btn:hover { background: var(--cyan); color: #000; }
-  .dl-btn { display: block; background: var(--cyan); color: #000; padding: 12px; text-align: center; text-decoration: none; font-weight: 800; margin-top: 15px; font-size: 0.8rem; box-shadow: 0 0 15px rgba(0,240,255,0.3); }
+.dl-btn{display:block;background:var(--cyan);color:#000;font-family:var(--mono);font-size:0.68rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px;text-align:center;box-shadow:0 0 16px rgba(0,240,255,0.25);margin-top:12px;transition:all 0.4s var(--apple-ease)}
+.dl-btn:hover{box-shadow:0 0 32px rgba(0,240,255,0.5);transform:translateY(-1px)}
+.dl-btn:active{transform:scale(0.97);box-shadow:0 0 12px rgba(0,240,255,0.3)}
 
-  .type-cursor::after { content: '█'; margin-left: 5px; color: var(--cyan); animation: blink 1s step-end infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
+#hero-right{position:relative;overflow:hidden;cursor:default}
+#terminal{position:absolute;bottom:24px;right:28px;z-index:10;width:260px;height:88px;overflow:hidden;font-size:0.57rem;color:var(--cyan);opacity:0.3;pointer-events:none;line-height:1.75;text-align:right;transition:opacity 0.6s var(--apple-ease)}
 
-  /* DEEP DIVE */
-  .deep-toggle { margin: 20px 0 0; padding: 10px 14px; border: 1px dashed var(--cyan-dim); cursor: pointer; border-radius: 4px; background: rgba(0,240,255,0.03); transition: 0.2s; }
-  .deep-toggle:hover { background: rgba(0,240,255,0.08); border-color: var(--cyan); }
-  .deep-toggle-label { color: var(--cyan); font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; }
-  .deep-panel { margin-top: 15px; border-left: 2px solid var(--cyan-dim); padding-left: 15px; }
-  .deep-block { margin-bottom: 18px; }
-  .deep-label { color: var(--purple); font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
-  .deep-text { font-size: 0.82rem; color: var(--text-dim); line-height: 1.65; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+#click-hint{
+  position:absolute; top: max(56px, 6vh); left:50%; transform:translateX(-50%);
+  z-index:20;font-size:0.6rem;letter-spacing:0.16em;color:var(--bright-dim);
+  text-align:center;white-space:nowrap;
+  transition:opacity 0.6s var(--apple-ease);
+  pointer-events:none;
+}
+#click-hint span { display: block; animation: hint-breathe 2.5s ease-in-out infinite alternate; font-weight: 600;}
+#key-hint { font-size:0.5rem !important; letter-spacing:0.18em; opacity:0.6; margin-top:4px; }
+@keyframes hint-breathe { 0% { opacity: 0.3; text-shadow: 0 0 4px rgba(0,240,255,0.1); } 100% { opacity: 1; text-shadow: 0 0 15px rgba(0,240,255,0.8); } }
 
-  /* GITHUB BUTTON */
-  .github-btn { display: block; margin-top: 20px; padding: 10px 14px; border: 1px solid var(--cyan-dim); color: var(--cyan); text-decoration: none; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; background: rgba(0,240,255,0.03); border-radius: 4px; transition: 0.2s; text-align: center; }
-  .github-btn:hover { background: rgba(0,240,255,0.1); border-color: var(--cyan); box-shadow: 0 0 15px var(--cyan-dim); }
+#universe{
+  position:absolute;inset:0;z-index:5;
+  display:flex;justify-content:center;align-items:center;
+  cursor:crosshair; transition:all 1.2s var(--apple-ease); transform-origin:center center;
+}
+#universe.blurred { filter: blur(6px); opacity: 0.35; transform: scale(0.95); }
 
-  /* PERSISTENT STATUS BAR */
-  #status-bar { position: absolute; top: 18px; right: 20px; z-index: 20; display: flex; gap: 12px; align-items: center; pointer-events: none; }
-  .status-pill { font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 3px; border: 1px solid; }
-  .status-open { color: #4ade80; border-color: rgba(74,222,128,0.4); background: rgba(74,222,128,0.08); }
-  .status-opt { color: var(--cyan); border-color: var(--cyan-dim); background: rgba(0,240,255,0.06); }
-  .status-kaggle { color: #f59e0b; border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.06); }
+#scroll-cue{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-size:0.52rem;letter-spacing:0.18em;color:var(--dim);
+  animation:bob 2.2s ease-in-out infinite;transition:opacity 0.6s var(--apple-ease);
+}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--cyan),transparent)}
+.scroll-arrow{width:8px;height:8px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg) translate(-1px,-1px);}
 
-  /* COMPETITION PLANET */
-  .comp-gem { width: 20px; height: 20px; background: #f59e0b; clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); box-shadow: 0 0 18px #f59e0b; }
+.sun{position:absolute;z-index:10;width:160px;height:160px;display:flex;justify-content:center;align-items:center;cursor:pointer;}
+.sun:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+.holo-wrapper{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;transform-style:preserve-3d;}
 
+.holo-rings {position:absolute;inset:0;display:flex;justify-content:center;align-items:center;transform-style:preserve-3d;animation:core-spin 22s linear infinite; pointer-events: none;}
+@keyframes core-spin{100%{transform:rotateY(360deg) rotateX(360deg)}}
+.holo-ring{position:absolute;width:90px;height:90px;border:2px solid var(--cyan);border-radius:4px;background:rgba(0,240,255,0.03);box-shadow:0 0 18px rgba(0,240,255,0.25),inset 0 0 18px rgba(0,240,255,0.15)}
+.r1{transform:rotateX(0deg) rotateY(0deg)}
+.r2{transform:rotateX(60deg) rotateY(45deg);border-color:var(--purple)}
+.r3{transform:rotateX(-60deg) rotateY(45deg)}
+
+.core-3d-wrapper {
+  position: absolute; width: 80px; height: 80px;
+  pointer-events: none;
+  animation: pulse-core-3d 3s ease-in-out infinite alternate;
+}
+#tetra-canvas { display: block; width: 80px; height: 80px; }
+.sun:hover #tetra-canvas { filter: drop-shadow(0 0 12px rgba(0,240,255,0.9)); }
+@keyframes pulse-core-3d { 0% { transform: scale(0.88) translateY(4px); } 100% { transform: scale(1.08) translateY(-4px); } }
+
+.ring{position:absolute;border-radius:50%;border:1px dashed var(--cyan-dim);pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2}
+.ring-label{position:absolute;left:50%;transform:translateX(-50%);top:-11px;color:var(--cyan);font-size:0.68rem;letter-spacing:4px;text-shadow:0 0 10px var(--cyan);font-weight:600;background:rgba(3,7,18,0.8);padding:0 10px; border-radius:4px;}
+.ring-1{width:28vh;height:28vh}
+.ring-2{width:50vh;height:50vh}
+.ring-3{width:72vh;height:72vh}
+
+.planet-container{position:absolute;top:50%;left:50%;width:100px;height:100px;margin:-50px 0 0 -50px;display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:10;cursor:pointer}
+.planet-container:hover{animation-play-state:paused!important;z-index:100}
+.planet-container:hover .planet-visual{transform:scale(1.7)}
+.planet-container:active .planet-visual{transform:scale(1.4)}
+.planet-container:hover .planet-label{color:#fff;text-shadow:0 0 10px var(--cyan);transform:translateY(10px)}
+.planet-container:hover .tooltip{opacity:1;transform:translateX(-50%) translateY(-10px)}
+@keyframes orbit-1{from{transform:rotate(0deg) translateX(14vh) rotate(0deg)}to{transform:rotate(360deg) translateX(14vh) rotate(-360deg)}}
+@keyframes orbit-2-rev{from{transform:rotate(360deg) translateX(25vh) rotate(-360deg)}to{transform:rotate(0deg) translateX(25vh) rotate(0deg)}}
+@keyframes orbit-3{from{transform:rotate(0deg) translateX(36vh) rotate(0deg)}to{transform:rotate(360deg) translateX(36vh) rotate(-360deg)}}
+.o1{animation:orbit-1 45s linear infinite}
+.o2{animation:orbit-2-rev 55s linear infinite}
+.o3{animation:orbit-3 75s linear infinite}
+.planet-visual{position:absolute;transition:transform 0.4s var(--apple-ease);pointer-events:none}
+.project-planet{width:24px;height:24px;border-radius:50%;background:var(--purple);box-shadow:0 0 18px var(--purple),0 0 4px rgba(255,255,255,0.3);border:1.5px solid rgba(255,255,255,0.25)}
+.exp-planet{width:22px;height:22px;border-radius:50%;background:#fbbf24;box-shadow:0 0 18px #fbbf24,0 0 4px rgba(255,255,255,0.3);border:1.5px solid rgba(255,255,255,0.25)}
+.edu-planet{width:18px;height:18px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan),0 0 4px rgba(255,255,255,0.3);border:1.5px solid rgba(255,255,255,0.25)}
+.comp-planet{width:24px;height:24px;border-radius:50%;background:var(--amber);box-shadow:0 0 18px var(--amber),0 0 4px rgba(255,255,255,0.3);border:1.5px solid rgba(255,255,255,0.25)}
+.planet-label{position:absolute;top:62px;white-space:nowrap;font-size:0.65rem;font-weight:700;color:var(--dim);transition:all 0.4s var(--apple-ease);pointer-events:none; text-shadow: 0 0 8px rgba(0,0,0,0.8);}
+.tooltip{position:absolute;bottom:80px;left:50%;transform:translateX(-50%) translateY(0);background:rgba(0,240,255,0.12);border:1px solid var(--cyan);padding:4px 12px;border-radius:3px;opacity:0;pointer-events:none;transition:all 0.4s var(--apple-ease);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);color:#fff;font-size:0.6rem;font-weight:600;white-space:nowrap;z-index:150; box-shadow: 0 0 15px rgba(0,240,255,0.15);}
+.tooltip b{color:var(--cyan)}
+
+#hero-spacer{height:100vh;position:relative;z-index:0}
+
+#content{
+  position:relative;z-index:10;
+  background: transparent; 
+  border-top:1px solid var(--rule);
+  transform:translateY(80px);opacity:0;
+  transition:transform 1.2s var(--apple-ease),opacity 1s var(--apple-ease);
+}
+#content.risen{transform:translateY(0);opacity:1}
+
+.section{padding:100px 10vw;border-bottom:1px solid var(--rule)}
+.section-label{font-size:0.63rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.section-title{font-size:clamp(30px,3.8vw,48px);font-weight:800;letter-spacing:-0.025em;color:#fff;margin-bottom:64px;line-height:1.1}
+
+.section-next{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  width:100%; margin-top:64px; cursor:pointer; padding:24px 0; min-height:90px;
+  font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--dim);transition:color 0.3s var(--apple-ease);text-decoration:none;text-align:center;
+}
+.section-next:hover .sn-arrow { animation-play-state:paused; }
+.section-next:hover{color:var(--cyan)}
+.section-next:hover .sn-arrow{box-shadow:0 0 16px var(--cyan);border-color:var(--cyan);}
+.section-next:active{transform:scale(0.95)}
+.sn-arrow{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.4s var(--apple-ease);
+  animation:bob-btn 2.5s ease-in-out infinite;
+  flex-shrink:0;
+}
+.sn-arrow::after{
+  content:'';
+  display:block;
+  width:9px;height:9px;
+  border-right:2px solid var(--dim);
+  border-bottom:2px solid var(--dim);
+  transform:rotate(45deg) translate(-1px,-1px);
+  transition:border-color 0.4s var(--apple-ease);
+}
+.section-next:hover .sn-arrow::after{border-color:var(--cyan);}
+@keyframes bob-btn{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:grid;grid-template-columns:160px 1px 1fr;gap:0 40px;padding:44px 0;border-top:1px solid var(--rule);opacity:0;transform:translateY(28px);transition:all 0.8s var(--apple-ease)}
+.tl-item.vis{opacity:1;transform:none}
+.tl-meta{text-align:right}
+.tl-content{
+  background:rgba(3,7,18,0.75);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--rule);
+  border-left:2px solid var(--cyan-dim);
+  padding:24px 28px;
+}
+.tl-period{font-size:0.68rem;font-weight:600;letter-spacing:0.06em;color:var(--bright-muted);margin-bottom:8px} 
+.tl-org{font-size:0.92rem;font-weight:700;color:var(--cyan);text-shadow:0 0 10px rgba(0,240,255,0.3);margin-bottom:4px}
+.tl-loc{font-size:0.64rem;font-weight:600;color:var(--bright-muted);letter-spacing:0.06em} 
+.tl-line{width:1px;background:var(--rule);position:relative}
+.tl-line::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.tl-role{font-size:0.98rem;font-weight:700;color:#fff;margin-bottom:12px}
+.tl-mv-row{display:flex;gap:0;margin-bottom:16px;border:1px solid var(--cyan-dim);background:rgba(0,240,255,0.03);overflow:hidden;}
+.tl-mv-cell { flex:1; padding:10px 16px; display:flex; flex-direction:column; align-items:flex-start; }
+.tl-mv-cell:first-child { border-right:1px solid var(--rule); }
+.tl-mv{font-size:1.2rem;font-weight:800;color:var(--cyan);line-height:1}
+.tl-ml{font-size:0.52rem;font-weight:700;color:var(--bright-dim);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px} 
+.tl-desc{font-size:0.8rem;font-weight:500;color:var(--bright);line-height:1.8;margin-bottom:14px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);} 
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.62rem;padding:3px 10px;border:1px solid rgba(189,0,255,0.3);color:#e9d5ff;background:rgba(189,0,255,0.08); font-weight: 500;}
+
+.proj-grid, .sk-grid, .edu-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule);
+}
+.skills-wrap { display:grid; grid-template-columns:340px 1fr; gap:40px; align-items:start; }
+.radar-wrap { position:sticky; top:80px; display:flex; flex-direction:column; align-items:center; }
+#radar-canvas { max-width:100%; height:auto; }
+.radar-label { margin-top:16px; font-size:0.62rem; font-weight:700; letter-spacing:0.14em; color:var(--cyan); text-transform:uppercase; min-height:1.2em; text-align:center; transition:all 0.3s var(--apple-ease); }
+.sk-grid { grid-template-columns: repeat(2, 1fr); }
+.sk-card[data-radar].hovered { background:rgba(0,240,255,0.06); box-shadow: inset 0 0 30px rgba(0,240,255,0.05); }
+@media(max-width:900px){ .skills-wrap{grid-template-columns:1fr} .radar-wrap{display:none} }
+.edu-grid { grid-template-columns: 1fr 1fr; }
+
+.pc, .sk-card, .edu-card {
+  background:rgba(3,7,18,0.85); 
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  padding:34px 28px;position:relative;overflow:hidden;opacity:0;
+  transform:translateY(24px);transition:all 0.4s var(--apple-ease);
+}
+.edu-card { display:flex; flex-direction:column; align-items:center; }
+.edu-card .chips { justify-content:center; }
+.pc {
+  padding-bottom: 24px; cursor: pointer; display: flex; flex-direction: column;
+}
+.pc.vis, .sk-card.vis, .edu-card.vis { opacity:1; transform:translateY(0); }
+
+.pc:hover, .sk-card:hover, .edu-card:hover {
+  background:rgba(3,7,18,0.95);
+  box-shadow: inset 0 0 40px rgba(0,240,255,0.03); 
+}
+.pc:active { transform:scale(0.98); transition: transform 0.15s; z-index: 2; }
+.pc::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform 0.45s var(--apple-ease); z-index: 5; }
+.pc:hover::before { transform:scaleX(1); }
+
+.pc-type, .sk-type { font-size:0.52rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--purple);margin-bottom:10px; }
+.sk-type { color: var(--cyan); }
+.pc-title, .sk-title, .edu-deg { font-size:0.98rem;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.25; }
+.sk-title { font-size: 0.9rem; margin-bottom: 12px; }
+.edu-deg { font-size: 1.15rem; margin-bottom: 8px; text-align:center; }
+.pc-desc, .sk-desc { font-size:0.77rem;font-weight:500;color:var(--bright-dim);line-height:1.75;margin-bottom:16px; }
+.sk-desc { font-size: 0.75rem; margin-bottom: 14px; }
+.edu-school { font-size:0.7rem;font-weight:700;color:var(--cyan);margin-bottom:14px; text-align:center; }
+.edu-meta { font-size:0.65rem;font-weight:600;color:var(--bright);letter-spacing:0.04em;line-height:2.1; text-align:center; } 
+.edu-courses-lbl { font-size:0.52rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--purple);margin-top:18px;margin-bottom:10px; text-align:center; }
+.pc-mvs, .edu-mvs { display:flex;margin-bottom:14px; }
+.pc-mvs { gap:0; justify-content:space-between; padding:12px 16px; border:1px solid var(--cyan-dim); background:rgba(0,240,255,0.03); }
+.pc-mvs > div { display:flex; flex-direction:column; align-items:flex-start; flex:1; }
+.pc-mvs > div:first-child { border-right:1px solid var(--rule); padding-right:14px; }
+.pc-mvs > div:last-child { padding-left:14px; }
+.edu-mvs { gap: 0; margin-top: 18px; justify-content:space-around; width:100%; }
+.edu-mvs > div { display:flex; flex-direction:column; align-items:center; flex:1; }
+.edu-mvs > div:first-child { padding-right: 20px; }
+.pc-mv, .edu-mv { font-size:1rem;font-weight:800;color:var(--cyan); }
+.edu-mv { font-size: 1.1rem; }
+.pc-ml, .edu-ml { font-size:0.51rem;font-weight:700;color:var(--bright-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:3px; }
+@keyframes countup-flash { 0%{color:var(--cyan);text-shadow:0 0 20px var(--cyan)} 100%{color:var(--cyan);text-shadow:none} }
+
+.expand-hint {
+  margin-top: auto; padding-top: 18px; text-align: left;
+  font-family: var(--mono); font-size: 0.55rem; font-weight: 800; letter-spacing: 0.15em;
+  color: var(--muted); text-transform: uppercase; transition: color 0.3s;
+}
+.pc:hover .expand-hint { color: var(--cyan); text-shadow: 0 0 8px rgba(0,240,255,0.4); }
+
+.deep-content{
+  position: absolute; inset: 0; z-index: 10;
+  background: rgba(3,7,18,0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  padding: 34px 28px; overflow-y: auto; display: block; 
+  opacity: 0; pointer-events: none; transition: opacity 0.3s var(--apple-ease);
+}
+.deep-content.open{opacity: 1; pointer-events: auto;}
+
+.db{margin-bottom:14px}
+.db-lbl{font-size:0.55rem;font-weight:800;letter-spacing:0.18em;color:var(--purple);text-transform:uppercase;margin-bottom:5px}
+.db-txt{font-size:0.71rem;font-weight:500;color:var(--bright-dim);line-height:1.75}
+
+.gh-link{
+  display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:0.59rem;font-weight:800;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);text-decoration:none;
+  border:1px solid var(--cyan-dim);padding:6px 12px; margin-top: 16px; 
+  transition:all 0.3s var(--apple-ease);
+}
+.gh-link:hover{background:var(--cyan-glow);border-color:var(--cyan);box-shadow: 0 0 10px rgba(0,240,255,0.2);}
+.gh-link:active{transform:scale(0.92)}
+
+.close-hint {
+  text-align: center; margin-top: 30px; padding-bottom: 10px; font-family: var(--mono); font-size: 0.5rem;
+  font-weight: 800; letter-spacing: 0.2em; color: var(--dim); opacity: 0.5;
+}
+
+.pc-placeholder {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background: rgba(3,7,18,0.3); border: none; 
+  min-height: 320px; cursor: default;
+}
+.pc-placeholder:hover { background:rgba(3,7,18,0.4); box-shadow:none; transform:none!important; }
+.pc-placeholder:hover::before { transform:scaleX(0); }
+.ph-loader { width:24px; height:24px; border:2px solid var(--cyan-dim); border-top-color:var(--cyan); border-radius:50%; animation:spin 1s linear infinite; margin-bottom:20px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.ph-sys { font-size:0.6rem; color:var(--cyan); font-weight:800; letter-spacing:0.15em; margin-bottom:12px; line-height:1.4;}
+.ph-stat { font-size:0.5rem; font-weight:700; color:var(--dim); letter-spacing:0.2em; text-transform:uppercase; animation:pulse-op 2s var(--apple-ease) infinite;} 
+
+.tl-terminal {
+  background: rgba(0,0,0,0.45); border: 1px solid var(--cyan-dim);
+  border-left: 3px solid var(--cyan); padding: 12px 16px; margin-top: 14px;
+  font-size: 0.62rem; line-height: 1.9; color: var(--cyan);
+  min-height: 2em; overflow: hidden;
+}
+.tl-terminal .tl-line-out { opacity: 0; transform: translateX(-6px); transition: opacity 0.3s, transform 0.3s; }
+.tl-terminal .tl-line-out.show { opacity: 1; transform: none; }
+.tl-terminal .tl-line-out .cmd { color: var(--bright-muted); }
+.tl-terminal .tl-line-out .val { color: var(--cyan); font-weight: 700; }
+.tl-terminal .tl-line-out .ok { color: var(--green); }
+.contact-status{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:8px 16px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.06);border-radius:2px;}
+.cs-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:cs-pulse 2s ease-in-out infinite;}
+@keyframes cs-pulse{0%,100%{box-shadow:0 0 4px var(--green);opacity:0.8}50%{box-shadow:0 0 14px var(--green);opacity:1}}
+.cs-text{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;color:var(--green);text-transform:uppercase;}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+.contact-head{font-size:clamp(26px,3.2vw,44px);font-weight:800;letter-spacing:-0.02em;color:#fff;line-height:1.1;margin-bottom:16px}
+.contact-sub{font-size:0.74rem;font-weight:500;color:var(--bright);line-height:1.8;max-width:360px}
+.c-rows{display:flex;flex-direction:column;gap:10px}
+.c-row2{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(0,240,255,0.02);backdrop-filter:blur(8px);transition:all 0.3s var(--apple-ease);cursor:pointer;position:relative;}
+.c-row2:hover{border-color:var(--cyan-dim);background:rgba(0,240,255,0.08);transform:translateX(5px)}
+.c-row2:active{transform:scale(0.98) translateX(3px);}
+.cr-lbl{font-size:0.55rem;font-weight:800;letter-spacing:0.12em;color:var(--cyan);width:68px}
+.cr-val{font-size:0.74rem;font-weight:600;color:var(--text);flex:1}
+.cr-hint{font-size:0.5rem;font-weight:700;letter-spacing:0.1em;color:var(--dim);text-transform:uppercase;transition:color 0.2s;}
+.c-row2:hover .cr-hint{color:var(--cyan);}
+
+footer{padding:22px 10vw;display:flex;justify-content:space-between;align-items:center;font-size:0.55rem;font-weight:600;color:var(--dim);letter-spacing:0.1em;background:rgba(3,7,18,0.8); border-top:1px solid var(--rule);}
+.footer-links{display:flex;gap:20px;}
+.footer-link{color:var(--dim);text-decoration:none;font-size:0.55rem;font-weight:600;letter-spacing:0.1em;transition:color 0.25s var(--apple-ease);}
+.footer-link:hover{color:var(--cyan);}
+
+@media(max-width:900px){
+  nav{padding:0 20px}.nav-links{display:none}
+  #hero-sticky{grid-template-columns:1fr}
+  #hero-right{display:none}
+  #sidenav{display:none}
+  .tl-item{grid-template-columns:1fr;gap:12px; padding: 0 0 34px;}
+  .tl-meta{text-align:left}
+  .tl-line{display:none}
+  .proj-grid{grid-template-columns:1fr}.sk-grid{grid-template-columns:1fr}.edu-grid{grid-template-columns:1fr}
+  .contact-wrap{grid-template-columns:1fr;gap:40px}
+  .section{padding:64px 20px}
+  footer{flex-direction:column;gap:8px;text-align:center}
+}
 </style>
 </head>
-<body onclick="handleGlobalClick(event)">
+<body>
 
-<div id="bg-layers">
-  <div id="starfield"></div>
-  <div class="grid-overlay"></div>
+<div id="global-bg">
+  <canvas id="starfield-canvas"></canvas>
   <div class="shooting-star ss-1"></div>
   <div class="shooting-star ss-2"></div>
+  <div class="shooting-star ss-3"></div>
+  <div class="shooting-star ss-4"></div>
 </div>
 
-<div id="terminal"></div>
+<nav id="top-nav">
+  <span class="nav-id" data-en="> HUIHAO_XING.DS" data-zh="> 邢辉皓 · 数科">> HUIHAO_XING.DS</span>
+  <ul class="nav-links">
+    <li><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;" data-en="Home" data-zh="首页">Home</a></li>
+    <li><a href="#experience" data-en="Experience" data-zh="经历">Experience</a></li>
+    <li><a href="#projects" data-en="Projects" data-zh="项目">Projects</a></li>
+    <li><a href="#skills" data-en="Skills" data-zh="技能">Skills</a></li>
+    <li><a href="#education" data-en="Education" data-zh="教育">Education</a></li>
+    <li><a href="#contact" data-en="Contact" data-zh="联系">Contact</a></li>
+  </ul>
+  <div class="nav-pills">
+    <span class="pill pill-green" data-en="OPEN TO WORK" data-zh="求职中">OPEN TO WORK</span>
+    <span class="pill pill-amber" data-en="OPT ACTIVE" data-zh="OPT有效">OPT ACTIVE</span>
+    <button class="lang-toggle" id="lang-btn" onclick="toggleLang()" title="切换语言 / Switch Language">🌐</button>
+  </div>
+</nav>
 
-<div class="app-container">
-  <div id="universe">
-    <!-- PERSISTENT STATUS BAR -->
-    <div id="status-bar">
-      <span class="status-pill status-open">OPEN TO WORK</span>
-      <span class="status-pill status-opt">OPT ACTIVE</span>
-      <span class="status-pill status-kaggle">KAGGLE TOP 3%</span>
-    </div>
+<div id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top"></div>
 
-    <div class="sun" onclick="loadData('profile'); event.stopPropagation();">
-      <div class="holo-wrapper">
-        <div class="holo-ring r1"></div><div class="holo-ring r2"></div><div class="holo-ring r3"></div>
+<div id="sidenav">
+  <div class="sn-item active" data-target="hero" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    <span class="sn-label" data-en="Home" data-zh="首页">Home</span>
+    <div class="sn-dot"></div>
+  </div>
+  <div class="sn-line"></div>
+  <div class="sn-item" data-target="experience" onclick="scrollToSection('experience')">
+    <span class="sn-label" data-en="Experience" data-zh="经历">Experience</span>
+    <div class="sn-dot"></div>
+  </div>
+  <div class="sn-line"></div>
+  <div class="sn-item" data-target="projects" onclick="scrollToSection('projects')">
+    <span class="sn-label" data-en="Projects" data-zh="项目">Projects</span>
+    <div class="sn-dot"></div>
+  </div>
+  <div class="sn-line"></div>
+  <div class="sn-item" data-target="skills" onclick="scrollToSection('skills')">
+    <span class="sn-label" data-en="Skills" data-zh="技能">Skills</span>
+    <div class="sn-dot"></div>
+  </div>
+  <div class="sn-line"></div>
+  <div class="sn-item" data-target="education" onclick="scrollToSection('education')">
+    <span class="sn-label" data-en="Education" data-zh="教育">Education</span>
+    <div class="sn-dot"></div>
+  </div>
+  <div class="sn-line"></div>
+  <div class="sn-item" data-target="contact" onclick="scrollToSection('contact')">
+    <span class="sn-label" data-en="Contact" data-zh="联系">Contact</span>
+    <div class="sn-dot"></div>
+  </div>
+</div>
+
+<div id="hero-sticky">
+
+  <div id="hero-left">
+    <div id="hero-identity">
+      <p class="hero-eyebrow"><span id="eyebrow-text"></span><span class="eyebrow-cursor">█</span></p>
+      <h1 class="hero-name" data-en="HUIHAO<br>XING" data-zh="邢辉皓">HUIHAO<br>XING</h1>
+      <p class="hero-role" data-en="DATA SCIENTIST" data-zh="数据科学家">DATA SCIENTIST</p>
+      <p class="hero-desc" data-en="Recent M.S. Data Science Graduate, Boston University (Jan 2026). Specialized in machine learning, A/B experimentation, and scalable data engineering. Seeking DS / DA / Strategy Ops roles." data-zh="波士顿大学数据科学硕士（2026年1月毕业）。专注于机器学习、A/B实验与大数据工程，寻求数据科学家、数据分析师及战略运营岗位。">Recent M.S. Data Science Graduate, Boston University (Jan 2026). Specialized in machine learning, A/B experimentation, and scalable data engineering. Seeking DS / DA / Strategy Ops roles.</p>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href="#experience"><span data-en="View Experience" data-zh="查看经历">View Experience</span> <span class="btn-arrow"></span></a>
+        <a class="btn btn-ghost" href="#contact"><span data-en="Get in Touch" data-zh="建立联系">Get in Touch</span></a>
       </div>
-      <div class="core-text"><h1>HUIHAO<br>XING</h1><span>DATA SCIENTIST</span></div>
     </div>
-
-    <div class="ring ring-1"><div class="ring-label">SKILLS</div></div>
-    <div class="planet-container o1" style="animation-delay:0s;" onclick="loadData('s_python'); event.stopPropagation();">
-      <div class="tooltip">Advanced <b>SQL / ETL</b></div>
-      <div class="planet-visual skill-moon"></div><div class="planet-label">Python / SQL</div>
-    </div>
-    <div class="planet-container o1" style="animation-delay:-15s;" onclick="loadData('s_ml'); event.stopPropagation();">
-      <div class="tooltip"><b>XGBoost / Ensemble</b></div>
-      <div class="planet-visual skill-moon"></div><div class="planet-label">Machine Learning</div>
-    </div>
-    <div class="planet-container o1" style="animation-delay:-30s;" onclick="loadData('s_stat'); event.stopPropagation();">
-      <div class="tooltip"><b>Power Analysis / MDE</b></div>
-      <div class="planet-visual skill-moon"></div><div class="planet-label">A/B Testing</div>
-    </div>
-
-    <div class="ring ring-2"><div class="ring-label">PROJECTS</div></div>
-    <div class="planet-container o2" style="animation-delay:0s;" onclick="loadData('p_gbh'); event.stopPropagation();">
-      <div class="tooltip"><b>Equity Analysis</b> · NPR</div>
-      <div class="planet-visual project-planet" style="background:#00f0ff; box-shadow: 0 0 20px #00f0ff;"></div><div class="planet-label">Boston Bus Equity</div>
-    </div>
-    <div class="planet-container o2" style="animation-delay:-10s;" onclick="loadData('p_mbta'); event.stopPropagation();">
-      <div class="tooltip">Model MAE: <b>3.56 min</b></div>
-      <div class="planet-visual project-planet"></div><div class="planet-label">MBTA Prediction</div>
-    </div>
-    <div class="planet-container o2" style="animation-delay:-20s;" onclick="loadData('p_viral'); event.stopPropagation();">
-      <div class="tooltip">Model AUC: <b>0.884</b></div>
-      <div class="planet-visual project-planet"></div><div class="planet-label">Content Predictor</div>
-    </div>
-    <div class="planet-container o2" style="animation-delay:-30s;" onclick="loadData('p_ab'); event.stopPropagation();">
-      <div class="tooltip">CTR Lift: <b>+4pp</b></div>
-      <div class="planet-visual project-planet"></div><div class="planet-label">Title A/B Test</div>
-    </div>
-    <div class="planet-container o2" style="animation-delay:-40s;" onclick="loadData('p_ecom'); event.stopPropagation();">
-      <div class="tooltip"><b>Funnel · CVR</b> Analysis</div>
-      <div class="planet-visual project-planet"></div><div class="planet-label">GMV Analysis</div>
-    </div>
-    <div class="planet-container o2" style="animation-delay:-50s;" onclick="loadData('p_kaggle'); event.stopPropagation();">
-      <div class="tooltip">Rank: <b>123 / 4143</b></div>
-      <div class="planet-visual comp-gem"></div><div class="planet-label">Kaggle Top 3%</div>
-    </div>
-
-    <div class="ring ring-3"><div class="ring-label">EXPERIENCE</div></div>
-    <div class="planet-container o3" style="animation-delay:0s;" onclick="loadData('e_bu'); event.stopPropagation();">
-      <div class="tooltip"><b>M.S. Data Science</b></div>
-      <div class="planet-visual exp-star"></div><div class="planet-label">Boston University</div>
-    </div>
-    <div class="planet-container o3" style="animation-delay:-18.7s;" onclick="loadData('e_tencent'); event.stopPropagation();">
-      <div class="tooltip">Efficiency: <b>+35%</b></div>
-      <div class="planet-visual exp-star"></div><div class="planet-label">Tencent Internship</div>
-    </div>
-    <div class="planet-container o3" style="animation-delay:-37.5s;" onclick="loadData('e_gbh'); event.stopPropagation();">
-      <div class="tooltip"><b>NPR / PBS</b> DS Consulting</div>
-      <div class="planet-visual exp-star"></div><div class="planet-label">GBH Consulting</div>
-    </div>
-    <div class="planet-container o3" style="animation-delay:-56.2s;" onclick="loadData('e_syr'); event.stopPropagation();">
-      <div class="tooltip">GPA: <b>3.7 / Top 10%</b></div>
-      <div class="planet-visual exp-star"></div><div class="planet-label">Syracuse University</div>
+    
+    <div id="hero-hud">
+      <div class="hud-inner">
+        <button class="hud-close" onclick="closeHUD()" data-en="✕ Close" data-zh="✕ 关闭">✕ Close</button>
+        <div id="hud-body"></div>
+      </div>
     </div>
   </div>
 
-  <div id="hud">
-    <button class="close-btn" onclick="closeHUD()">✕</button>
-    <div class="hud-header">
-      <div class="sys-status">USER: HUIHAO_XING<br>STATUS: <span style="color:#4ade80;">OPT ACTIVE</span><br>SYSTEM: ONLINE <span class="blink">_</span></div>
+  <div id="hero-right">
+    <div id="terminal"></div>
+    <div id="click-hint">
+      <span data-en="> Click any object to explore" data-zh="> 点击任意星球探索">> Click any object to explore</span>
+      <span id="key-hint" data-en="← → to navigate" data-zh="← → 切换星球">← → to navigate</span>
     </div>
-    <div class="hud-main" id="display-area"></div>
+
+    <div id="universe">
+      <div class="sun" onclick="loadData('profile');event.stopPropagation()">
+        <div class="tooltip" style="bottom: 120px;" data-en="<b>IDENTITY</b> CORE" data-zh="<b>核心档案</b>"><b>IDENTITY</b> CORE</div>
+        <div class="holo-wrapper">
+          <div class="holo-rings">
+            <div class="holo-ring r1"></div><div class="holo-ring r2"></div><div class="holo-ring r3"></div>
+          </div>
+          <div class="core-3d-wrapper">
+            <canvas id="tetra-canvas" width="160" height="160"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="ring ring-1"><div class="ring-label" data-en="EDUCATION" data-zh="教育">EDUCATION</div></div>
+      <div class="planet-container o1" style="animation-delay:0s" onclick="loadData('e_bu');event.stopPropagation()">
+        <div class="tooltip" data-en="M.S. <b>Data Science</b>" data-zh="理学硕士 · <b>数据科学</b>">M.S. <b>Data Science</b></div>
+        <div class="planet-visual edu-planet"></div><div class="planet-label" data-en="Boston U." data-zh="波士顿大学">Boston U.</div>
+      </div>
+      <div class="planet-container o1" style="animation-delay:-22.5s" onclick="loadData('e_syr');event.stopPropagation()">
+        <div class="tooltip" data-en="B.S. <b>Business Analytics</b>" data-zh="理学学士 · <b>商业分析</b>">B.S. <b>Business Analytics</b></div>
+        <div class="planet-visual edu-planet"></div><div class="planet-label" data-en="Syracuse U." data-zh="雪城大学">Syracuse U.</div>
+      </div>
+
+      <div class="ring ring-2"><div class="ring-label" data-en="EXPERIENCE" data-zh="经历">EXPERIENCE</div></div>
+      <div class="planet-container o2" style="animation-delay:0s" onclick="loadData('e_gbh');event.stopPropagation()">
+        <div class="tooltip" data-en="DS Consultant · <b>NPR/PBS</b>" data-zh="数据科学顾问 · <b>公共广播</b>">DS Consultant · <b>NPR/PBS</b></div>
+        <div class="planet-visual exp-planet"></div><div class="planet-label" data-en="GBH" data-zh="GBH广播">GBH</div>
+      </div>
+      <div class="planet-container o2" style="animation-delay:-27.5s" onclick="loadData('e_tencent');event.stopPropagation()">
+        <div class="tooltip" data-en="Ops Intern · <b>-35% Processing</b>" data-zh="运营实习 · <b>处理时长 -35%</b>">Ops Intern · <b>-35% Processing</b></div>
+        <div class="planet-visual exp-planet"></div><div class="planet-label" data-en="Tencent News" data-zh="腾讯新闻">Tencent News</div>
+      </div>
+
+      <div class="ring ring-3"><div class="ring-label" data-en="PROJECTS" data-zh="项目">PROJECTS</div></div>
+      <div class="planet-container o3" style="animation-delay:0s" onclick="loadData('p_gbh');event.stopPropagation()">
+        <div class="tooltip" data-en="<b>Metric Redesign</b> · NPR" data-zh="<b>指标重设计</b> · NPR"><b>Metric Redesign</b> · NPR</div>
+        <div class="planet-visual project-planet" style="background:#00f0ff;box-shadow:0 0 18px #00f0ff,0 0 4px rgba(255,255,255,0.3)"></div><div class="planet-label" data-en="Bus Equity" data-zh="运营分析">Bus Equity</div>
+      </div>
+      <div class="planet-container o3" style="animation-delay:-12.5s" onclick="loadData('p_mbta');event.stopPropagation()">
+        <div class="tooltip" data-en="MAE: <b>3.56 min</b> · Azure" data-zh="MAE: <b>3.56分钟</b> · Azure">MAE: <b>3.56 min</b> · Azure</div>
+        <div class="planet-visual project-planet"></div><div class="planet-label" data-en="Delay Forecast" data-zh="延误预测">Delay Forecast</div>
+      </div>
+      <div class="planet-container o3" style="animation-delay:-25s" onclick="loadData('p_viral');event.stopPropagation()">
+        <div class="tooltip" data-en="AUC: <b>0.884</b> · XGBoost" data-zh="AUC: <b>0.884</b> · XGBoost">AUC: <b>0.884</b> · XGBoost</div>
+        <div class="planet-visual project-planet"></div><div class="planet-label" data-en="Viral Predict" data-zh="爆款预测">Viral Predict</div>
+      </div>
+      <div class="planet-container o3" style="animation-delay:-37.5s" onclick="loadData('p_ab');event.stopPropagation()">
+        <div class="tooltip" data-en="CTR: <b>+4pp</b> · p<0.05" data-zh="CTR提升: <b>+4pp</b> · p<0.05">CTR: <b>+4pp</b> · p&lt;0.05</div>
+        <div class="planet-visual project-planet"></div><div class="planet-label" data-en="CTR Experiment" data-zh="CTR实验">CTR Experiment</div>
+      </div>
+      <div class="planet-container o3" style="animation-delay:-50s" onclick="loadData('p_ecom');event.stopPropagation()">
+        <div class="tooltip" data-en="<b>CVR Drop</b> · Root Cause" data-zh="<b>CVR下降</b> · 根因分析"><b>CVR Drop</b> · Root Cause</div>
+        <div class="planet-visual project-planet"></div><div class="planet-label" data-en="GMV Diagnosis" data-zh="GMV归因">GMV Diagnosis</div>
+      </div>
+      <div class="planet-container o3" style="animation-delay:-62.5s" onclick="loadData('p_kaggle');event.stopPropagation()">
+        <div class="tooltip" data-en="Rank: <b>123 / 4143</b>" data-zh="排名: <b>123 / 4143</b>">Rank: <b>123 / 4143</b></div>
+        <div class="planet-visual comp-planet"></div><div class="planet-label" data-en="Churn Top 3%" data-zh="客户流失预测 Kaggle前3%">Churn Top 3%</div>
+      </div>
+    </div>
+    
+    <div id="scroll-cue">
+      <span data-en="SCROLL" data-zh="向下滚动">SCROLL</span>
+      <div class="scroll-line"></div>
+      <div class="scroll-arrow"></div>
+    </div>
   </div>
+</div>
+
+<div id="hero-spacer"></div>
+
+<div id="content">
+
+  <section class="section" id="experience">
+    <p class="section-label" data-en="> 01 / Experience" data-zh="> 01 / 工作经历">> 01 / Experience</p>
+    <h2 class="section-title" data-en="Where I've worked" data-zh="我的工作经历">Where I've worked</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-meta"><p class="tl-period" data-en="Sep – Dec 2024" data-zh="2024年9月 – 12月">Sep – Dec 2024</p><p class="tl-org" data-en="GBH / WGBH" data-zh="GBH广播">GBH / WGBH</p><p class="tl-loc" data-en="Boston, MA" data-zh="波士顿, 美国">Boston, MA</p></div>
+        <div class="tl-line"></div>
+        <div class="tl-content">
+          <p class="tl-role" data-en="Data Science Consultant" data-zh="数据科学顾问">Data Science Consultant</p>
+          <div class="tl-mv-row"><div class="tl-mv-cell"><div class="tl-mv">NPR/PBS</div><div class="tl-ml" data-en="Client" data-zh="项目客户">Client</div></div><div class="tl-mv-cell"><div class="tl-mv">5 Yrs</div><div class="tl-ml" data-en="Data Analyzed" data-zh="数据年限">Data Analyzed</div></div></div>
+          <p class="tl-desc" data-en="GBH News is Boston's NPR and PBS flagship. Led a 5-person DS team to build a bus equity analysis for the newsroom. Redefined core delay metric to passenger-centric wait time, ran EDA across 5 years of MBTA data, and produced policy-ready findings on service disparities." data-zh="GBH是波士顿NPR/PBS旗舰台。主导5人数据科学团队，构建公交公平性分析报告。将核心延误指标重新定义为乘客候车时长，对MBTA五年运营数据进行端到端EDA，输出具有政策价值的数据洞察。">GBH News is Boston's NPR and PBS flagship. Led a 5-person DS team to build a bus equity analysis for the newsroom. Redefined core delay metric to passenger-centric wait time, ran EDA across 5 years of MBTA data, and produced policy-ready findings on service disparities.</p>
+          <div class="chips"><span class="chip">Consulting</span><span class="chip">Metric Design</span><span class="chip">EDA</span><span class="chip">Public Policy</span><span class="chip">Python / SQL</span></div>
+          <div class="tl-terminal" data-lines='["$ cd GBH_Consulting/transit_equity/2024","&gt; dataset: MBTA <val>5yr</val> arrivals + passenger survey","&gt; redefining delay_metric → <val>passenger_centric_wait_time</val>","&gt; route_14: avg_delay <val>&gt;16 min</val> — highest disparity","&gt; equity_finding: high-delay routes serve <val>lower-income</val> communities <ok>[PUBLISHED]</ok>"]'></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-meta"><p class="tl-period" data-en="Dec 2023 – Mar 2024" data-zh="2023年12月 – 2024年3月">Dec 2023 – Mar 2024</p><p class="tl-org" data-en="Tencent News" data-zh="腾讯新闻">Tencent News</p><p class="tl-loc" data-en="Beijing, CN" data-zh="北京, 中国">Beijing, CN</p></div>
+        <div class="tl-line"></div>
+        <div class="tl-content">
+          <p class="tl-role" data-en="Operations Intern" data-zh="运营实习生">Operations Intern</p>
+          <div class="tl-mv-row"><div class="tl-mv-cell"><div class="tl-mv">-35%</div><div class="tl-ml" data-en="Processing Time" data-zh="处理时长">Processing Time</div></div><div class="tl-mv-cell"><div class="tl-mv">300k+</div><div class="tl-ml" data-en="Views Driven" data-zh="新增播放量">Views Driven</div></div></div>
+          <p class="tl-desc" data-en="Monitored content performance metrics (views, likes, comments) and identified viral keyword-traffic patterns to build a reusable topic evaluation framework. Applied GenAI to streamline content SOPs, cutting manual processing time ~35% and contributing to 300k+ incremental views." data-zh="负责内容指标监控（播放量、点赞、评论），分析热点关键词与流量爆发规律，构建可复用的选题判断框架。应用生成式AI优化内容处理SOP，降低人工处理时长约35%，累计带来新增播放量30万+。">Monitored content performance metrics (views, likes, comments) and identified viral keyword-traffic patterns to build a reusable topic evaluation framework. Applied GenAI to streamline content SOPs, cutting manual processing time ~35% and contributing to 300k+ incremental views.</p>
+          <div class="chips"><span class="chip">Content Analytics</span><span class="chip">GenAI</span><span class="chip">Metric Design</span><span class="chip">SOP Optimization</span></div>
+          <div class="tl-terminal" data-lines='["$ cd Tencent_News/ops/2023-2024","&gt; loading content_metrics_dashboard...","&gt; viral_patterns: <val>keyword-traffic correlation detected</val>","&gt; GenAI_integration: SOP_processing_time <val>-35%</val>","&gt; incremental_views: <val>+300k</val> <ok>[CONFIRMED]</ok>"]'></div>
+        </div>
+      </div>
+    </div>
+    <a class="section-next" href="#projects"><div class="sn-arrow"></div><span data-en="Projects" data-zh="项目">Projects</span></a>
+  </section>
+
+  <section class="section" id="projects">
+    <p class="section-label" data-en="> 02 / Projects" data-zh="> 02 / 项目经历">> 02 / Projects</p>
+    <h2 class="section-title" data-en="Things I've built" data-zh="我的项目">Things I've built</h2>
+    <div class="proj-grid">
+
+      <div class="pc" onclick="toggleCardDeep(this)">
+        <p class="pc-type" data-en="Project Archive" data-zh="项目档案">Project Archive</p><h3 class="pc-title" data-en="Boston Bus Equity Analysis" data-zh="营运时序数据分析">Boston Bus Equity Analysis</h3>
+        <p class="pc-desc" data-en="Led metric design and 5-year EDA for GBH News (NPR affiliate). Reconstructed a passenger-centric delay metric using next-available-bus logic—revealing systematic underreporting hidden by standard KPIs." data-zh="主导GBH新闻（NPR）的乘客体验指标设计与五年EDA。基于“下一班可乘”逻辑重建乘客候车时长指标，揭示传统KPI对延误的系统性低估。">Led metric design and 5-year EDA for GBH News (NPR affiliate). Reconstructed a passenger-centric delay metric using next-available-bus logic—revealing systematic underreporting hidden by standard KPIs.</p>
+        <div class="pc-mvs"><div><div class="pc-mv" data-en="Route 14" data-zh="14路">Route 14</div><div class="pc-ml" data-en=">16 min delay" data-zh="平均延误>16分钟">>16 min delay</div></div><div><div class="pc-mv" data-en="5 Years" data-zh="5年">5 Years</div><div class="pc-ml" data-en="Data Analyzed" data-zh="数据年限">Data Analyzed</div></div></div>
+        <div class="chips"><span class="chip">Metric Design</span><span class="chip">EDA</span><span class="chip">Time Series</span><span class="chip">Python/SQL</span></div>
+        <div class="expand-hint" data-en="▸ DEEP DIVE" data-zh="▸ 深度解析">▸ DEEP DIVE</div>
+        
+        <div class="deep-content">
+          <div class="db"><p class="db-lbl" data-en="◆ Why This Problem" data-zh="◆ 为什么">◆ Why This Problem</p><p class="db-txt" data-en="Existing MBTA KPIs masked real passenger experience: a bus leaving 2 min early is counted 'on time' but strands waiting passengers." data-zh="现有MBTA KPI掩盖了真实乘客体验：提前2分钟发车被记为“准点”，但实际上让乘客扑空。">Existing MBTA KPIs masked real passenger experience: a bus leaving 2 min early is counted 'on time' but strands waiting passengers.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ How It Was Built" data-zh="◆ 如何构建">◆ How It Was Built</p><p class="db-txt" data-en="Constructed available_bus_depart_time—earliest bus actually catchable. Compared 2019 vs 2022 ridership. Joined MBTA data with 2023 Passenger Survey demographics." data-zh="构建“最早可乘发车时间”字段。对比2019/2022年客流数据。关联2023年乘客调查人口统计信息。">Constructed available_bus_depart_time—earliest bus actually catchable. Compared 2019 vs 2022 ridership. Joined MBTA data with 2023 Passenger Survey demographics.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Key Finding" data-zh="◆ 核心发现">◆ Key Finding</p><p class="db-txt" data-en="High-delay routes (14, 23, 28, 111) disproportionately serve lower-income communities. Route 14 averaged >16 min. Routes 23/28 improved ~3 min post-COVID; Route 24 worsened by 7 min." data-zh="高延误线路（14、23、28、111路）主要服务低收入社区。14路平均延误超16分钟。疫情后23/28路改善约3分钟，24路恶化7分钟。">High-delay routes (14, 23, 28, 111) disproportionately serve lower-income communities. Route 14 averaged >16 min. Routes 23/28 improved ~3 min post-COVID; Route 24 worsened by 7 min.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Limitation" data-zh="◆ 局限性">◆ Limitation</p><p class="db-txt" data-en="Fall seasons only. AFC undercounting may bias boardings data." data-zh="仅覆盖秋季数据。AFC系统对客流存在低估，可能影响分析精度。">Fall seasons only. AFC undercounting may bias boardings data.</p></div>
+          <a class="gh-link" href="https://github.com/huihaoxing" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>
+          <div class="close-hint" data-en="▾ CLICK TO CLOSE" data-zh="▾ 点击关闭">▾ CLICK TO CLOSE</div>
+        </div>
+      </div>
+
+      <div class="pc" onclick="toggleCardDeep(this)">
+        <p class="pc-type" data-en="Project Archive" data-zh="项目档案">Project Archive</p><h3 class="pc-title" data-en="MBTA Delay Prediction (Azure)" data-zh="延误预测（Azure）">MBTA Delay Prediction (Azure)</h3>
+        <p class="pc-desc" data-en="End-to-end delay prediction for Green Line B integrating weather and event data. Cloud ETL on Azure; XGBoost by AutoML. Weather and events confirmed as drivers via ANOVA and T-test." data-zh="构建绿线B的端到端延误预测模型，整合天气与赛事数据。Azure云端ETL，AutoML选出XGBoost，ANOVA与T检验确认驱动因素。MAE 3.56分钟。">End-to-end delay prediction for Green Line B integrating weather and event data. Cloud ETL on Azure; XGBoost by AutoML. Weather and events confirmed as drivers via ANOVA and T-test.</p>
+        <div class="pc-mvs"><div><div class="pc-mv">3.56 min</div><div class="pc-ml" data-en="Model MAE" data-zh="模型MAE">Model MAE</div></div><div><div class="pc-mv">F=160.49</div><div class="pc-ml">ANOVA</div></div></div>
+        <div class="chips"><span class="chip">Azure AutoML</span><span class="chip">Apache Spark</span><span class="chip">XGBoost</span><span class="chip">ANOVA</span></div>
+        <div class="expand-hint" data-en="▸ DEEP DIVE" data-zh="▸ 深度解析">▸ DEEP DIVE</div>
+        
+        <div class="deep-content">
+          <div class="db"><p class="db-lbl" data-en="◆ Why This Problem" data-zh="◆ 为什么">◆ Why This Problem</p><p class="db-txt" data-en="Fenway and TD Garden events create predictable surges—forecasting from event schedules + weather lets MBTA pre-position resources." data-zh="芬威球场与TD花园赛事制造可预测的客流高峰——结合赛事日程与天气预报可提前调配运力。">Fenway and TD Garden events create predictable surges—forecasting from event schedules + weather lets MBTA pre-position resources.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ How It Was Built" data-zh="◆ 如何构建">◆ How It Was Built</p><p class="db-txt" data-en="Merged MBTA arrivals with OpenWeather and Ticketmaster data. ETL via Spark + Azure Data Factory. AutoML tested 20+ configs; XGBoost won." data-zh="按时间戳合并MBTA到站数据、OpenWeather与Ticketmaster。Spark + Azure Data Factory完成ETL。AutoML测试20+配置，XGBoost胜出。">Merged MBTA arrivals with OpenWeather and Ticketmaster data. ETL via Spark + Azure Data Factory. AutoML tested 20+ configs; XGBoost won.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Key Finding" data-zh="◆ 核心发现">◆ Key Finding</p><p class="db-txt" data-en="Events added ~0.5 min delay (t=−14.87, p&lt;0.0001). Snow most disruptive. 7PM peak = highest-risk. R²=0.34." data-zh="赛事平均增加约0.5分钟延误（t=−14.87，p<0.0001）。降雪影响最显著。晚7点为最高风险时段。R²=0.34。">Events added ~0.5 min delay (t=−14.87, p&lt;0.0001). Snow most disruptive. 7PM peak = highest-risk. R²=0.34.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Limitation" data-zh="◆ 局限性">◆ Limitation</p><p class="db-txt" data-en="R²=0.34—unobserved variance from mechanical/signal failures. Live ridership would improve significantly." data-zh="R²=0.34，机械故障与信号问题主导了残差方差。接入实时客流数据将显著改善模型表现。">R²=0.34—unobserved variance from mechanical/signal failures. Live ridership would improve significantly.</p></div>
+          <a class="gh-link" href="https://github.com/huihaoxing" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>
+          <div class="close-hint" data-en="▾ CLICK TO CLOSE" data-zh="▾ 点击关闭">▾ CLICK TO CLOSE</div>
+        </div>
+      </div>
+
+      <div class="pc" onclick="toggleCardDeep(this)">
+        <p class="pc-type" data-en="Project Archive" data-zh="项目档案">Project Archive</p><h3 class="pc-title" data-en="High-Potential Content Predictor" data-zh="高潜爆款内容预测">High-Potential Content Predictor</h3>
+        <p class="pc-desc" data-en="XGBoost classifier for viral-potential tech videos. Scraped 6,000+ YouTube records; TF-IDF + TruncatedSVD (50 dims). Built for Tencent News editorial team as a coarse pre-filter." data-zh="为腾讯新闻编辑团队构建高潜力内容分类模型。抓取6000+条YouTube数据，TF-IDF+SVD特征工程，XGBoost分类器。AUC 0.884，Recall 84.6%。">XGBoost classifier for viral-potential tech videos. Scraped 6,000+ YouTube records; TF-IDF + TruncatedSVD (50 dims). Built for Tencent News editorial team as a coarse pre-filter.</p>
+        <div class="pc-mvs"><div><div class="pc-mv">0.884</div><div class="pc-ml" data-en="AUC Score" data-zh="AUC分数">AUC Score</div></div><div><div class="pc-mv">84.6%</div><div class="pc-ml">Recall</div></div></div>
+        <div class="chips"><span class="chip">XGBoost</span><span class="chip">TF-IDF</span><span class="chip">TruncatedSVD</span><span class="chip">Web Scraping</span></div>
+        <div class="expand-hint" data-en="▸ DEEP DIVE" data-zh="▸ 深度解析">▸ DEEP DIVE</div>
+        
+        <div class="deep-content">
+          <div class="db"><p class="db-lbl" data-en="◆ Why This Problem" data-zh="◆ 为什么">◆ Why This Problem</p><p class="db-txt" data-en="Editors relied on intuition; high-potential content frequently missed. Goal: coarse pre-filter maximizing Recall to minimize miss rate." data-zh="编辑依赖经验判断，高潜内容频繁漏判。目标：构建以Recall为核心、最小化漏判率的粗筛过滤器。">Editors relied on intuition; high-potential content frequently missed. Goal: coarse pre-filter maximizing Recall to minimize miss rate.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ How It Was Built" data-zh="◆ 如何构建">◆ How It Was Built</p><p class="db-txt" data-en="YouTube API scrape → TF-IDF → SVD (50 dims) + channel stats. XGBoost over LightGBM for better regularization on ~6k dataset." data-zh="YouTube API抓取 → TF-IDF向量化 → SVD降维（50维）+ 频道历史特征 → XGBoost。小数据集下XGBoost正则化优于LightGBM。">YouTube API scrape → TF-IDF → SVD (50 dims) + channel stats. XGBoost over LightGBM for better regularization on ~6k dataset.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Key Finding" data-zh="◆ 核心发现">◆ Key Finding</p><p class="db-txt" data-en="Channel history + title semantics top-2 drivers. 'Contrast/conflict' framing consistently correlated with virality. Top-20% pool captured 84.6% of high-potential content." data-zh="频道历史与标题语义为最强预测因子。“对比冲突”类标题与爆发流量强相关。前20%候选池可覆盖84.6%高潜内容。">Channel history + title semantics top-2 drivers. 'Contrast/conflict' framing consistently correlated with virality. Top-20% pool captured 84.6% of high-potential content.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Limitation" data-zh="◆ 局限性">◆ Limitation</p><p class="db-txt" data-en="YouTube-scraped data—cross-platform shift is real. Intended as filter, not deployment-ready recommender." data-zh="YouTube数据与腾讯内部存在分布差异，跨平台迁移风险真实存在。本模型定位为粗筛工具，非生产级推荐系统。">YouTube-scraped data—cross-platform shift is real. Intended as filter, not deployment-ready recommender.</p></div>
+          <a class="gh-link" href="https://github.com/huihaoxing" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>
+          <div class="close-hint" data-en="▾ CLICK TO CLOSE" data-zh="▾ 点击关闭">▾ CLICK TO CLOSE</div>
+        </div>
+      </div>
+
+      <div class="pc" onclick="toggleCardDeep(this)">
+        <p class="pc-type" data-en="Project Archive" data-zh="项目档案">Project Archive</p><h3 class="pc-title" data-en="Title A/B Experiment (Tencent)" data-zh="标题优化 CTR实验">Title A/B Experiment (Tencent)</h3>
+        <p class="pc-desc" data-en="Rigorous A/B test: LLM-optimized vs. DeepL-translated titles for a 400k DAU tech channel. Power analysis: baseline CTR=12%, MDE=3%, α=0.05 → 128k samples/group." data-zh="针对40万DAU科技频道设计严格A/B实验，验证LLM标题优化方案。基于历史CTR=12%、MDE=3%完成样本量测算，每组约12.8万。">Rigorous A/B test: LLM-optimized vs. DeepL-translated titles for a 400k DAU tech channel. Power analysis: baseline CTR=12%, MDE=3%, α=0.05 → 128k samples/group.</p>
+        <div class="pc-mvs"><div><div class="pc-mv">+4pp</div><div class="pc-ml" data-en="CTR Lift" data-zh="CTR提升">CTR Lift</div></div><div><div class="pc-mv" data-en="128k" data-zh="12.8万">128k</div><div class="pc-ml" data-en="Samples/Group" data-zh="每组样本量">Samples/Group</div></div></div>
+        <div class="chips"><span class="chip">A/B Testing</span><span class="chip">Power Analysis</span><span class="chip">Hypothesis Testing</span><span class="chip">LLM Prompt</span></div>
+        <div class="expand-hint" data-en="▸ DEEP DIVE" data-zh="▸ 深度解析">▸ DEEP DIVE</div>
+        
+        <div class="deep-content">
+          <div class="db"><p class="db-lbl" data-en="◆ Why This Problem" data-zh="◆ 为什么">◆ Why This Problem</p><p class="db-txt" data-en="DeepL titles are literal—underperform in Chinese social media CTR. Hypothesis: LLM titles with localized framing improve CTR without hurting completion (guardrail)." data-zh="DeepL直译标题在中文社交媒体CTR上表现偏弱。假设：LLM本地化标题可提升CTR且不损害完播率（护栏指标）。">DeepL titles are literal—underperform in Chinese social media CTR. Hypothesis: LLM titles with localized framing improve CTR without hurting completion (guardrail).</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ How It Was Built" data-zh="◆ 如何构建">◆ How It Was Built</p><p class="db-txt" data-en="User-level randomization to prevent contamination. Fixed prompt template for LLM; DeepL baseline for control. Sample size via two-proportion Z-test." data-zh="用户级随机分流防止污染。固定Prompt模板生成实验组标题，DeepL直译作对照组。双比例Z检验计算样本量。">User-level randomization to prevent contamination. Fixed prompt template for LLM; DeepL baseline for control. Sample size via two-proportion Z-test.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Key Finding" data-zh="◆ 核心发现">◆ Key Finding</p><p class="db-txt" data-en="Simulated CTR: 12%→16% (+4pp, p&lt;0.05). Completion rate delta not significant—quality intact. Supports LLM titles as default." data-zh="模拟结果：CTR从12%提升至16%（+4pp，p<0.05）。完播率无显著差异，内容质量未受损。支持将LLM标题设为默认方案。">Simulated CTR: 12%→16% (+4pp, p&lt;0.05). Completion rate delta not significant—quality intact. Supports LLM titles as default.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Limitation" data-zh="◆ 局限性">◆ Limitation</p><p class="db-txt" data-en="Results are simulated. Novelty effects could inflate short-term CTR. Recommend 2-week holdout." data-zh="结果为模拟数据。新颖效应可能导致短期CTR虚高，建议设置2周holdout验证长期效果。">Results are simulated. Novelty effects could inflate short-term CTR. Recommend 2-week holdout.</p></div>
+          <a class="gh-link" href="https://github.com/huihaoxing" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>
+          <div class="close-hint" data-en="▾ CLICK TO CLOSE" data-zh="▾ 点击关闭">▾ CLICK TO CLOSE</div>
+        </div>
+      </div>
+
+      <div class="pc" onclick="toggleCardDeep(this)">
+        <p class="pc-type" data-en="Project Archive" data-zh="项目档案">Project Archive</p><h3 class="pc-title" data-en="E-Commerce GMV Attribution" data-zh="电商 GMV 归因分析">E-Commerce GMV Attribution</h3>
+        <p class="pc-desc" data-en="Diagnosed declining GMV via Traffic × CVR × AOV decomposition. Root cause: CVR drop at Browse→Payment. Random Forest (grid search) identified page depth and user type as top drivers." data-zh="通过流量×转化率×客单价三层拆解诊断GMV下滑，定位核心原因为浏览→支付环节CVR下降。随机森林（网格搜索）识别出浏览深度与用户类型为核心驱动因素。">Diagnosed declining GMV via Traffic × CVR × AOV decomposition. Root cause: CVR drop at Browse→Payment. Random Forest (grid search) identified page depth and user type as top drivers.</p>
+        <div class="pc-mvs"><div><div class="pc-mv" data-en="CVR Drop" data-zh="CVR下降">CVR Drop</div><div class="pc-ml" data-en="Root Cause" data-zh="根本原因">Root Cause</div></div><div><div class="pc-mv">RF + Grid</div><div class="pc-ml" data-en="Model" data-zh="模型">Model</div></div></div>
+        <div class="chips"><span class="chip">Funnel Analysis</span><span class="chip">Random Forest</span><span class="chip">Grid Search</span><span class="chip">EDA</span></div>
+        <div class="expand-hint" data-en="▸ DEEP DIVE" data-zh="▸ 深度解析">▸ DEEP DIVE</div>
+        
+        <div class="deep-content">
+          <div class="db"><p class="db-lbl" data-en="◆ Why This Problem" data-zh="◆ 为什么">◆ Why This Problem</p><p class="db-txt" data-en="Systematic GMV decomposition forces the question: which lever is broken? Trains diagnostic instinct that separates DS from analysts." data-zh="系统性GMV拆解强制回答：哪个杠杆失效了？训练数据驱动的诊断直觉，这正是数据科学家与分析师的差距所在。">Systematic GMV decomposition forces the question: which lever is broken? Trains diagnostic instinct that separates DS from analysts.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ How It Was Built" data-zh="◆ 如何构建">◆ How It Was Built</p><p class="db-txt" data-en="Three-layer decomposition. Funnel: drop at Cart→Payment. Built LR, DT, RF; grid search; RF selected by F1 on imbalanced set." data-zh="三层指标拆解。漏斗分析定位购物车→支付环节为主要流失点。构建LR/DT/RF，网格搜索，不均衡数据集上以F1选出随机森林。">Three-layer decomposition. Funnel: drop at Cart→Payment. Built LR, DT, RF; grid search; RF selected by F1 on imbalanced set.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Key Finding" data-zh="◆ 核心发现">◆ Key Finding</p><p class="db-txt" data-en="New users converted at significantly lower rates. 3+ page depth was strongest predictor. Fix onboarding > blanket discounts." data-zh="新用户转化率显著低于老用户。浏览页面数≥3是最强预测因子。优化新用户引导优先于全量折扣策略。">New users converted at significantly lower rates. 3+ page depth was strongest predictor. Fix onboarding > blanket discounts.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Limitation" data-zh="◆ 局限性">◆ Limitation</p><p class="db-txt" data-en="Simulated data. Lacks session-level signals (time-on-page, scroll depth)." data-zh="模拟数据。缺乏页面停留时长、滚动深度等session级信号，是主要局限。">Simulated data. Lacks session-level signals (time-on-page, scroll depth).</p></div>
+          <a class="gh-link" href="https://github.com/huihaoxing" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>
+          <div class="close-hint" data-en="▾ CLICK TO CLOSE" data-zh="▾ 点击关闭">▾ CLICK TO CLOSE</div>
+        </div>
+      </div>
+
+      <div class="pc" onclick="toggleCardDeep(this)">
+        <p class="pc-type" data-en="Competition" data-zh="竞赛">Competition</p><h3 class="pc-title" data-en="Kaggle: Telco Churn — Top 3%" data-zh="客户流失预测 Kaggle前3%">Kaggle: Telco Churn — Top 3%</h3>
+        <p class="pc-desc" data-en="Ranked 123/4,143 in Kaggle Playground S6E3. Three-model stacking (XGBoost + CatBoost + LightGBM) with 10-fold CV, inner-fold target encoding, rank-averaging ensemble." data-zh="Kaggle Playground S6E3排名123/4143（前3%）。三模型Stacking（XGBoost + CatBoost + LightGBM），10折交叉验证，内层目标编码，Rank-Averaging集成。">Ranked 123/4,143 in Kaggle Playground S6E3. Three-model stacking (XGBoost + CatBoost + LightGBM) with 10-fold CV, inner-fold target encoding, rank-averaging ensemble.</p>
+        <div class="pc-mvs"><div><div class="pc-mv">123/4143</div><div class="pc-ml" data-en="Leaderboard" data-zh="排行榜">Leaderboard</div></div><div><div class="pc-mv" data-en="Top 3%" data-zh="前3%">Top 3%</div><div class="pc-ml" data-en="Percentile" data-zh="百分位">Percentile</div></div></div>
+        <div class="chips"><span class="chip">XGBoost</span><span class="chip">CatBoost</span><span class="chip">LightGBM</span><span class="chip">Ensemble</span></div>
+        <div class="expand-hint" data-en="▸ DEEP DIVE" data-zh="▸ 深度解析">▸ DEEP DIVE</div>
+        
+        <div class="deep-content">
+          <div class="db"><p class="db-lbl" data-en="◆ Why This Problem" data-zh="◆ 为什么">◆ Why This Problem</p><p class="db-txt" data-en="Single-model approaches plateau on tabular churn. Stacking captures different bias-variance trade-offs across tree algorithms." data-zh="单模型在表格型流失预测上容易触达瓶颈。Stacking可捕获不同树模型间的偏差-方差互补效应。">Single-model approaches plateau on tabular churn. Stacking captures different bias-variance trade-offs across tree algorithms.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ How It Was Built" data-zh="◆ 如何构建">◆ How It Was Built</p><p class="db-txt" data-en="10-fold outer + 5-fold inner CV for target encoding. Three models combined via rank-averaging + scipy-optimized weights. N-gram features captured interaction effects." data-zh="外层10折+内层5折CV完成目标编码。三模型Rank-Averaging + scipy权重优化集成。N-gram特征捕获交互效应。">10-fold outer + 5-fold inner CV for target encoding. Three models combined via rank-averaging + scipy-optimized weights. N-gram features captured interaction effects.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Key Finding" data-zh="◆ 核心发现">◆ Key Finding</p><p class="db-txt" data-en="Rank-averaging beat simple averaging. Charges-deviation (TotalCharges − tenure × MonthlyCharges) was top churn driver." data-zh="Rank-Averaging优于简单平均。自定义特征“费用偏差”（总费用-在网时长×月费）为最强流失预测因子。">Rank-averaging beat simple averaging. Charges-deviation (TotalCharges − tenure × MonthlyCharges) was top churn driver.</p></div>
+          <div class="db"><p class="db-lbl" data-en="◆ Limitation" data-zh="◆ 局限性">◆ Limitation</p><p class="db-txt" data-en="GPU training required; not reproducible on CPU-only without adjusting device params." data-zh="训练需GPU；CPU环境需调整device参数，否则无法复现。">GPU training required; not reproducible on CPU-only without adjusting device params.</p></div>
+          <a class="gh-link" href="https://github.com/huihaoxing" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>
+          <div class="close-hint" data-en="▾ CLICK TO CLOSE" data-zh="▾ 点击关闭">▾ CLICK TO CLOSE</div>
+        </div>
+      </div>
+
+      <div class="pc-placeholder">
+        <div class="ph-loader"></div>
+        <p class="ph-sys" data-en="> SYSTEM PROMPT:<br>FETCHING_ADDITIONAL_NODES..." data-zh="> 系统提示：<br>正在获取更多节点...">> SYSTEM PROMPT:<br>FETCHING_ADDITIONAL_NODES...</p>
+        <p class="ph-stat" data-en="STATUS: ENCRYPTED // DEPLOYMENT PENDING" data-zh="状态：加密中 // 部署待定">STATUS: ENCRYPTED // DEPLOYMENT PENDING</p>
+      </div>
+
+    </div>
+    <a class="section-next" href="#skills"><div class="sn-arrow"></div><span data-en="Skills" data-zh="技能栈">Skills</span></a>
+  </section>
+
+  <section class="section" id="skills">
+    <p class="section-label" data-en="> 03 / Skills" data-zh="> 03 / 技能栈">> 03 / Skills</p>
+    <h2 class="section-title" data-en="What I work with" data-zh="我的核心技术">What I work with</h2>
+    <div class="skills-wrap">
+      <div class="radar-wrap">
+        <canvas id="radar-canvas" width="340" height="340"></canvas>
+        <div id="radar-label" class="radar-label"></div>
+      </div>
+      <div class="sk-grid">
+      <div class="sk-card" data-radar="0">
+        <p class="sk-type" data-en="Skill Cluster" data-zh="技能模块">Skill Cluster</p><p class="sk-title" data-en="Languages & Tools" data-zh="语言与工具">Languages & Tools</p>
+        <p class="sk-desc" data-en="Python (Pandas, NumPy, Scikit-learn), advanced SQL (CTEs, window functions, multi-table joins), Apache Spark, Azure (AutoML, Data Factory). Tableau, Power BI, Plotly." data-zh="Python（Pandas、NumPy、Scikit-learn），进阶SQL（CTE、窗口函数、多表查询），Apache Spark，Azure（AutoML、Data Factory）。Tableau、Power BI、Plotly。">Python (Pandas, NumPy, Scikit-learn), advanced SQL (CTEs, window functions, multi-table joins), Apache Spark, Azure (AutoML, Data Factory). Tableau, Power BI, Plotly.</p>
+        <div class="chips"><span class="chip">Python</span><span class="chip">Advanced SQL</span><span class="chip">Spark</span><span class="chip">Azure</span><span class="chip">Tableau</span><span class="chip">Power BI</span></div>
+      </div>
+      <div class="sk-card" data-radar="1">
+        <p class="sk-type" data-en="Skill Cluster" data-zh="技能模块">Skill Cluster</p><p class="sk-title" data-en="Machine Learning" data-zh="机器学习">Machine Learning</p>
+        <p class="sk-desc" data-en="XGBoost, CatBoost, LightGBM, Random Forest, Logistic Regression. Feature engineering, target encoding, grid/random search. Ensemble: stacking, rank-averaging, optimized weights." data-zh="XGBoost、CatBoost、LightGBM、随机森林、逻辑回归。特征工程、目标编码、网格/随机搜索。集成学习：Stacking、Rank-Averaging、权重优化。">XGBoost, CatBoost, LightGBM, Random Forest, Logistic Regression. Feature engineering, target encoding, grid/random search. Ensemble: stacking, rank-averaging, optimized weights.</p>
+        <div class="chips"><span class="chip">XGBoost</span><span class="chip">LightGBM</span><span class="chip">Random Forest</span><span class="chip">Ensemble</span><span class="chip">Feature Eng.</span></div>
+      </div>
+      <div class="sk-card" data-radar="2">
+        <p class="sk-type" data-en="Skill Cluster" data-zh="技能模块">Skill Cluster</p><p class="sk-title" data-en="Stats & Experimentation" data-zh="统计与实验设计">Stats & Experimentation</p>
+        <p class="sk-desc" data-en="A/B experiment design, power analysis (MDE, sample size), hypothesis testing (T-test, ANOVA), metric design, causal inference fundamentals." data-zh="A/B实验设计、样本量分析（MDE）、假设检验（T检验、ANOVA）、指标设计、因果推断基础。">A/B experiment design, power analysis (MDE, sample size), hypothesis testing (T-test, ANOVA), metric design, causal inference fundamentals.</p>
+        <div class="chips"><span class="chip">A/B Testing</span><span class="chip">Power Analysis</span><span class="chip">ANOVA / T-Test</span><span class="chip">Metric Design</span></div>
+      </div>
+      <div class="sk-card" data-radar="3">
+        <p class="sk-type" data-en="Skill Cluster" data-zh="技能模块">Skill Cluster</p><p class="sk-title" data-en="Data Engineering" data-zh="数据工程">Data Engineering</p>
+        <p class="sk-desc" data-en="End-to-end pipeline design, Azure Data Factory, Apache Spark ETL, cloud AutoML orchestration. Experience with large-scale data ingestion and multi-source joins." data-zh="端到端数据管道设计，Azure Data Factory，Apache Spark ETL，云端AutoML编排。具备大规模数据接入与多源关联经验。">End-to-end pipeline design, Azure Data Factory, Apache Spark ETL, cloud AutoML orchestration. Experience with large-scale data ingestion and multi-source joins.</p>
+        <div class="chips"><span class="chip">Spark ETL</span><span class="chip">Azure DF</span><span class="chip">Pipeline Design</span><span class="chip">AutoML</span></div>
+      </div>
+      <div class="sk-card" data-radar="4">
+        <p class="sk-type" data-en="Skill Cluster" data-zh="技能模块">Skill Cluster</p><p class="sk-title" data-en="Business & Strategy" data-zh="业务与策略">Business & Strategy</p>
+        <p class="sk-desc" data-en="Metric decomposition (Traffic × CVR × AOV), funnel analysis, content strategy, stakeholder communication. Translating data findings into actionable product decisions." data-zh="指标拆解（流量×转化率×客单价）、漏斗分析、内容策略、跨部门沟通。将数据洞察转化为可落地的产品决策。">Metric decomposition (Traffic × CVR × AOV), funnel analysis, content strategy, stakeholder communication. Translating data findings into actionable product decisions.</p>
+        <div class="chips"><span class="chip">Funnel Analysis</span><span class="chip">Metric Design</span><span class="chip">Content Ops</span><span class="chip">Storytelling</span></div>
+      </div>
+      <div class="sk-card" data-radar="5">
+        <p class="sk-type" data-en="Skill Cluster" data-zh="技能模块">Skill Cluster</p><p class="sk-title" data-en="Visualization & BI" data-zh="可视化与 BI">Visualization & BI</p>
+        <p class="sk-desc" data-en="Tableau, Power BI, Plotly, Matplotlib. Dashboard design for non-technical stakeholders. Interactive charts, geo-mapping, cohort heatmaps." data-zh="Tableau、Power BI、Plotly、Matplotlib。面向非技术受众的Dashboard设计，交互图表、地理热图、队列热力图。">Tableau, Power BI, Plotly, Matplotlib. Dashboard design for non-technical stakeholders. Interactive charts, geo-mapping, cohort heatmaps.</p>
+        <div class="chips"><span class="chip">Tableau</span><span class="chip">Power BI</span><span class="chip">Plotly</span><span class="chip">Matplotlib</span></div>
+      </div>
+    </div>
+    </div>
+    <a class="section-next" href="#education"><div class="sn-arrow"></div><span data-en="Education" data-zh="教育背景">Education</span></a>
+  </section>
+
+  <section class="section" id="education">
+    <p class="section-label" data-en="> 04 / Education" data-zh="> 04 / 教育经历">> 04 / Education</p>
+    <h2 class="section-title" data-en="Where I studied" data-zh="我的教育背景">Where I studied</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <p class="edu-deg" data-en="M.S. Data Science" data-zh="理学硕士 · 数据科学">M.S. Data Science</p><p class="edu-school" data-en="Boston University" data-zh="波士顿大学">Boston University</p>
+   
+        <div class="edu-mvs"><div><div class="edu-mv" data-en="Jan 2026" data-zh="2026年1月">Jan 2026</div><div class="edu-ml" data-en="Graduation" data-zh="毕业时间">Graduation</div></div><div><div class="edu-mv" data-en="Scholarship" data-zh="优秀录取奖学金">Scholarship</div><div class="edu-ml" data-en="Excellence Award" data-zh="优秀奖学金">Excellence Award</div></div></div>
+        <p class="edu-courses-lbl" data-en="Relevant Coursework" data-zh="相关课程">Relevant Coursework</p>
+        <div class="chips" style="margin-top:0">
+          <span class="chip" data-en="Machine Learning" data-zh="机器学习">Machine Learning</span>
+          <span class="chip" data-en="Statistical Modeling" data-zh="统计建模">Statistical Modeling</span>
+          <span class="chip" data-en="Big Data Engineering" data-zh="大数据工程">Big Data Engineering</span>
+          <span class="chip" data-en="Probability & Statistics" data-zh="概率论与数理统计">Probability & Statistics</span>
+        </div>
+      </div>
+      <div class="edu-card">
+        <p class="edu-deg" data-en="B.S. Business Analytics" data-zh="理学学士 · 商业分析">B.S. Business Analytics</p><p class="edu-school" data-en="Syracuse University · Whitman School" data-zh="雪城大学 · 惠特曼商学院">Syracuse University · Whitman School</p>
+        <div class="edu-meta"><div data-en="Graduated · May 2024 · Summa Cum Laude" data-zh="毕业于2024年5月 · 特优荣誉">Graduated · May 2024 · Summa Cum Laude</div><div data-en='"Invest in Success" Scholarship · Minor: CS' data-zh='"助力成功"奖学金 · 副专业：计算机科学'>"Invest in Success" Scholarship · Minor: CS</div></div>
+        <div class="edu-mvs"><div><div class="edu-mv" data-en="3.7 / 4.0" data-zh="3.7 / 4.0">3.7 / 4.0</div><div class="edu-ml" data-en="GPA" data-zh="GPA">GPA</div></div><div><div class="edu-mv" data-en="Top 10%" data-zh="前10%">Top 10%</div><div class="edu-ml" data-en="Class Rank" data-zh="班级排名">Class Rank</div></div></div>
+        <p class="edu-courses-lbl" data-en="Relevant Coursework" data-zh="相关课程">Relevant Coursework</p>
+        <div class="chips" style="margin-top:0">
+          <span class="chip" data-en="Predictive Analytics" data-zh="预测性分析">Predictive Analytics</span>
+          <span class="chip" data-en="Data Mining" data-zh="数据挖掘">Data Mining</span>
+          <span class="chip" data-en="DB Management" data-zh="数据库管理">DB Management</span>
+          <span class="chip" data-en="Business Intelligence" data-zh="商业智能">Business Intelligence</span>
+          <span class="chip" data-en="Python for Analytics" data-zh="Python数据分析">Python for Analytics</span>
+          <span class="chip">SQL</span>
+        </div>
+      </div>
+    </div>
+    <a class="section-next" href="#contact"><div class="sn-arrow"></div><span data-en="Contact" data-zh="联系方式">Contact</span></a>
+  </section>
+
+  <section class="section" id="contact" style="border-bottom:none">
+    <p class="section-label" data-en="> 05 / Contact" data-zh="> 05 / 联系方式">> 05 / Contact</p>
+    <div class="contact-wrap">
+      <div>
+        <h2 class="contact-head" data-en="Let's work<br>together" data-zh="期待合作">Let's work<br>together</h2>
+        <p class="contact-sub" data-en="Actively exploring DS / DA / Strategy Ops roles — especially at companies where data drives product decisions. OPT active, available immediately." data-zh="正积极寻求数据科学家、数据分析师及战略运营岗位，尤其青睐以数据驱动产品决策的公司。OPT有效，随时可入职。">Actively exploring DS / DA / Strategy Ops roles — especially at companies where data drives product decisions. OPT active, available immediately.</p>
+        <div class="contact-status">
+          <span class="cs-dot"></span>
+          <span class="cs-text"><span data-en="Open to work · " data-zh="求职中 · ">Open to work · </span><span id="cs-time">calculating...</span></span>
+        </div>
+      </div>
+      <div>
+        <div class="c-rows">
+          <div class="c-row2" onclick="copyText('jackxing175@gmail.com',this)"><span class="cr-lbl" data-en="EMAIL" data-zh="电子邮箱">EMAIL</span><span class="cr-val">jackxing175@gmail.com</span><span class="cr-hint" data-en="CLICK TO COPY" data-zh="点击复制">CLICK TO COPY</span></div>
+          <div class="c-row2" onclick="copyText('https://www.linkedin.com/in/huihao/',this)"><span class="cr-lbl" data-en="LINKEDIN" data-zh="领英">LINKEDIN</span><span class="cr-val">linkedin.com/in/huihao</span><span class="cr-hint" data-en="CLICK TO COPY" data-zh="点击复制">CLICK TO COPY</span></div>
+          <div class="c-row2" onclick="copyText('https://github.com/huihaoxing',this)"><span class="cr-lbl">GITHUB</span><span class="cr-val">github.com/huihaoxing</span><span class="cr-hint" data-en="CLICK TO COPY" data-zh="点击复制">CLICK TO COPY</span></div>
+        </div>
+        <a href="Huihao_Xing_Resume.pdf" download class="dl-btn"><span data-en="&gt; DOWNLOAD FULL RESUME .PDF" data-zh="&gt; 下载完整简历 .PDF">&gt; DOWNLOAD FULL RESUME .PDF</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-en="HUIHAO_XING · DATA SCIENTIST" data-zh="邢辉皓 · 数据科学家">HUIHAO_XING · DATA SCIENTIST</span>
+    <div class="footer-links">
+      <a href="https://github.com/huihaoxing" target="_blank" class="footer-link">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/huihao/" target="_blank" class="footer-link" data-en="LinkedIn ↗" data-zh="领英 ↗">LinkedIn ↗</a>
+      <a href="mailto:jackxing175@gmail.com" class="footer-link" data-en="Email ↗" data-zh="电子邮箱 ↗">Email ↗</a>
+    </div>
+    <span data-en="OPEN TO RELOCATION · OPT ACTIVE" data-zh="接受异地 · OPT有效">OPEN TO RELOCATION · OPT ACTIVE</span>
+  </footer>
 </div>
 
 <script>
-  // Twinkle Starfield Init
-  const starfield = document.getElementById('starfield');
-  for(let i=0; i<100; i++) {
-    let star = document.createElement('div'); star.className = 'star';
-    let sz = Math.random() * 2.5 + 0.5; star.style.width = sz + 'px'; star.style.height = sz + 'px';
-    star.style.left = Math.random() * 100 + 'vw'; star.style.top = Math.random() * 100 + 'vh';
-    star.style.setProperty('--dur', (Math.random() * 4 + 2) + 's'); star.style.setProperty('--del', (Math.random() * 5 * -1) + 's');
-    starfield.appendChild(star);
-  }
+/* ── GLOBALS ── */
+let currentLang = 'en'; 
+let currentId = null;
+let typeTO = null;
+const heroIdentity = document.getElementById('hero-identity');
+const heroHud = document.getElementById('hero-hud');
+const heroLeft = document.getElementById('hero-left');
+const hudBody = document.getElementById('hud-body');
 
-  // Ambient Terminal Engine
-  const terminal = document.getElementById('terminal');
-  const logs = [
-    "> Initialize cluster...", "> Connecting to Azure Data Lake...", "> Load Scikit-learn Success.",
-    "> Executing SQL Window functions...", "> [p < 0.05] Significance detected.", "> TF-IDF Vectorizing titles...",
-    "> Random Forest: n_estimators=100", "> Spark ETL job complete.", "> Optimizing MDE parameters..."
+/* ── STARFIELD: PARALLAX + NEBULA + MOUSE RESPONSE ── */
+(function(){
+  const sfCv  = document.getElementById('starfield-canvas');
+  if(!sfCv) return;
+  const sfCtx = sfCv.getContext('2d');
+  let W, H, stars=[];
+  let mouse={x:-9999,y:-9999};
+  let scrollY=0;
+
+  window.addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+  window.addEventListener('scroll',()=>{ scrollY=window.scrollY; });
+
+  function resize(){
+    W=sfCv.width=window.innerWidth;
+    H=sfCv.height=window.innerHeight;
+    if(stars.length===0) initStars();
+  }
+  window.addEventListener('resize',resize);
+
+  const layers=[
+    {count:130,rMin:0.25,rMax:0.8, parallax:0.010,opMin:0.12,opMax:0.50,twS:0.006},
+    {count:80, rMin:0.55,rMax:1.35,parallax:0.025,opMin:0.22,opMax:0.72,twS:0.010},
+    {count:35, rMin:1.0, rMax:2.2, parallax:0.055,opMin:0.40,opMax:0.95,twS:0.015},
   ];
-  let logIdx = 0;
-  function addLog() {
-    const line = document.createElement('div');
-    line.className = 'term-line';
-    line.innerText = logs[logIdx];
-    terminal.appendChild(line);
-    if (terminal.childNodes.length > 5) terminal.removeChild(terminal.firstChild);
-    logIdx = (logIdx + 1) % logs.length;
-    setTimeout(addLog, Math.random() * 2000 + 1000);
-  }
-  addLog();
 
-  const DB = {
-    'profile': {
-      type: 'IDENTITY CORE', title: 'Huihao Xing',
-      desc: 'M.S. Data Science, Boston University (Jan 2026). Specialized in machine learning, A/B experimentation, and scalable data engineering. Open to DS / DA / Strategy Ops roles · OPT Active.',
-      metrics: [ {v: 'M.S. DS', l: 'Boston University'}, {v: 'OPT', l: 'Active · Immediate'} ],
-      tags: ['Data Science', 'Data Analytics', 'Strategy Ops'],
-      isProfile: true
-    },
-    'p_kaggle': {
-      type: 'COMPETITION', title: 'Kaggle: Telco Churn',
-      desc: 'Ranked 123 / 4,143 (top 3%) in Kaggle Playground S6E3. Built a three-model stacking pipeline (XGBoost + CatBoost + LightGBM) with 10-fold stratified CV, inner-fold target encoding to prevent leakage, and an optimized rank-averaging ensemble. Feature engineering included N-gram category interactions, frequency encoding, and arithmetic charge features.',
-      metrics: [ {v: '123 / 4143', l: 'Leaderboard Rank'}, {v: 'Top 3%', l: 'Percentile'} ],
-      tags: ['XGBoost', 'CatBoost', 'LightGBM', 'Ensemble', 'Feature Engineering'],
-      deep: {
-        why: 'Standard single-model approaches plateau on tabular churn data due to diverse feature types (categorical services + continuous charges). Ensemble stacking captures different bias-variance trade-offs across tree algorithms.',
-        how: '10-fold outer CV + 5-fold inner CV for target encoding (prevents leakage). Three models trained independently; final predictions combined via rank-averaging + scipy-optimized weight search. N-gram bigram/trigram features on service combinations captured interaction effects standard models miss.',
-        finding: 'Rank-averaging consistently outperformed simple averaging. Charges-deviation feature (TotalCharges − tenure × MonthlyCharges) was a top driver—customers whose total spend diverges from expected are higher churn risk.',
-        limitation: 'GPU-accelerated training (CUDA / GPU flags) required; results not fully reproducible on CPU-only environments without adjusting device params.'
-      },
-      github: 'https://github.com/huihaoxing'
-    },
-    'p_gbh': {
-      type: 'PROJECT ARCHIVE', title: 'Boston Bus Equity Analysis',
-      desc: 'Led metric design and 5-year EDA for GBH News (NPR affiliate) to quantify service inequity across MBTA bus routes. Identified that the standard "schedule adherence" metric systematically underestimates passenger wait time when buses depart early—reconstructed a passenger-centric delay metric using next available bus logic.',
-      metrics: [ {v: 'Route 14', l: '>16 min avg delay'}, {v: '5 Years', l: 'Data Analyzed' } ],
-      tags: ['Metric Design', 'EDA', 'Time Series', 'Public Policy', 'Python / SQL'],
-      deep: {
-        why: 'GBH\'s journalism team needed data to support transit equity advocacy. Existing MBTA KPIs (schedule adherence) masked real passenger experience: a bus leaving 2 min early is counted "on time" but strands waiting passengers.',
-        how: 'Constructed available_bus_depart_time variable—earliest bus actually catchable given scheduled arrival. Compared 2019 vs 2022 ridership across route tiers. Joined MBTA performance data with 2023 Passenger Survey demographics to identify which communities bear the worst delays.',
-        finding: 'High-delay routes (14, 23, 28, 111) disproportionately serve lower-income and minority communities. Route 14 averaged >16 min delay. Routes 23 and 28 each improved ~3 min post-COVID; Route 24 worsened by 7 min.',
-        limitation: 'Ridership data covers Fall seasons only—seasonal variation not fully captured. AFC undercounting (passengers not tapping CharlieCards) may bias boardings data.'
-      },
-      github: 'https://github.com/huihaoxing'
-    },
-    'p_mbta': {
-      type: 'PROJECT ARCHIVE', title: 'MBTA Delay Prediction (Azure)',
-      desc: 'Built an end-to-end delay prediction system for the Green Line B branch integrating real-time weather (OpenWeather API) and event data (Ticketmaster API). Designed cloud ETL pipelines on Azure; XGBoost regressor selected by AutoML achieved MAE 3.56 min. Statistically confirmed weather and events as delay drivers via ANOVA and T-test.',
-      metrics: [ {v: '3.56 min', l: 'Model MAE'}, {v: 'F=160.49', l: 'ANOVA (weather)'} ],
-      tags: ['Azure AutoML', 'Apache Spark', 'XGBoost', 'ANOVA / T-Test', 'REST APIs'],
-      deep: {
-        why: 'Standard MBTA delay models ignore external context. Fenway Park and TD Garden events create predictable rider surges—if you can forecast delays from known event schedules + weather forecasts, MBTA can pre-position resources.',
-        how: 'Merged MBTA arrival data with OpenWeather and Ticketmaster event records by timestamp and geo-proximity. ETL via Apache Spark + Azure Data Factory. Azure AutoML evaluated 20+ model configurations; XGBoost Regressor won. ANOVA tested weather category vs delay; independent T-test compared event-present vs no-event hours.',
-        finding: 'Events added ~0.5 min average delay (1.5→2.0 min, t=−14.87, p<0.0001). Snow and smoke were most disruptive weather types. 7PM event peak is the highest-risk window. R²=0.34—model explains one-third of variance; useful for trend forecasting, not exact prediction.',
-        limitation: 'R² of 0.34 reflects that most delay variance comes from unobserved factors (mechanical issues, signal failures). Adding live ridership counts or incident reports would improve significantly.'
-      },
-      github: 'https://github.com/huihaoxing'
-    },
-    'p_viral': {
-      type: 'PROJECT ARCHIVE', title: 'High-Potential Content Predictor',
-      desc: 'Built an XGBoost classifier to identify high-viral-potential tech videos before publication for Tencent News editorial team. Scraped 6,000+ YouTube records; combined TF-IDF title features with TruncatedSVD (50 components) for semantic compression. AUC 0.884 / Recall 84.6% on held-out validation set.',
-      metrics: [ {v: '0.884', l: 'AUC Score'}, {v: '84.6%', l: 'Recall'} ],
-      tags: ['XGBoost', 'TF-IDF', 'TruncatedSVD', 'Python', 'Web Scraping'],
-      deep: {
-        why: 'Editors at Tencent News relied on intuition to pick tech video topics. High-potential content was frequently missed. Goal: build a coarse pre-filter that surfaces top 20% of candidates for human review—maximizing Recall over Precision to minimize miss rate.',
-        how: 'Scraped YouTube Data API for title, views, channel, publish date. Features: TF-IDF on titles → TruncatedSVD (50 dims) for semantic compression + channel historical performance stats. XGBoost chosen over LightGBM because dataset size (~6k) didn\'t require LightGBM\'s speed advantage, and XGBoost provided better regularization control for this feature set.',
-        finding: 'Channel historical features and title semantic features were top-2 drivers. "Contrast/conflict" framing in titles (e.g., "X vs Y", "Why X fails") consistently correlated with viral potential. Top-20% candidate pool captured 84.6% of actual high-potential content.',
-        limitation: 'Training data is YouTube-scraped, not Tencent internal. Cross-platform distribution shift is a real concern. Model intended as editorial filtering tool, not a deployment-ready recommender.'
-      },
-      github: 'https://github.com/huihaoxing'
-    },
-    'p_ab': {
-      type: 'PROJECT ARCHIVE', title: 'Title A/B Experiment (Tencent)',
-      desc: 'Designed a statistically rigorous A/B experiment to test LLM-optimized titles vs. DeepL direct translations for a 400k DAU tech news channel. Full power analysis: baseline CTR=12%, MDE=3%, α=0.05, β=0.2 → 128k samples/group. Simulated result: +4pp CTR lift (p<0.05), completion rate held stable.',
-      metrics: [ {v: '+4pp', l: 'CTR Lift'}, {v: '128k', l: 'Samples / Group'} ],
-      tags: ['A/B Testing', 'Power Analysis', 'Hypothesis Testing', 'LLM Prompt Design'],
-      deep: {
-        why: 'Tencent News tech channel relies heavily on translated foreign content. DeepL produces accurate but literal titles that underperform in Chinese social media CTR. Hypothesis: LLM-rewritten titles with localized framing significantly improve CTR without hurting content integrity (guardrail: completion rate).',
-        how: 'User-level randomization (not article-level) to prevent contamination. Fixed prompt template for LLM group; DeepL baseline for control. Sample size calculated via two-proportion Z-test power formula. CTR as primary metric; completion rate as guardrail to detect quality degradation.',
-        finding: 'Simulated CTR: 12% → 16% (+4pp, p<0.05). Completion rate delta was not statistically significant—suggesting title quality did not mislead users. Supports rolling out LLM-optimized titles as default.',
-        limitation: 'Results are simulated, not from a live experiment. Real-world novelty effects (users clicking LLM titles due to curiosity) could inflate short-term CTR. Recommend 2-week holdout before full rollout.'
-      },
-      github: 'https://github.com/huihaoxing'
-    },
-    'p_ecom': {
-      type: 'PROJECT ARCHIVE', title: 'E-Commerce GMV Attribution',
-      desc: 'Diagnosed declining GMV on an international e-commerce platform by decomposing Traffic × CVR × AOV. Root cause: checkout conversion rate drop. Funnel analysis pinpointed the Browse→Payment stage. Random Forest (via grid search) identified page view depth and new/returning user status as top conversion drivers.',
-      metrics: [ {v: 'CVR Drop', l: 'Root Cause'}, {v: 'RF + Grid', l: 'Model Selection'} ],
-      tags: ['Funnel Analysis', 'Random Forest', 'Grid Search', 'EDA', 'Logistic Regression'],
-      deep: {
-        why: 'GMV = Traffic × CVR × AOV. Most teams jump to ad spend or pricing when GMV drops. Systematic decomposition forces the question: which lever is actually broken? This project trains the structured diagnostic instinct that separates DS from analysts.',
-        how: 'Three-layer metric decomposition first. Funnel: Home→Listing→Cart→Payment—drop concentrated at Cart→Payment. EDA revealed regional and new/returning user conversion gaps. Built Logistic Regression, Decision Tree, and Random Forest classifiers; used grid search (max_depth, n_estimators, min_samples_leaf) to tune; Random Forest selected by F1 on imbalanced test set.',
-        finding: 'New users converted at significantly lower rates. Page view depth (browsing 3+ pages) was the single strongest predictor of purchase. Implication: improving onboarding UX and product discovery for new users > blanket discount campaigns.',
-        limitation: 'Dataset is from a course project (simulated e-commerce data). Feature set lacks session-level behavioral signals (time-on-page, scroll depth) that real conversion models depend on heavily.'
-      },
-      github: 'https://github.com/huihaoxing'
-    },
-    'e_tencent': {
-      type: 'EXPERIENCE LOG', title: 'Operations Intern @ Tencent News',
-      desc: 'Monitored content performance metrics (views, likes, comments) and identified viral keyword-traffic patterns to build a reusable topic evaluation framework. Applied GenAI to streamline content SOPs, cutting manual processing time ~35% and contributing to 300k+ incremental views.',
-      metrics: [ {v: '-35%', l: 'Processing Time'}, {v: '300k+', l: 'Views Driven'} ],
-      tags: ['Content Analytics', 'GenAI', 'Metric Design', 'SOP Optimization']
-    },
-    'e_gbh': {
-      type: 'EXPERIENCE LOG', title: 'Data Science Consultant @ GBH',
-      desc: 'GBH News is Boston\'s NPR and PBS flagship station. Led a 5-person DS team to build a bus equity analysis for the newsroom. Redefined core delay metric to passenger-centric wait time, ran EDA across 5 years of MBTA data, and produced policy-ready findings on service disparities across communities.',
-      metrics: [ {v: 'NPR / PBS', l: 'Client'}, {v: '5 Years', l: 'Data Analyzed'} ],
-      tags: ['Consulting', 'Metric Design', 'EDA', 'Public Policy', 'Python / SQL']
-    },
-    'e_bu': {
-      type: 'EDUCATION LOG', title: 'M.S. Data Science — Boston University',
-      desc: 'Graduated January 2026. Core focus: machine learning (supervised/unsupervised), statistical modeling, linear algebra (SVD, eigendecomposition), and big data engineering. Excellence Admission Scholarship recipient.',
-      metrics: [ {v: 'Jan 2026', l: 'Graduation'}, {v: 'Scholarship', l: 'Excellence Award'} ],
-      tags: ['Machine Learning', 'Statistical Modeling', 'Big Data Engineering']
-    },
-    'e_syr': {
-      type: 'EDUCATION LOG', title: 'B.S. Business Analytics — Syracuse',
-      desc: 'Graduated May 2024. Minor in Computer Science. Summa Cum Laude (GPA 3.7/4.0, Top 10%). Coursework in data mining, predictive modeling, and database management. "Invest in Success" scholarship.',
-      metrics: [ {v: '3.7 / 4.0', l: 'GPA'}, {v: 'Top 10%', l: 'Class Rank'} ],
-      tags: ['Business Analytics', 'Data Mining', 'Computer Science']
-    },
-    's_python': { type: 'SKILL CLUSTER', title: 'Languages & Tools', desc: 'Python (Pandas, NumPy, Scikit-learn), advanced SQL (CTEs, window functions, multi-table joins), Apache Spark, Azure (AutoML, Data Factory). Tableau, Power BI, Plotly.', metrics: [], tags: ['Python', 'Advanced SQL', 'Spark', 'Azure', 'Tableau', 'Power BI'] },
-    's_ml': { type: 'SKILL CLUSTER', title: 'Machine Learning', desc: 'XGBoost, CatBoost, LightGBM, Random Forest, Logistic Regression. Feature engineering, target encoding, grid/random search. Ensemble methods: stacking, rank-averaging, optimized weights.', metrics: [], tags: ['XGBoost', 'LightGBM', 'Random Forest', 'Ensemble', 'Feature Engineering'] },
-    's_stat': { type: 'SKILL CLUSTER', title: 'Stats & Experimentation', desc: 'A/B experiment design, power analysis (MDE, sample size), hypothesis testing (T-test, ANOVA), metric design, causal inference fundamentals.', metrics: [], tags: ['A/B Testing', 'Power Analysis', 'ANOVA / T-Test', 'Metric Design'] }
-  };
-
-  const hud = document.getElementById('hud');
-  const displayArea = document.getElementById('display-area');
-  let typeTimeout;
-
-  function loadData(id) {
-    const data = DB[id]; if(!data) return;
-    hud.classList.add('open');
-    
-    let topSection = "";
-    if(data.isProfile) {
-      topSection = `
-        <div class="contact-box">
-          <div class="contact-row"><span class="contact-label">EMAIL</span><span class="contact-val">jackxing175@gmail.com</span><button class="copy-btn" onclick="copyText('jackxing175@gmail.com', this)">[COPY]</button></div>
-          <div class="contact-row"><span class="contact-label">LINKEDIN</span><span class="contact-val">linkedin.com/in/huihao</span><button class="copy-btn" onclick="copyText('https://www.linkedin.com/in/huihao/', this)">[COPY]</button></div>
-          <a href="Huihao_Xing_Resume.pdf" download class="dl-btn">> DOWNLOAD FULL RESUME .PDF</a>
-        </div>`;
-    }
-
-    let metrics = data.metrics.length ? `<div class="metrics-grid">${data.metrics.map(m=>`<div class="metric-box"><div class="metric-val">${m.v}</div><div class="metric-label">${m.l}</div></div>`).join('')}</div>` : "";
-    let tags = data.tags ? `<div class="tags-container">${data.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : "";
-
-    let deepSection = "";
-    if(data.deep) {
-      deepSection = `
-        <div class="deep-toggle" onclick="toggleDeep(this)">
-          <span class="deep-toggle-label">> DEEP DIVE ↓</span>
-        </div>
-        <div class="deep-panel" style="display:none;">
-          <div class="deep-block"><div class="deep-label">◆ WHY THIS PROBLEM</div><div class="deep-text">${data.deep.why}</div></div>
-          <div class="deep-block"><div class="deep-label">◆ HOW IT WAS BUILT</div><div class="deep-text">${data.deep.how}</div></div>
-          <div class="deep-block"><div class="deep-label">◆ KEY FINDING</div><div class="deep-text">${data.deep.finding}</div></div>
-          <div class="deep-block"><div class="deep-label">◆ LIMITATION / NEXT STEP</div><div class="deep-text">${data.deep.limitation}</div></div>
-        </div>`;
-    }
-
-    let githubBtn = "";
-    if(data.github) {
-      githubBtn = `<a href="${data.github}" target="_blank" class="github-btn">> VIEW CODE ON GITHUB ↗</a>`;
-    }
-
-    displayArea.innerHTML = `
-      ${topSection}
-      <div class="data-type">${data.type}</div>
-      <div class="data-title type-cursor" id="type-target"></div>
-      <div class="data-desc" id="desc-target" style="opacity:0; transition:0.3s;">${data.desc}</div>
-      <div id="meta-target" style="opacity:0; transition:0.3s 0.1s;">${metrics}${tags}${deepSection}${githubBtn}</div>
-    `;
-
-    const target = document.getElementById('type-target');
-    let i = 0; clearTimeout(typeTimeout);
-    function type() {
-      if (i < data.title.length) { target.innerHTML += data.title.charAt(i); i++; typeTimeout = setTimeout(type, 5); }
-      else { target.classList.remove('type-cursor'); document.getElementById('desc-target').style.opacity = 1; document.getElementById('meta-target').style.opacity = 1; }
-    }
-    setTimeout(type, 100);
-  }
-
-  function toggleDeep(el) {
-    const panel = el.nextElementSibling;
-    const label = el.querySelector('.deep-toggle-label');
-    if(panel.style.display === 'none') {
-      panel.style.display = 'block';
-      panel.style.animation = 'fadeIn 0.3s ease';
-      label.textContent = '> DEEP DIVE ↑';
-    } else {
-      panel.style.display = 'none';
-      label.textContent = '> DEEP DIVE ↓';
-    }
-  }
-
-  function handleGlobalClick(e) { if(e.target.id === 'universe') closeHUD(); }
-  function closeHUD() { hud.classList.remove('open'); }
-  function copyText(txt, btn) {
-    navigator.clipboard.writeText(txt).then(() => {
-      const orig = btn.innerText; btn.innerText = '[DONE]'; btn.style.borderColor = '#4ade80';
-      setTimeout(() => { btn.innerText = orig; btn.style.borderColor = 'var(--cyan)'; }, 1500);
+  function initStars(){
+    stars=[];
+    layers.forEach((l,li)=>{
+      for(let i=0;i<l.count;i++){
+        stars.push({
+          x:Math.random()*W, y:Math.random()*H,
+          r:l.rMin+Math.random()*(l.rMax-l.rMin),
+          op:l.opMin+Math.random()*(l.opMax-l.opMin),
+          phase:Math.random()*Math.PI*2,
+          twS:l.twS+Math.random()*0.006,
+          layer:li, parallax:l.parallax,
+          mx:0, my:0,
+        });
+      }
     });
   }
+
+  function draw(){
+    sfCtx.clearRect(0,0,W,H);
+    const MOUSE_R=100;
+    stars.forEach(s=>{
+      const pOff = scrollY * s.parallax * 0.14;
+      const sx=s.x, sy=s.y+pOff;
+      const dx=sx-mouse.x, dy=sy-mouse.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      let txm=0,tym=0;
+      if(dist<MOUSE_R&&dist>0){
+        const f=(1-dist/MOUSE_R)*2.2*s.parallax*22;
+        txm=dx/dist*f; tym=dy/dist*f;
+      }
+      s.mx+=(txm-s.mx)*0.10;
+      s.my+=(tym-s.my)*0.10;
+      s.phase+=s.twS;
+      const tw=0.52+0.48*Math.sin(s.phase);
+      const op=s.op*(0.5+0.5*tw);
+      const fx=sx+s.mx, fy=sy+s.my;
+      if(s.layer===2&&op>0.6){
+        const g=sfCtx.createRadialGradient(fx,fy,0,fx,fy,s.r*3);
+        g.addColorStop(0,`rgba(190,225,255,${op*0.20})`);
+        g.addColorStop(1,'rgba(0,0,0,0)');
+        sfCtx.beginPath(); sfCtx.arc(fx,fy,s.r*3,0,Math.PI*2);
+        sfCtx.fillStyle=g; sfCtx.fill();
+      }
+      sfCtx.beginPath(); sfCtx.arc(fx,fy,s.r,0,Math.PI*2);
+      const col=s.layer===2?`rgba(215,235,255,${op})`:
+                s.layer===1?`rgba(200,220,250,${op})`:`rgba(180,200,230,${op})`;
+      sfCtx.fillStyle=col; sfCtx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+})();
+
+/* ── LANGUAGE TOGGLE ── */
+function applyLang(lang){
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.body.classList.toggle('lang-zh', lang==='zh');
+
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const txt = el.getAttribute('data-' + lang);
+    if(txt) el.innerHTML = txt;
+  });
+
+  if(currentId && heroHud && heroHud.classList.contains('active')){
+    loadData(currentId);
+  }
+
+  restartEyebrow();
+  updateStatus();
+
+  // update cr-hint copy text
+  const copyHint = lang==='zh' ? '点击复制' : 'CLICK TO COPY';
+  document.querySelectorAll('.cr-hint').forEach(el=>{
+    if(!el.textContent.includes('✓')) el.textContent=copyHint;
+    el.setAttribute('data-en','CLICK TO COPY');
+    el.setAttribute('data-zh','点击复制');
+  });
+
+  // update button title
+  const btn = document.getElementById('lang-btn');
+  if(btn) btn.title = lang==='en' ? '切换为中文' : 'Switch to English';
+}
+
+function toggleLang(){
+  applyLang(currentLang==='en' ? 'zh' : 'en');
+}
+
+
+window.addEventListener('load', ()=>{ 
+  const savedLang = localStorage.getItem('lang');
+  if(savedLang === 'zh') applyLang('zh');
+  else updateStatus(); 
+});
+
+/* ── VIEW DETAIL: SCROLL + HIGHLIGHT ── */
+const TARGET_MAP = {
+  'e_bu':    {section:'education', selector:'.edu-card:nth-child(1)', type:'card'},
+  'e_syr':   {section:'education', selector:'.edu-card:nth-child(2)', type:'card'},
+  'e_gbh':   {section:'experience', selector:'.tl-item:nth-child(2) .tl-content', type:'tl'},
+  'e_tencent':{section:'experience', selector:'.tl-item:nth-child(1) .tl-content', type:'tl'},
+  'p_gbh':   {section:'projects', selector:'.pc:nth-child(1)', type:'card'},
+  'p_mbta':  {section:'projects', selector:'.pc:nth-child(2)', type:'card'},
+  'p_viral': {section:'projects', selector:'.pc:nth-child(3)', type:'card'},
+  'p_ab':    {section:'projects', selector:'.pc:nth-child(4)', type:'card'},
+  'p_ecom':  {section:'projects', selector:'.pc:nth-child(5)', type:'card'},
+  'p_kaggle':{section:'projects', selector:'.pc:nth-child(6)', type:'card'},
+};
+
+function viewDetail(id){
+  const map = TARGET_MAP[id];
+  if(!map) return;
+  closeHUD();
+  const section = document.getElementById(map.section);
+  if(!section) return;
+  section.scrollIntoView({behavior:'smooth', block:'start'});
+  setTimeout(()=>{
+    const el = document.querySelector(map.selector);
+    if(!el) return;
+    el.classList.remove('card-flash','tl-flash');
+    void el.offsetWidth; // reflow
+    el.classList.add(map.type==='tl' ? 'tl-flash' : 'card-flash');
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(()=>el.classList.remove('card-flash','tl-flash'), 2000);
+  }, 600);
+}
+
+/* ── BACK TO TOP BUTTON ── */
+const backTop = document.getElementById('back-top');
+window.addEventListener('scroll',()=>{
+  if(backTop) backTop.classList.toggle('visible', window.scrollY > window.innerHeight*0.6);
+});
+
+/* ── CONTACT STATUS TIME ── */
+function updateStatus(){
+  const el = document.getElementById('cs-time');
+  if(!el) return;
+  const now = new Date();
+  const bostonH = new Date(now.toLocaleString('en-US',{timeZone:'America/New_York'})).getHours();
+  const isZh = currentLang === 'zh';
+  if(bostonH >= 9 && bostonH < 23) {
+    el.textContent = isZh ? "大概率在线" : "Likely online now";
+  } else {
+    el.textContent = isZh ? "24小时内回复" : "Response within 24h";
+  }
+}
+setInterval(updateStatus, 60000);
+
+/* ── GLOBAL CLICK TO CLOSE HUD ── */
+document.addEventListener('click', function(e) {
+  if(heroHud && !heroHud.classList.contains('active')) return;
+  const hudInner = document.querySelector('.hud-inner');
+  if(hudInner && !hudInner.contains(e.target)) closeHUD();
+});
+
+/* ── TERMINAL ── */
+const terminal=document.getElementById('terminal');
+const logs=['> Initialize cluster...','> Connecting to Azure Data Lake...','> Load Scikit-learn Success.','> Executing SQL window functions...','> [p < 0.05] Significance detected.','> TF-IDF Vectorizing titles...','> XGBoost: n_estimators=300','> Spark ETL job complete.','> Optimizing MDE parameters...','> ANOVA F=160.49, p<0.0001','> Stacking ensemble: rank_avg...','> CatBoost: iterations=1000'];
+let logIdx=0;
+function addLog(){
+  const line=document.createElement('div');line.innerText=logs[logIdx];
+  terminal.appendChild(line);
+  if(terminal.childNodes.length>5)terminal.removeChild(terminal.firstChild);
+  logIdx=(logIdx+1)%logs.length;
+  setTimeout(addLog,Math.random()*2000+900);
+}
+addLog();
+
+/* ── SPACER ── */
+document.getElementById('hero-spacer').style.height=window.innerHeight+'px';
+
+/* ── SCROLL: Hero Sync Fade + Nav border + close HUD ── */
+const universe  =document.getElementById('universe');
+const clickHint =document.getElementById('click-hint');
+const content   =document.getElementById('content');
+const termEl    =document.getElementById('terminal');
+const topNav    =document.getElementById('top-nav');
+const scrollCue =document.getElementById('scroll-cue');
+
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(updateScroll);ticking=true;}});
+window.addEventListener('resize',()=>{document.getElementById('hero-spacer').style.height=window.innerHeight+'px'});
+
+function updateScroll(){
+  ticking=false;
+  const sy=window.scrollY,vh=window.innerHeight;
+  const p=Math.min(sy/vh,1); 
+
+  if(sy > 50) topNav.classList.add('scrolled');
+  else topNav.classList.remove('scrolled');
+
+  const exitP = Math.max((p - 0) / 1, 0);
+  const heroOpacity = Math.max(1 - exitP * 1.6, 0);
+  
+  universe.style.opacity = heroOpacity;
+  if(scrollCue) scrollCue.style.opacity = heroOpacity;
+  if(heroHud && !heroHud.classList.contains('active')){
+    if(heroLeft) heroLeft.style.opacity = heroOpacity;
+  }
+
+  clickHint.style.opacity=Math.max(1-p*3,0);
+  termEl.style.opacity=p>0.6?0:0.3*(1-p*1.2);
+
+  if(p > 0.35 && heroHud && heroHud.classList.contains('active')) {
+    closeHUD();
+  }
+
+  if(p>0.4) content.classList.add('risen');
+  else content.classList.remove('risen');
+
+  updateSidenav();
+}
+updateScroll();
+
+/* ── SIDENAV ── */
+function updateSidenav(){
+  const sy=window.scrollY,vh=window.innerHeight;
+  const items=document.querySelectorAll('.sn-item');
+  const lines=document.querySelectorAll('.sn-line');
+
+  let active='hero';
+  ['experience','projects','skills','education','contact'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(el.getBoundingClientRect().top<vh*0.5) active=id;
+  });
+  if(sy<vh*0.8) active='hero';
+
+  const targets=['hero','experience','projects','skills','education','contact'];
+  items.forEach((item,i)=>{
+    const isActive=item.dataset.target===active;
+    item.classList.toggle('active',isActive);
+  });
+  lines.forEach((line,i)=>{
+    line.classList.toggle('active',targets[i]===active||targets[i+1]===active);
+  });
+}
+
+function scrollToSection(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+/* ── SCROLL REVEAL ── */
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('vis'),e.target.dataset.d||0);
+      revObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.08});
+document.querySelectorAll('.tl-item,.pc:not(.pc-placeholder),.sk-card,.edu-card').forEach((el,i)=>{
+  el.dataset.d=(i%3)*90;revObs.observe(el);
+});
+
+/* ── CARD TOGGLE LOGIC ── */
+function toggleCardDeep(card){
+  const overlay = card.querySelector('.deep-content');
+  if(overlay) {
+    if(!overlay.classList.contains('open')) {
+      overlay.scrollTop = 0; 
+    }
+    overlay.classList.toggle('open');
+  }
+}
+
+/* ── HUD DATA ── */
+const DB={
+  'profile':{type:'IDENTITY CORE',type_zh:'核心档案',title:'Huihao Xing',title_zh:'邢辉皓',desc:'Recent M.S. Data Science Graduate, Boston University (Jan 2026). Specialized in machine learning, A/B experimentation, and scalable data engineering. Open to DS / DA / Strategy Ops · OPT Active.',desc_zh:'波士顿大学数据科学硕士（2026年1月）。专注机器学习、A/B实验与大数据工程。寻求数据科学家、数据分析师及战略运营岗位 · OPT有效。',metrics:[{v:'M.S. Data Science',l:'Boston University',l_zh:'波士顿大学'},{v:'OPT',l:'Active · Immediate',l_zh:'有效 · 随时入职'}],tags:['Data Science','Data Analytics','Strategy Ops'],isProfile:true},
+  'p_kaggle':{type:'COMPETITION',type_zh:'竞赛',title:'Kaggle: Telco Churn',title_zh:'客户流失预测 Kaggle前3%',desc:'Ranked 123/4,143 (top 3%) in Kaggle Playground S6E3. Three-model stacking (XGBoost + CatBoost + LightGBM) with 10-fold CV and rank-averaging ensemble.',desc_zh:'Kaggle Playground S6E3排名123/4143（前3%）。三模型Stacking集成，10折CV，Rank-Averaging权重优化。',metrics:[{v:'123/4143',l:'Leaderboard',l_zh:'排行榜'},{v:'Top 3%',l:'Percentile',l_zh:'百分位'}],tags:['XGBoost','CatBoost','LightGBM','Ensemble'],deep:{why:'Single-model approaches plateau on tabular churn. Stacking captures different bias-variance trade-offs.',why_zh:'单模型在表格型流失预测上容易触达瓶颈，Stacking可捕获不同算法间的偏差-方差互补。',how:'10-fold outer + 5-fold inner CV. Rank-averaging + scipy-optimized weights. N-gram features for interaction effects.',how_zh:'外层10折+内层5折CV做目标编码。三模型Rank-Averaging + scipy权重优化。N-gram特征捕获交互效应。',finding:'Charges-deviation (TotalCharges − tenure × MonthlyCharges) was top driver.',finding_zh:'自定义特征“费用偏差”（总费用 − 在网时长×月费）是最强流失预测因子。',limitation:'GPU training required; CPU-only needs device param adjustment.',limitation_zh:'训练需GPU；CPU环境需调整device参数。'},github:'https://github.com/huihaoxing'},
+  'p_gbh':{type:'PROJECT ARCHIVE',type_zh:'项目档案',title:'Boston Bus Equity',title_zh:'营运时序数据分析',desc:'Led metric design and 5-year EDA for GBH News (NPR). Reconstructed passenger-centric delay metric using next-available-bus logic.',desc_zh:'为GBH新闻（NPR）主导指标设计与五年EDA。基于“下一班可乘”逻辑重建乘客候车时长指标，揭示传统KPI的系统性低估。',metrics:[{v:'Route 14',l:'>16 min delay',l_zh:'平均延误>16分钟'},{v:'5 Years',l:'Data Analyzed',l_zh:'数据年限'}],tags:['Metric Design','EDA','Time Series','Python/SQL'],deep:{why:'MBTA KPIs masked real experience: a bus leaving 2 min early is "on time" but strands passengers.',why_zh:'MBTA的KPI掩盖了真实体验：提前2分钟发车被记为“准时”，但实际上让乘客扑空。',how:'Constructed available_bus_depart_time. Compared 2019 vs 2022. Joined with 2023 Passenger Survey demographics.',how_zh:'构建“最早可乘发车时间”字段，对比2019/2022年客流，关联2023年乘客调查人口统计数据。',finding:'High-delay routes (14,23,28,111) serve lower-income communities. Route 24 worsened by 7 min.',finding_zh:'高延误线路（14、23、28、111路）主要服务低收入社区。24路较疫情前恶化7分钟。',limitation:'Fall seasons only. AFC undercounting may bias boardings.',limitation_zh:'仅覆盖秋季数据。AFC系统对客流存在低估，可能影响分析准确性。'},github:'https://github.com/huihaoxing'},
+  'p_mbta':{type:'PROJECT ARCHIVE',type_zh:'项目档案',title:'MBTA Delay Prediction',title_zh:'延误预测（Azure）',desc:'End-to-end pipeline for Green Line B. Weather + events data. XGBoost by AutoML. MAE 3.56 min.',desc_zh:'绿线B的端到端延误预测管道，整合天气与赛事数据。Azure AutoML选出XGBoost，MAE 3.56分钟。',metrics:[{v:'3.56 min',l:'Model MAE',l_zh:'模型MAE'},{v:'F=160.49',l:'ANOVA',l_zh:'方差分析'}],tags:['Azure AutoML','Spark','XGBoost','ANOVA'],deep:{why:'Event schedules + weather are predictable—forecasting lets MBTA pre-position resources.',why_zh:'赛事日程与天气可提前预知——预测模型可让MBTA提前调配运力。',how:'Merged MBTA + OpenWeather + Ticketmaster by timestamp. Spark ETL. AutoML: 20+ configs, XGBoost won.',how_zh:'按时间戳合并MBTA、OpenWeather与Ticketmaster数据。Spark ETL处理，AutoML测试20+配置，XGBoost胜出。',finding:'Events +0.5 min delay (t=−14.87, p<0.0001). 7PM peak = highest risk. R²=0.34.',finding_zh:'赛事平均增加0.5分钟延误（t=−14.87，p<0.0001）。晚7点为最高风险时段。R²=0.34。',limitation:'R²=0.34—mechanical/signal failures dominate variance.',limitation_zh:'R²=0.34，机械故障与信号问题主导了残差方差，为主要局限。'},github:'https://github.com/huihaoxing'},
+  'p_viral':{type:'PROJECT ARCHIVE',type_zh:'项目档案',title:'Content Predictor',title_zh:'高潜爆款内容预测',desc:'XGBoost classifier for viral-potential videos. 6,000+ YouTube records. TF-IDF + SVD. AUC 0.884 / Recall 84.6%.',desc_zh:'面向腾讯新闻的高潜力视频分类模型。6000+条YouTube数据，TF-IDF+SVD特征，XGBoost分类。AUC 0.884，Recall 84.6%。',metrics:[{v:'0.884',l:'AUC',l_zh:'AUC'},{v:'84.6%',l:'Recall',l_zh:'召回率'}],tags:['XGBoost','TF-IDF','SVD','Web Scraping'],deep:{why:'Editors missed high-potential content. Goal: coarse filter maximizing Recall.',why_zh:'编辑依赖经验判断，高潜内容频繁漏判。目标：构建以Recall为核心的粗筛过滤器。',how:'YouTube API → TF-IDF → SVD (50 dims) + channel stats → XGBoost.',how_zh:'YouTube API抓取 → TF-IDF向量化 → SVD降维（50维）+ 频道历史特征 → XGBoost训练。',finding:'"Contrast/conflict" framing correlated with virality. Top-20% pool captured 84.6% of hits.',finding_zh:'“对比冲突”类标题与爆发流量强相关。前20%候选池可覆盖84.6%的高潜内容。',limitation:'YouTube data ≠ Tencent internal. Distribution shift is real.',limitation_zh:'YouTube数据与腾讯内部数据存在分布差异，跨平台迁移风险真实存在。'},github:'https://github.com/huihaoxing'},
+  'p_ab':{type:'PROJECT ARCHIVE',type_zh:'项目档案',title:'Title A/B Experiment',title_zh:'标题优化 CTR实验',desc:'LLM vs. DeepL titles for 400k DAU channel. Power analysis → 128k samples/group. +4pp CTR lift.',desc_zh:'40万DAU科技频道的标题A/B实验。基于历史CTR=12%、MDE=3%完成样本量测算，每组12.8万。CTR提升+4pp。',metrics:[{v:'+4pp',l:'CTR Lift',l_zh:'CTR提升'},{v:'128k',l:'Samples/Group',l_zh:'每组样本量'}],tags:['A/B Testing','Power Analysis','Hypothesis Testing'],deep:{why:'DeepL titles underperform in Chinese social media CTR.',why_zh:'DeepL直译标题在中文社交媒体CTR上表现偏弱，LLM本地化标题有望提升效果。',how:'User-level randomization. Fixed prompt for LLM; DeepL baseline. Z-test sample size.',how_zh:'用户级随机分流防止污染。固定Prompt模板生成实验组标题，DeepL直译作对照。双比例Z检验计算样本量。',finding:'+4pp CTR (p<0.05). Completion rate unchanged—quality intact.',finding_zh:'模拟CTR从12%提升至16%（+4pp，p<0.05）。完播率无显著差异，内容质量未受损。',limitation:'Simulated results. Novelty effects may inflate short-term CTR.',limitation_zh:'结果为模拟数据。新颖效应可能导致短期CTR虚高，建议设置2周holdout验证。'},github:'https://github.com/huihaoxing'},
+  'p_ecom':{type:'PROJECT ARCHIVE',type_zh:'项目档案',title:'GMV Attribution',title_zh:'电商GMV归因分析',desc:'Diagnosed declining GMV via Traffic × CVR × AOV. Root cause: CVR drop at Browse→Payment. RF identified page depth + user type.',desc_zh:'通过流量×转化率×客单价三层拆解诊断GMV下滑。定位核心原因为浏览→支付环节CVR下降，随机森林识别关键驱动因素。',metrics:[{v:'CVR Drop',l:'Root Cause',l_zh:'根因'},{v:'RF+Grid',l:'Model',l_zh:'模型'}],tags:['Funnel Analysis','Random Forest','EDA'],deep:{why:'Decomposition forces: which lever is broken? Trains diagnostic instinct.',why_zh:'系统性拆解强制回答：哪个杠杆失效了？训练数据驱动的诊断直觉。',how:'Three-layer decomp → funnel → LR/DT/RF → grid search → RF by F1.',how_zh:'三层拆解 → 漏斗分析 → LR/DT/RF建模 → 网格搜索 → 以F1选出随机森林。',finding:'New users convert less. 3+ page depth = strongest predictor.',finding_zh:'新用户转化率显著低于老用户。浏览页面数≥3是最强预测因子。',limitation:'Simulated data. No session-level signals.',limitation_zh:'模拟数据，缺乏页面停留时长、滚动深度等session级信号。'},github:'https://github.com/huihaoxing'},
+  'e_tencent':{type:'EXPERIENCE LOG',type_zh:'工作经历',title:'Operations Intern @ Tencent',title_zh:'运营实习生 @ 腾讯新闻',desc:'Monitored content metrics, identified viral patterns. Applied GenAI to streamline SOPs, cutting processing time ~35% and driving 300k+ incremental views.',desc_zh:'负责内容指标监控，分析热点关键词与流量规律，构建可复用选题框架。应用GenAI优化内容SOP，降低人工处理时长约35%，累计带来新增播放量30万+。',metrics:[{v:'-35%',l:'Processing Time',l_zh:'处理时长减少'},{v:'300k+',l:'Views Driven',l_zh:'新增播放量'}],tags:['Content Analytics','GenAI','Metric Design']},
+  'e_gbh':{type:'EXPERIENCE LOG',type_zh:'工作经历',title:'DS Consultant @ GBH',title_zh:'数据科学顾问 @ GBH',desc:"Boston's NPR/PBS flagship. Led 5-person DS team for bus equity analysis. Redefined delay metric to passenger-centric wait time, 5-year MBTA EDA.",desc_zh:'波士顿NPR/PBS旗舰台。主导5人数据科学团队开展公交公平性分析，将延误指标重新定义为乘客候车时长，完成MBTA五年数据EDA。',metrics:[{v:'NPR/PBS',l:'Client',l_zh:'项目客户'},{v:'5 Years',l:'Data Analyzed',l_zh:'数据分析年限'}],tags:['Consulting','Metric Design','EDA','Public Policy']},
+  'e_bu':{type:'EDUCATION LOG',type_zh:'教育经历',title:'M.S. Data Science — BU',title_zh:'理学硕士 · 数据科学 — 波士顿大学',desc:'Graduated Jan 2026. ML, statistical modeling, SVD/eigendecomposition, big data engineering. Excellence Admission Scholarship.',desc_zh:'2026年1月毕业。课程涵盖机器学习、统计建模、大数据工程。优秀录取奖学金获得者。',metrics:[{v:'Jan 2026',l:'Graduation',l_zh:'毕业时间'},{v:'Scholarship',l:'Excellence Award',l_zh:'优秀奖学金'}],tags:['ML','Statistical Modeling','Big Data']},
+  'e_syr':{type:'EDUCATION LOG',type_zh:'教育经历',title:'B.S. Business Analytics — Syracuse',title_zh:'理学学士 · 商业分析 — 雪城大学',desc:'May 2024. Summa Cum Laude (3.7/4.0, Top 10%). Minor: CS. "Invest in Success" scholarship.',desc_zh:'2024年5月毕业，特优荣誉（GPA 3.7/4.0，约前10%）。副专业：计算机科学。“助力成功”奖学金获得者。',metrics:[{v:'3.7/4.0',l:'GPA',l_zh:'GPA'},{v:'Top 10%',l:'Class Rank',l_zh:'班级排名'}],tags:['Business Analytics','Data Mining','CS']},
+};
+
+function loadData(id){
+  const d=DB[id];if(!d)return;
+  currentId=id;
+  
+  if(heroIdentity && heroHud) {
+    heroIdentity.classList.add('hidden');
+    heroHud.classList.add('active');
+  }
+  document.getElementById('universe').classList.add('blurred');
+  if(heroLeft) heroLeft.style.opacity='1';
+
+  const isZh = currentLang==='zh';
+  const desc = (isZh && d.desc_zh) ? d.desc_zh : d.desc;
+  const hudTitle = (isZh && d.title_zh) ? d.title_zh : d.title;
+  const hudType = (isZh && d.type_zh) ? d.type_zh : d.type;
+
+  let top='';
+  if(d.isProfile){
+    const copyHint = isZh?'点击复制':'CLICK TO COPY';
+    const dlText = isZh?'> 下载完整简历 .PDF':'> DOWNLOAD FULL RESUME .PDF';
+    top=`<div class="contact-block">
+      <div class="c-rows" style="margin-bottom:10px">
+        <div class="c-row2" onclick="copyText('jackxing175@gmail.com',this)"><span class="cr-lbl">EMAIL</span><span class="cr-val">jackxing175@gmail.com</span><span class="cr-hint">${copyHint}</span></div>
+        <div class="c-row2" onclick="copyText('https://www.linkedin.com/in/huihao/',this)"><span class="cr-lbl">LINKEDIN</span><span class="cr-val">linkedin.com/in/huihao</span><span class="cr-hint">${copyHint}</span></div>
+      </div>
+      <a href="Huihao_Xing_Resume.pdf" download class="dl-btn">${dlText}</a>
+    </div>`;
+  }
+  const metrics=d.metrics.length?`<div class="h-metrics">${d.metrics.map(m=>`<div class="h-metric"><div class="h-mv">${m.v}</div><div class="h-ml">${isZh&&m.l_zh?m.l_zh:m.l}</div></div>`).join('')}</div>`:'';
+  const tags=d.tags?`<div class="h-tags">${d.tags.map(t=>`<span class="h-tag">${t}</span>`).join('')}</div>`:'';
+  let deep='';
+  if(d.deep){
+    const dw=isZh&&d.deep.why_zh?d.deep.why_zh:d.deep.why;
+    const dh=isZh&&d.deep.how_zh?d.deep.how_zh:d.deep.how;
+    const df=isZh&&d.deep.finding_zh?d.deep.finding_zh:d.deep.finding;
+    const dl=isZh&&d.deep.limitation_zh?d.deep.limitation_zh:d.deep.limitation;
+    const deepLabel=isZh?'> 深度解析':'> DEEP DIVE';
+    deep=`<div class="hud-deep-toggle" onclick="toggleHudDeep(this)"><span class="hud-deep-lbl">${deepLabel} ↓</span></div>
+    <div class="hud-deep-panel">
+      <div class="dp-block"><p class="dp-lbl">◆ ${isZh?'为什么':'WHY'}</p><p class="dp-txt">${dw}</p></div>
+      <div class="dp-block"><p class="dp-lbl">◆ ${isZh?'如何做':'HOW'}</p><p class="dp-txt">${dh}</p></div>
+      <div class="dp-block"><p class="dp-lbl">◆ ${isZh?'核心发现':'FINDING'}</p><p class="dp-txt">${df}</p></div>
+      <div class="dp-block"><p class="dp-lbl">◆ ${isZh?'局限性':'LIMITATION'}</p><p class="dp-txt">${dl}</p></div>
+    </div>`;
+  }
+  const gh=d.github?`<a class="gh-btn" href="${d.github}" target="_blank" onclick="event.stopPropagation()">▸ GitHub ↗</a>`:'';
+  const hasTarget=TARGET_MAP[id];
+  const viewBtn=hasTarget?`<button class="view-detail-btn" onclick="viewDetail('${id}')">${isZh?'▸ 查看详情':'▸ View Detail'}</button>`:'';
+
+  if(hudBody) {
+    hudBody.innerHTML=`${top}<p class="h-type">${hudType}</p><p class="h-title typing" id="hud-title"></p><p class="h-desc" id="hud-desc" style="opacity:0;transition:.3s var(--apple-ease)">${desc}</p><div id="hud-meta" style="opacity:0;transition:.3s var(--apple-ease) .06s">${metrics}${tags}${deep}${gh}${viewBtn}</div>`;
+
+    const titleEl=document.getElementById('hud-title');
+    let i=0; clearTimeout(typeTO);
+    (function type(){
+      if(i<hudTitle.length){titleEl.innerHTML+=hudTitle.charAt(i);i++;typeTO=setTimeout(type,18);}
+      else{
+        titleEl.classList.remove('typing');
+        document.getElementById('hud-desc').style.opacity=1;
+        const meta=document.getElementById('hud-meta');
+        meta.style.opacity=1;
+        setTimeout(()=>{
+          meta.querySelectorAll('.h-mv').forEach(el=>animateCountup(el,700));
+        },120);
+      }
+    })();
+  }
+}
+
+function closeHUD(){
+  if(heroHud && !heroHud.classList.contains('active')) return;
+  if(heroHud) heroHud.classList.remove('active');
+  if(heroIdentity) heroIdentity.classList.remove('hidden');
+  document.getElementById('universe').classList.remove('blurred');
+  currentId=null; clearTimeout(typeTO);
+  updateScroll();
+}
+
+function toggleHudDeep(el){
+  const p=el.nextElementSibling,lbl=el.querySelector('.hud-deep-lbl');
+  p.classList.toggle('open');
+  lbl.textContent=p.classList.contains('open')? (currentLang==='zh'?'> 深度解析 ↑':'> DEEP DIVE ↑') : (currentLang==='zh'?'> 深度解析 ↓':'> DEEP DIVE ↓');
+}
+
+function copyText(txt, el){
+  navigator.clipboard.writeText(txt).then(()=>{
+    const hint = el.classList.contains('c-row2') ? el.querySelector('.cr-hint') : el;
+    if(!hint) return;
+    const orig = hint.textContent;
+    hint.textContent = '✓ COPIED';
+    hint.style.color = 'var(--green)';
+    setTimeout(()=>{ hint.textContent=orig; hint.style.color=''; }, 1600);
+  }).catch(()=>{});
+}
+
+/* ── TYPEWRITER EYEBROW LOOP ── */
+const eyebrowLines = {
+  en: [
+    '> Initializing profile... system online_',
+    '> Role: Data Scientist / Analyst_',
+    '> Stack: Python · SQL · XGBoost · Spark_',
+    '> Status: OPT Active · Available Now_',
+    '> M.S. Data Science · Boston University_',
+  ],
+  zh: [
+    '> 正在加载档案... 系统上线_',
+    '> 身份：数据科学家 / 数据分析师_',
+    '> 技术栈：Python · SQL · XGBoost · Spark_',
+    '> 状态：OPT有效 · 随时可入职_',
+    '> 理学硕士 · 波士顿大学_',
+  ]
+};
+let eyebrowTO = null;
+
+function restartEyebrow(){
+  clearTimeout(eyebrowTO);
+  const el = document.getElementById('eyebrow-text');
+  if(!el) return;
+  if(el.textContent) el.textContent='';
+  const lines = eyebrowLines[currentLang] || eyebrowLines.en;
+  let li=0, ci=0, deleting=false;
+  function tick(){
+    const line = lines[li];
+    if(!deleting){
+      el.textContent = line.slice(0,ci+1);
+      ci++;
+      if(ci===line.length){ deleting=true; eyebrowTO=setTimeout(tick,2200); return; }
+      eyebrowTO=setTimeout(tick, 38);
+    } else {
+      el.textContent = line.slice(0,ci-1);
+      ci--;
+      if(ci===0){ deleting=false; li=(li+1)%lines.length; eyebrowTO=setTimeout(tick,400); return; }
+      eyebrowTO=setTimeout(tick, 28);
+    }
+  }
+  tick();
+}
+
+/* ── COUNT-UP ANIMATION ── */
+function parseCountup(str){
+  const m = str.match(/^([^0-9\-+.]*)([+\-]?[\d]+\.?[\d]*)(.*)$/);
+  if(!m) return null;
+  const num = parseFloat(m[2]);
+  if(isNaN(num)) return null;
+  const decimals = (m[2].includes('.')) ? m[2].split('.')[1].length : 0;
+  return {prefix:m[1], num, suffix:m[3], decimals};
+}
+function animateCountup(el, duration=900){
+  const original = el.dataset.target || el.textContent.trim();
+  el.dataset.target = original;
+  const parsed = parseCountup(original);
+  if(!parsed) return;
+  const start = performance.now();
+  function frame(now){
+    const t = Math.min((now-start)/duration, 1);
+    const ease = 1 - Math.pow(1-t, 3);
+    const val = parsed.num * ease;
+    el.textContent = parsed.prefix + val.toFixed(parsed.decimals) + parsed.suffix;
+    if(t<1) requestAnimationFrame(frame);
+    else {
+      el.textContent = original;
+      el.style.animation='countup-flash 0.5s ease-out';
+      setTimeout(()=>el.style.animation='',500);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+const countObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      animateCountup(e.target);
+      countObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.8});
+document.querySelectorAll('.pc-mv, .tl-mv').forEach(el=>countObs.observe(el));
+
+/* ── TERMINAL REPLAY ── */
+function buildTerminalLines(termEl){
+  let raw;
+  try{ raw = JSON.parse(termEl.dataset.lines); } catch(e){ return; }
+  termEl.innerHTML = '';
+  raw.forEach(html=>{
+    const div = document.createElement('div');
+    div.className = 'tl-line-out';
+    div.innerHTML = html
+      .replace(/<val>(.*?)<\/val>/g,'<span class="val">$1</span>')
+      .replace(/<ok>(.*?)<\/ok>/g,'<span class="ok">$1</span>');
+    termEl.appendChild(div);
+  });
+}
+function replayTerminal(termEl){
+  const lines = termEl.querySelectorAll('.tl-line-out');
+  lines.forEach(l=>l.classList.remove('show'));
+  lines.forEach((l,i)=>setTimeout(()=>l.classList.add('show'), i*280));
+}
+const termObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      replayTerminal(e.target);
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.tl-terminal').forEach(t=>{
+  buildTerminalLines(t);
+  termObs.observe(t);
+});
+
+/* ── V14 ORIGINAL RADAR CHART ── */
+(function(){
+  const cv = document.getElementById('radar-canvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const W=340, H=340, cx=W/2, cy=H/2, R=130;
+  const labels = ['Languages\n& Tools','Machine\nLearning','Stats &\nExperiment','Data\nEngineering','Business\n& Strategy','Viz & BI'];
+  const baseVals = [0.92, 0.88, 0.85, 0.78, 0.82, 0.75];
+  const N = labels.length;
+  let current = new Array(N).fill(0);
+  let target  = [...baseVals];
+  let hovIdx  = -1;
+  let animating = true;
+
+  const cards = document.querySelectorAll('.sk-card[data-radar]');
+  cards.forEach(card=>{
+    card.addEventListener('mouseenter',()=>{
+      hovIdx = parseInt(card.dataset.radar);
+      target = baseVals.map((v,i)=> i===hovIdx ? Math.min(v+0.08,1) : v*0.7);
+      animating=true;
+      document.getElementById('radar-label').textContent = labels[hovIdx].replace('\n',' ');
+      card.classList.add('hovered');
+    });
+    card.addEventListener('mouseleave',()=>{
+      hovIdx=-1; target=[...baseVals]; animating=true;
+      document.getElementById('radar-label').textContent='';
+      card.classList.remove('hovered');
+    });
+  });
+
+  function angle(i){ return (Math.PI*2/N)*i - Math.PI/2; }
+  function pt(i,r){ return [cx+r*Math.cos(angle(i)), cy+r*Math.sin(angle(i))]; }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let ring=1;ring<=5;ring++){
+      const r=R*ring/5;
+      ctx.beginPath();
+      for(let i=0;i<N;i++){
+        const [x,y]=pt(i,r);
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle=`rgba(0,240,255,${0.06+ring*0.02})`;
+      ctx.lineWidth=1;
+      ctx.stroke();
+    }
+    for(let i=0;i<N;i++){
+      const [x,y]=pt(i,R);
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,y);
+      ctx.strokeStyle='rgba(0,240,255,0.12)';ctx.lineWidth=1;ctx.stroke();
+    }
+    ctx.font='600 11px JetBrains Mono, monospace';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    for(let i=0;i<N;i++){
+      const [x,y]=pt(i,R+22);
+      const isHov=i===hovIdx;
+      ctx.fillStyle=isHov?'#00f0ff':'rgba(203,213,225,0.7)';
+      const parts=labels[i].split('\n');
+      parts.forEach((p,pi)=>ctx.fillText(p,x,y+(pi-(parts.length-1)/2)*14));
+    }
+    ctx.beginPath();
+    for(let i=0;i<N;i++){
+      const [x,y]=pt(i,R*current[i]);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+    grad.addColorStop(0,'rgba(0,240,255,0.25)');
+    grad.addColorStop(1,'rgba(0,100,255,0.08)');
+    ctx.fillStyle=grad;
+    ctx.fill();
+    ctx.strokeStyle='rgba(0,240,255,0.8)';
+    ctx.lineWidth=2;
+    ctx.shadowColor='rgba(0,240,255,0.6)';
+    ctx.shadowBlur=8;
+    ctx.stroke();
+    ctx.shadowBlur=0;
+    for(let i=0;i<N;i++){
+      const [x,y]=pt(i,R*current[i]);
+      const isHov=i===hovIdx;
+      ctx.beginPath();ctx.arc(x,y,isHov?6:3.5,0,Math.PI*2);
+      ctx.fillStyle=isHov?'#fff':'rgba(0,240,255,0.9)';
+      ctx.shadowColor='rgba(0,240,255,1)';ctx.shadowBlur=isHov?16:6;
+      ctx.fill();ctx.shadowBlur=0;
+    }
+
+    let diff=0;
+    for(let i=0;i<N;i++){
+      current[i]+=(target[i]-current[i])*0.1;
+      diff+=Math.abs(target[i]-current[i]);
+    }
+    if(diff>0.001) animating=true;
+    else animating=false;
+    requestAnimationFrame(draw);
+  }
+
+  const radarObs=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      target=[...baseVals]; animating=true;
+      radarObs.disconnect();
+    }
+  },{threshold:0.3});
+  radarObs.observe(cv);
+  draw();
+})();
+
+/* ── KEYBOARD NAVIGATION ── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeHUD();
+  const planetIds=['profile','e_bu','e_syr','e_gbh','e_tencent','p_gbh','p_mbta','p_viral','p_ab','p_ecom','p_kaggle'];
+  if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&window.scrollY<window.innerHeight*0.5){
+    const idx=currentId?planetIds.indexOf(currentId):-1;
+    let next;
+    if(e.key==='ArrowRight') next=planetIds[(idx+1)%planetIds.length];
+    else next=planetIds[(idx-1+planetIds.length)%planetIds.length];
+    loadData(next);
+  }
+});
+
+(function(){
+  const cv = document.getElementById('tetra-canvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = 160, H = 160;
+  let angle = 0;
+  const sunEl = cv.closest('.sun');
+
+  const r = 42;
+  const verts = [
+    [0, -r, 0],
+    [r*Math.sin(0)*0.94,          r*0.33, r*Math.cos(0)*0.94],
+    [r*Math.sin(2*Math.PI/3)*0.94, r*0.33, r*Math.cos(2*Math.PI/3)*0.94],
+    [r*Math.sin(4*Math.PI/3)*0.94, r*0.33, r*Math.cos(4*Math.PI/3)*0.94],
+  ];
+  const faces = [[0,1,2],[0,2,3],[0,3,1],[1,3,2]];
+
+  function rotY(v,a){return[v[0]*Math.cos(a)+v[2]*Math.sin(a),v[1],-v[0]*Math.sin(a)+v[2]*Math.cos(a)];}
+  function rotX(v,a){return[v[0],v[1]*Math.cos(a)-v[2]*Math.sin(a),v[1]*Math.sin(a)+v[2]*Math.cos(a)];}
+  function project(v){const fov=340,z=v[2]+fov;return[W/2+v[0]*fov/z,H/2+v[1]*fov/z];}
+  function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]];}
+  function cross(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];}
+  function len(v){return Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])||1;}
+  function normalize(v){const l=len(v);return[v[0]/l,v[1]/l,v[2]/l];}
+
+  function draw(){
+    const hovered = sunEl && sunEl.matches(':hover');
+    const speed = hovered ? 0.038 : 0.011;
+    angle += speed;
+    ctx.clearRect(0,0,W,H);
+
+    for(let y=0;y<H;y+=3){
+      const a = 0.018 + Math.sin(y*0.13+angle*2)*0.008;
+      ctx.fillStyle=`rgba(0,240,255,${a})`;
+      ctx.fillRect(0,y,W,1);
+    }
+
+    const tf = verts.map(v=>rotX(rotY(v,angle),-0.38));
+
+    const sorted = faces.map((f,i)=>{
+      const pts = f.map(j=>tf[j]);
+      const z = (pts[0][2]+pts[1][2]+pts[2][2])/3;
+      const n = normalize(cross(sub(pts[1],pts[0]),sub(pts[2],pts[0])));
+      const bright = Math.max(0,n[2])*0.65+0.35;
+      return {f,i,z,bright};
+    }).sort((a,b)=>b.z-a.z);
+
+    sorted.forEach(({f,i,bright})=>{
+      const pts2d = f.map(j=>project(tf[j]));
+      ctx.beginPath();
+      ctx.moveTo(pts2d[0][0],pts2d[0][1]);
+      pts2d.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+      ctx.closePath();
+
+      const g = ctx.createLinearGradient(pts2d[0][0],pts2d[0][1],pts2d[2][0],pts2d[2][1]);
+      const alpha = bright*(i===0?0.78:i===3?0.18:0.42);
+      g.addColorStop(0,`rgba(0,240,255,${alpha})`);
+      g.addColorStop(0.5,`rgba(60,200,255,${alpha*0.65})`);
+      g.addColorStop(1,`rgba(0,80,255,${alpha*0.25})`);
+      ctx.fillStyle=g;
+      ctx.fill();
+
+      ctx.strokeStyle=`rgba(0,240,255,${0.55*bright+0.25})`;
+      ctx.lineWidth = hovered ? 2 : 1.4;
+      ctx.shadowColor='rgba(0,240,255,0.95)';
+      ctx.shadowBlur = hovered ? 14 : 7;
+      ctx.stroke();
+      ctx.shadowBlur=0;
+    });
+
+    tf.forEach(v=>{
+      const p=project(v);
+      ctx.beginPath();ctx.arc(p[0],p[1],hovered?3.5:2.2,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,240,255,1)';
+      ctx.shadowColor='rgba(0,240,255,1)';
+      ctx.shadowBlur=hovered?16:8;
+      ctx.fill();
+      ctx.shadowBlur=0;
+    });
+
+    const cx=W/2,cy=H/2,cr=hovered?7:5;
+    const radGrad=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);
+    radGrad.addColorStop(0,'rgba(255,255,255,0.95)');
+    radGrad.addColorStop(0.4,'rgba(0,240,255,0.7)');
+    radGrad.addColorStop(1,'rgba(0,240,255,0)');
+    ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);
+    ctx.fillStyle=radGrad;
+    ctx.shadowColor='rgba(0,240,255,1)';
+    ctx.shadowBlur=hovered?22:12;
+    ctx.fill();
+    ctx.shadowBlur=0;
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 </script>
 </body>
 </html>
