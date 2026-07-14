@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Case study: SALES_AI — Huihao Xing</title>
+  <meta name="description" content="How a solo-built, human-gated LLM prospecting system keeps spend bounded and every claim traceable. A full acceptance run cost $0.59.">
+  <meta name="theme-color" content="#f3efe5">
+  <link rel="canonical" href="https://huihaoxing.github.io/sales-ai.html">
+  <meta property="og:title" content="Case study: SALES_AI — spend only after signal">
+  <meta property="og:description" content="A two-stage, human-gated LLM prospecting system. Full acceptance run: $0.59.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://huihaoxing.github.io/sales-ai.html">
+  <meta property="og:image" content="https://huihaoxing.github.io/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face{font-family:Bricolage;src:url('fonts/bricolage-grotesque-latin.woff2') format('woff2');font-weight:400 800;font-display:swap}
+    @font-face{font-family:Inter;src:url('fonts/inter-latin.woff2') format('woff2');font-weight:100 900;font-display:swap}
+    :root{--paper:#f3efe5;--cream:#fffaf0;--ink:#24251f;--muted:#72736a;--line:#c9c4b6;--blue:#5f76d7;--coral:#df8068;--sage:#88a993;--gold:#ddb65e;--sans:Bricolage,Inter,sans-serif;--ui:Inter,Arial,sans-serif;--pad:clamp(20px,5vw,72px);--ease:cubic-bezier(.22,1,.36,1)}
+    *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit}::selection{background:var(--blue);color:white}:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+    .nav{position:fixed;inset:0 0 auto;z-index:100;height:66px;padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;background:rgba(243,239,229,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:.82rem;font-weight:750}.brand-mark{width:29px;height:29px;border:1px solid var(--ink);display:grid;place-items:center;transform:rotate(45deg);background:var(--cream)}.brand-mark span{transform:rotate(-45deg);font:750 .58rem var(--ui)}.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}.nav-links a{text-decoration:none;font:650 .65rem var(--ui);letter-spacing:.05em;text-transform:uppercase}.nav-links a:hover{color:var(--blue)}.resume-link{border:1px solid var(--ink);padding:8px 13px;border-radius:999px}
+    .wrap{max-width:840px;margin:0 auto;padding:130px var(--pad) 90px}
+    .crumb{font:750 .58rem var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+    h1{font-size:clamp(2.6rem,6vw,4.6rem);line-height:.92;letter-spacing:-.05em;margin:14px 0 0;font-weight:560}
+    .standfirst{margin:24px 0 0;font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.6;letter-spacing:-.015em;max-width:620px}.standfirst strong{font-weight:750}
+    .meta-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}.meta-strip span{border:1px solid rgba(36,37,31,.3);border-radius:999px;padding:6px 10px;font:650 .56rem var(--ui);letter-spacing:.05em;text-transform:uppercase}
+    h2{font-size:clamp(1.7rem,3vw,2.5rem);line-height:1;letter-spacing:-.04em;margin:72px 0 18px;font-weight:600}
+    p{font-family:var(--ui);font-size:.95rem;line-height:1.75;color:#3d3e36;max-width:640px}
+    p strong{color:var(--ink)}
+    .pull{border-left:3px solid var(--blue);padding:4px 0 4px 20px;margin:34px 0;font-family:var(--sans);font-size:1.25rem;line-height:1.4;letter-spacing:-.02em;font-weight:600;max-width:560px}
+    .stage-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1.5px solid var(--ink);background:var(--cream);margin:30px 0 8px}
+    .stage{padding:16px 14px 18px;border-right:1.5px solid var(--ink);position:relative}.stage:last-child{border-right:0}
+    .stage i{display:block;width:12px;height:12px;border:1.5px solid var(--ink);background:var(--blue);margin-bottom:12px;font-style:normal}
+    .stage:nth-child(2) i{background:var(--coral);border-radius:50%}.stage:nth-child(3) i{background:var(--sage)}.stage:nth-child(4) i{background:var(--gold)}.stage:nth-child(5) i{background:var(--cream)}
+    .stage b{display:block;font:750 .6rem var(--ui);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+    .stage span{display:block;font:400 .68rem/1.45 var(--ui);color:#5d5e55}
+    .flow-note{font:650 .56rem var(--ui);letter-spacing:.07em;text-transform:uppercase;color:#66675e;margin:0 0 10px}
+    .gate-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--coral);border:1.5px solid var(--ink);padding:2px 7px;font:800 .5rem var(--ui);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+    .numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:30px 0}
+    .num{border:1.5px solid var(--ink);background:var(--cream);padding:18px 16px}
+    .num b{display:block;font-size:2rem;letter-spacing:-.04em;font-weight:600}
+    .num span{display:block;margin-top:6px;font:650 .6rem var(--ui);letter-spacing:.06em;text-transform:uppercase;color:#5d5e55;line-height:1.5}
+    .decision{border-top:1px solid var(--line);padding:22px 0;display:grid;grid-template-columns:minmax(140px,.35fr) 1fr;gap:18px}
+    .decision:last-of-type{border-bottom:1px solid var(--line)}
+    .decision b{font-size:1.05rem;letter-spacing:-.02em}
+    .decision p{margin:0;font-size:.85rem}
+    .foot-cta{margin-top:84px;border:1.5px solid var(--ink);background:var(--cream);padding:34px;clip-path:polygon(0 0,96% 0,100% 14%,100% 100%,0 100%)}
+    .foot-cta h2{margin:0 0 10px}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+    .button{min-height:43px;padding:0 17px;border:1px solid var(--ink);border-radius:999px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:transparent;cursor:pointer;font:700 .68rem var(--ui);letter-spacing:.03em;transition:.22s}.button.primary{background:var(--ink);color:white}.button:hover{transform:translateY(-2px);box-shadow:0 7px 0 rgba(36,37,31,.09)}
+    footer{border-top:1px solid var(--line);padding:26px var(--pad);display:flex;justify-content:space-between;gap:20px;font:650 .56rem var(--ui);letter-spacing:.08em;text-transform:uppercase;color:#696a61}
+    @media(max-width:700px){.stage-flow{grid-template-columns:1fr}.stage{border-right:0;border-bottom:1.5px solid var(--ink)}.stage:last-child{border-bottom:0}.gate-tag{top:50%;left:auto;right:12px;transform:translateY(-50%)}.decision{grid-template-columns:1fr;gap:6px}.nav-links li:not(:last-child){display:none}footer{display:block}footer span{display:block;margin-top:7px}}
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <a class="brand" href="index.html"><span class="brand-mark"><span>HX</span></span>Huihao Xing</a>
+    <ul class="nav-links"><li><a href="index.html#work">Work</a></li><li><a href="index.html#experience">Experience</a></li><li><a href="index.html#contact">Contact</a></li><li><a class="resume-link" href="resume/Huihao_Xing_Resume.pdf" target="_blank">Résumé ↗</a></li></ul>
+  </nav>
+
+  <main class="wrap">
+    <span class="crumb">Case study · 01 / SALES_AI</span>
+    <h1>Spend only after signal.</h1>
+    <p class="standfirst">A prospecting system I designed, built, and ran solo for a real B2B food business. It finds candidate buyers cheaply, lets a human decide who deserves research, backs every claim with a public source, and drafts outreach <strong>that it is structurally unable to send.</strong></p>
+    <div class="meta-strip"><span>Solo build</span><span>Claude + OpenAI</span><span>MCP server</span><span>Human-gated</span><span>2026</span></div>
+
+    <h2>The problem</h2>
+    <p>Soja Foods is a U.S. tofu-skin producer preparing for launch. It needed a pipeline of importers and specialty distributors — classic B2B prospecting — with one person (me) owning everything technical.</p>
+    <p>The naive LLM version of this fails in two predictable ways. First, <strong>cost inversion:</strong> deep research is the expensive step, and running it on every scraped candidate means paying the most for the leads you know the least about. Second, <strong>trust destruction:</strong> auto-sent AI outreach reads as spam, and in food import — a relationship business — one bad first touch closes a door permanently.</p>
+    <p class="pull">So the design question was never "how much can the AI do?" It was "what must the AI never do?"</p>
+
+    <h2>The architecture</h2>
+    <p class="flow-note">Five stages · one human gate · nothing sends automatically</p>
+    <div class="stage-flow">
+      <div class="stage"><i></i><b>01 · Discover</b><span>Deterministic search against business directory APIs. Dedup against everything already seen. Cheap by construction — no LLM calls yet.</span></div>
+      <div class="stage"><span class="gate-tag">Human gate</span><i></i><b>02 · Keep / pass</b><span>A person reviews each candidate and decides who is worth money. Research spend is only unlocked by this decision.</span></div>
+      <div class="stage"><i></i><b>03 · Research</b><span>Source-backed enrichment on kept candidates only. Every claim carries a public citation; unverifiable fields stay blank.</span></div>
+      <div class="stage"><i></i><b>04 · Judge</b><span>Structured verdicts, not vibes: buyer vs. competitor, product-spec fit, and why — recorded as explicit fields a reviewer can challenge.</span></div>
+      <div class="stage"><i></i><b>05 · Draft</b><span>A review-ready letter plus the evidence dossier, handed to a person. The system has no send capability at all.</span></div>
+    </div>
+
+    <h2>What it cost</h2>
+    <div class="numbers">
+      <div class="num"><b>$0.59</b><span>Full acceptance run, discovery through reviewed draft</span></div>
+      <div class="num"><b>1</b><span>Human decision required before any research spend</span></div>
+      <div class="num"><b>0</b><span>Emails the system can send on its own</span></div>
+    </div>
+    <p>Cheap is not the point by itself — <strong>bounded</strong> is the point. Search ceilings and budget caps mean the worst-case bill is known before a run starts, which is what makes it safe to hand to a non-technical operator.</p>
+
+    <h2>Decisions I'd defend</h2>
+    <div class="decision"><b>Deterministic before generative</b><p>Discovery and dedup are plain code. LLMs enter only where judgment is genuinely required — reading sources, assessing fit, writing. This is why the cost curve stays flat as the candidate pool grows.</p></div>
+    <div class="decision"><b>The gate is upstream of the spend</b><p>Most "human in the loop" designs put the human at the end, reviewing output the system already paid to produce. Putting the keep/pass decision before enrichment makes human judgment the budget allocator, not a rubber stamp.</p></div>
+    <div class="decision"><b>Blank beats plausible</b><p>If a fact can't be traced to a public source, the field stays empty. An honest gap costs a follow-up question; a confident hallucination in a first-touch email costs the relationship.</p></div>
+    <div class="decision"><b>No send path, by construction</b><p>Not a config flag — the capability doesn't exist. The deliverable is a draft plus dossier for a person to act on. This single constraint is what makes every other part of the system safe to automate aggressively.</p></div>
+
+    <h2>Built as tools, not a script</h2>
+    <p>The system is exposed as an MCP server — each stage is a tool an agent (or a person) can call, with the cost limits and the gate enforced at the tool layer rather than by prompt discipline. Model-side it runs on Claude and OpenAI models, chosen per step for the cheapest model that clears the quality bar.</p>
+
+    <div class="foot-cta">
+      <h2>Bring me the messy workflow.</h2>
+      <p>I'm looking for AI Solutions, Forward-Deployed, or GTM Engineering teams that care about customer reality as much as model capability.</p>
+      <div class="actions"><a class="button primary" href="mailto:Jackxing175@gmail.com">Jackxing175@gmail.com</a><a class="button" href="https://linkedin.com/in/huihao/" target="_blank" rel="noopener">LinkedIn ↗</a><a class="button" href="index.html">← Back to all work</a></div>
+    </div>
+  </main>
+  <footer><span>© 2026 Huihao Xing</span><span>New York metro · English / 中文</span><span>Built with an unreasonable amount of care</span></footer>
+</body>
+</html>
