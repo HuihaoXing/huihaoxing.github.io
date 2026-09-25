@@ -1,5 +1,5 @@
 // Case pages: whichever beat sits across the reading line sets the scene. The rail shows where you are and jumps.
-import {CASES,state,show,setLight,setAdjust,mobile,debug} from './engine.js?v=20260924c';
+import {CASES,state,show,setLight,setAdjust,mobile,debug} from './engine.js?v=20260925k';
 
 export function mountCase(k){
   const story=document.querySelector('.story'),inner=mobile&&getComputedStyle(story).overflowY==='auto',beats=[...document.querySelectorAll('.beat')],rail=document.querySelector('.rail .segs'),label=document.querySelector('.rail small');
@@ -17,9 +17,9 @@ export function mountCase(k){
     const s=+beats[best].dataset.step;if(first||s!==state.step||state.ck!==k)show(k,s,first)}
   addEventListener('scroll',pick,{passive:true});story.addEventListener('scroll',pick,{passive:true});addEventListener('resize',pick);pick();
 
-  const themeBtn=document.getElementById('theme');
-  function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';themeBtn.textContent=l?'Dark':'Light';try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
-  themeBtn.onclick=()=>theme(document.documentElement.dataset.theme!=='light');
+  const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
+  function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
+  document.querySelector('header .mode').onclick=()=>theme(document.documentElement.dataset.theme!=='light');
   if(document.documentElement.dataset.theme==='light')theme(true);
 
   addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,button,a'))return;

@@ -5,9 +5,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lead research that waits for a person | Jack Xing</title>
-<meta name="description" content="An LLM prospecting pipeline with a human gate before any spend and no way to send on its own. Review per lead fell from about 15 minutes to 2 to 5.">
+<meta name="description" content="An LLM prospecting pipeline on Claude and OpenAI with a human gate before any model spend and no send path. Review per lead fell from about 15 minutes to 2 to 5.">
 <meta property="og:title" content="Lead research that waits for a person">
-<meta property="og:description" content="An LLM prospecting pipeline with a human gate before any spend and no way to send on its own. Review per lead fell from about 15 minutes to 2 to 5.">
+<meta property="og:description" content="An LLM prospecting pipeline on Claude and OpenAI with a human gate before any model spend and no send path. Review per lead fell from about 15 minutes to 2 to 5.">
 <meta property="og:type" content="article">
 <link rel="canonical" href="https://huihaoxing.github.io/sales-ai.html">
 <meta property="og:url" content="https://huihaoxing.github.io/sales-ai.html">
@@ -21,51 +21,52 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260924c">
+<link rel="stylesheet" href="assets/case.css?v=20260925k">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Lead research that waits for a person","description":"An LLM prospecting pipeline on Claude and OpenAI with a human gate before any model spend and no send path. Review per lead fell from about 15 minutes to 2 to 5.","url":"https://huihaoxing.github.io/sales-ai.html","image":"https://huihaoxing.github.io/og/sales-ai.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Takes a tangled problem and turns it into a decision, with data, pipelines and AI."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
 <canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
 <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
-<header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><button class="theme" type="button" id="theme">Light</button><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a></nav></header>
+<header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">Case study, AI systems</p>
-<h1>Each lead took 15 minutes of research. <em>Can AI help without going rogue?</em></h1>
-<p class="lede">A B2B food brand preparing to launch needed importers and specialty distributors, with one person owning everything technical. I designed, built and ran the prospecting system that finds them.</p><dl class="facts"><dt>Role</dt><dd>Sole designer and engineer</dd><dt>Stack</dt><dd>TypeScript, Next.js, Claude and OpenAI APIs, MCP, HubSpot</dd><dt>Status</dt><dd>In use before launch</dd></dl>
+<p class="kick">Case study, applied AI</p>
+<h1>Each lead took 15 minutes of research. <em>Can AI do it without acting on its own?</em></h1>
+<p class="lede">A pre-launch B2B food brand needed importers and specialty distributors, with one person owning everything technical. I designed and built the prospecting system that finds them, researches them and drafts the outreach.</p><dl class="glance"><div><dt>2–5 min</dt><dd>reviewer time per lead, down from about 15</dd></div><div><dt>0</dt><dd>emails the system can send on its own</dd></div><div><dt>$0.06–0.12</dt><dd>model cost per researched lead</dd></div></dl><dl class="facts"><dt>Role</dt><dd>Sole designer and engineer</dd><dt>Stack</dt><dd>TypeScript, Next.js, Claude and OpenAI APIs, MCP, Supabase, HubSpot</dd><dt>Status</dt><dd>Validated end to end; outreach begins at product launch</dd></dl>
 </div></section>
-<section class="beat" data-step="0" data-name="Two ways to fail"><div class="in">
+<section class="beat" data-step="0" data-name="Two failure modes"><div class="in">
 <p class="n">First</p><h2>The naive version fails twice.</h2>
-<p><b>Cost inversion.</b> Deep research is the expensive step, and running it on every scraped candidate pays the most for the leads you know least about.</p>
-<p><b>Trust.</b> Auto-sent AI outreach reads as spam, and in food import, a relationship business, one bad first touch closes a door.</p>
-<p>So the design question was never how much the AI could do. It was what it must never do.</p>
+<p><b>Cost inversion.</b> Deep research is the expensive step; running it on every scraped candidate spends the most on the leads you know least about.</p>
+<p><b>Trust.</b> Auto-sent AI outreach reads as spam, and in food import, a relationship business, a bad first touch closes the account.</p>
+<p>So the design question was not how much the model could do, but what it must never do.</p>
 </div></section>
-<section class="beat" data-step="1" data-name="Find"><div class="in">
+<section class="beat" data-step="1" data-name="Discover"><div class="in">
 <p class="n">01</p><h2>Find candidates.</h2>
-<p>Deterministic search against business-directory APIs, deduplicated against everything already seen. No model calls, so it stays cheap by construction.</p>
+<p>Deterministic code queries the Google Places API and de-duplicates against every lead already seen. No model calls, so widening the candidate pool costs almost nothing.</p>
 </div></section>
-<section class="beat" data-step="2" data-name="Decide"><div class="in">
+<section class="beat" data-step="2" data-name="Gate"><div class="in">
 <p class="n">02</p><h2>A person decides.</h2>
-<p>A person reviews each candidate and keeps or passes it. Research spend is unlocked only by that decision, so the human is the budget allocator, not a rubber stamp at the end.</p>
+<p>A reviewer keeps or passes each candidate. Model spend is unlocked only by that decision, which makes the human the budget allocator rather than a final rubber stamp.</p>
 </div></section>
 <section class="beat" data-step="3" data-name="Research"><div class="in">
 <p class="n">03</p><h2>Research with sources.</h2>
-<p>Enrichment runs on kept candidates only. Every claim carries a public citation, and anything that cannot be traced stays blank. A model then gives verdicts a reviewer can challenge: buyer or competitor, product fit, and why.</p><p class="note"><b>Blank beats plausible</b>An honest gap costs a follow-up question. A confident hallucination in a first email costs the relationship.</p>
+<p>Approved leads are enriched by Claude or OpenAI with provider-hosted web search. Every claim carries a public citation; anything unverifiable stays blank.</p>
+<p>The model then returns structured verdicts a reviewer can check: buyer or competitor, product-spec fit, and the reason.</p><p class="note"><b>Blank beats plausible</b>An honest gap costs a follow-up question. A confident hallucination in a first email costs the relationship.</p>
 </div></section>
 <section class="beat" data-step="4" data-name="Draft"><div class="in">
 <p class="n">04</p><h2>A draft, never sent.</h2>
-<p>The last step writes a review-ready letter and its evidence dossier. Sending opens the person’s own mail; the app holds no mail credentials. The capability does not exist in the code, which is what makes every other step safe to automate.</p>
+<p>A separate model call writes the outreach from saved research, so a prompt change never pays for research twice. Approving opens a prefilled draft in the reviewer’s own mail client; the app holds no mail credentials and has no send path.</p>
+</div></section>
+<section class="beat" data-step="6" data-name="Model design"><div class="in">
+<p class="n">Design</p><h2>Where the models sit, <em>and what bounds them.</em></h2><ul class="list"><li><b>No model where code will do.</b> Discovery and de-duplication are deterministic.</li><li><b>Per-step model choice.</b> Each stage runs on the lowest-cost Claude or OpenAI model that meets the quality bar, switchable per run.</li><li><b>Structured output.</b> Judgments return JSON against a schema, so every verdict is machine-checkable and reviewer-scorable.</li><li><b>Bounded cost.</b> A pinned cap on web searches per call, prompt caching on the stable system prompt, and a billing log with a monthly budget cap.</li><li><b>Tools, not a script.</b> The pipeline is also an MCP server, so an agent can call each stage with the gate and limits enforced in code rather than in the prompt.</li><li><b>Measured.</b> Each run logs reviewer-marked classification accuracy, review time per lead and cost per stage.</li></ul>
 </div></section>
 <section class="beat dec" data-step="5" data-name="The result"><div class="in">
-<p class="n">Result</p><h2>2 to 5 minutes per lead, not 15.</h2><div class="big"><div><b>2–5 min</b><span>human review per lead, down from about 15</span></div><div><b>$0.06–0.12</b><span>model cost per researched lead</span></div><div><b>0</b><span>emails the system can send on its own</span></div></div><p>Cheap is not the point by itself; bounded is. Search ceilings and budget caps mean the worst-case bill is known before a run starts.</p>
-</div></section>
-<section class="beat" data-step="5" data-name="How it is built"><div class="in">
-<p class="n">Under it</p><h2>Tools, not a script.</h2>
-<p>The pipeline is an MCP server, so each stage is a tool an agent or a person can call, with cost limits and the gate enforced in code rather than by prompt. Each step uses the cheapest Claude or OpenAI model that clears the bar, behind strict TypeScript and 300+ automated tests.</p><p class="note"><b>Not yet evaluated at scale</b>The brand has not launched, so only the first dozen or so drafts have been reviewed, too few for a formal evaluation. That is why the design leans on a human gate and hard cost ceilings.</p><a class="next" href="./paid-search.html"><i>Next case</i><span>Ads got 44% cheaper. Should we spend more? →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
+<p class="n">Result</p><h2>2 to 5 minutes per lead, not 15.</h2><div class="big"><div><b>2–5 min</b><span>reviewer time per lead, down from about 15</span></div><div><b>$0.06–0.12</b><span>model cost per researched lead</span></div><div><b>0</b><span>emails the system can send on its own</span></div></div><p>The point is not only low cost but bounded cost: search and budget caps fix the worst-case bill before a run starts.</p><p class="note"><b>Status</b>Validated end to end on real leads. Outreach at volume begins when the product launches, which is also when a scored evaluation set becomes possible.</p><a class="next" href="./rider-wait.html"><i>Next case</i><span>Which bus riders is Boston failing? →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
 </div></section>
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260924c"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260924c';mountCase(3)</script>
+<script src="assets/share.js?v=20260925k"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260925k';mountCase(1)</script>
 </body>
 </html>

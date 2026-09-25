@@ -5,9 +5,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ads got 44% cheaper. Should we spend more? | Jack Xing</title>
-<meta name="description" content="Cheaper clicks from a search-ads pilot, matched to what visitors actually did. Why the broad ads were paused.">
+<meta name="description" content="A search-ads pilot measured against on-site conversion, the decision to pause it, and the shift to AI search that followed.">
 <meta property="og:title" content="Ads got 44% cheaper. Should we spend more?">
-<meta property="og:description" content="Cheaper clicks from a search-ads pilot, matched to what visitors actually did. Why the broad ads were paused.">
+<meta property="og:description" content="A search-ads pilot measured against on-site conversion, the decision to pause it, and the shift to AI search that followed.">
 <meta property="og:type" content="article">
 <link rel="canonical" href="https://huihaoxing.github.io/paid-search.html">
 <meta property="og:url" content="https://huihaoxing.github.io/paid-search.html">
@@ -21,52 +21,57 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260924c">
+<link rel="stylesheet" href="assets/case.css?v=20260925k">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ads got 44% cheaper. Should we spend more?","description":"A search-ads pilot measured against on-site conversion, the decision to pause it, and the shift to AI search that followed.","url":"https://huihaoxing.github.io/paid-search.html","image":"https://huihaoxing.github.io/og/paid-search.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Takes a tangled problem and turns it into a decision, with data, pipelines and AI."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
 <canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
 <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
-<header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><button class="theme" type="button" id="theme">Light</button><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a></nav></header>
+<header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">Case study, analyze and grow</p>
+<p class="kick">Case study, analytics and growth</p>
 <h1>Ads got 44% cheaper. <em>Should we spend more?</em></h1>
-<p class="lede">A B2B food brand ran a four-week search-ads pilot. I tuned bids and search terms until each click cost 44% less. By the dashboard it was working, so before touching the budget I checked what the clicks actually did.</p><dl class="facts"><dt>Role</dt><dd>Sole analyst and engineer</dd><dt>Stack</dt><dd>SQL, Python, statsmodels, scikit-learn</dd><dt>Data</dt><dd>First-party site events, ad click IDs, UTM tags</dd><dt>Privacy</dt><dd>Every figure is a rate or a ratio. Volumes, dates and spend stay private.</dd></dl>
+<p class="lede">A B2B food brand ran a four-week search-ads pilot. I tuned bids and search terms until cost per click fell 44%. The dashboard said scale; before touching the budget, I measured what the clicks actually did.</p><dl class="glance"><div><dt>2.7%</dt><dd>of ad visitors took a next step, vs 17% of everyone else</dd></div><div><dt>Paused</dt><dd>the broad-match ads</dd></div><div><dt>#1</dt><dd>in AI search afterwards, on Google, Gemini and ChatGPT</dd></div></dl><dl class="facts"><dt>Role</dt><dd>Sole analyst and engineer</dd><dt>Stack</dt><dd>SQL, Python, statsmodels, scikit-learn</dd><dt>Data</dt><dd>First-party event logs, ad click IDs, UTM parameters</dd><dt>Disclosure</dt><dd>All figures are rates or ratios. Volumes, dates, spend and the brand are withheld.</dd></dl>
 </div></section>
 <section class="beat" data-step="1" data-name="The dashboard"><div class="in">
 <p class="n">01</p><h2>What the dashboard said.</h2>
-<p>Cost per click fell every week, 44% by week four. The obvious move was a bigger budget. But a cheaper click is only good news if it turns into something, and the dashboard could not tell me that.</p>
+<p>Cost per click fell every week, 44% by week four, and the default next move was a larger budget. A cheaper click is only good news if it converts, and the dashboard did not measure that.</p>
 </div></section>
-<section class="beat" data-step="2" data-name="What visitors did"><div class="in">
+<section class="beat" data-step="2" data-name="Conversion by source"><div class="in">
 <p class="n">02</p><h2>What those visitors did.</h2>
-<p>I joined every ad click ID and UTM tag to site sessions in SQL and counted who took a next step.</p>
-<dl class="defs"><div><dt>Visit</dt><dd>One session. Bots removed by user agent, our own traffic removed by IP.</dd></div><div><dt>Ad visitor</dt><dd>The first page view carries an ad click ID or a paid-search tag.</dd></div><div><dt>Next step</dt><dd>A contact, wholesale, product or sample button, or opening the wholesale form.</dd></div></dl><div class="big"><div><b>2.7%</b><span>of ad visitors took a next step (95% interval 1.6 to 4.5)</span></div><div><b>17%</b><span>of everyone else (11.2 to 24.1)</span></div></div><p class="note"><b>A correction I made later</b>My first count included the cookie banner’s “Got it” button and put everyone else at 19%. Removing it changed the numbers, not the decision.</p>
+<p>I joined every ad click ID and UTM parameter to site sessions in SQL, then measured the share of sessions that took a next step.</p>
+<dl class="defs"><div><dt>Session</dt><dd>One visit. Bots removed by user agent; internal traffic removed by IP.</dd></div><div><dt>Ad visitor</dt><dd>A session whose first page view carries an ad click ID or a cpc tag.</dd></div><div><dt>Next step</dt><dd>A contact, wholesale, product or sample click, or opening the wholesale form.</dd></div></dl><div class="big"><div><b>2.7%</b><span>of ad visitors took a next step (95% CI 1.6 to 4.5)</span></div><div><b>17%</b><span>of all other visitors (95% CI 11.2 to 24.1)</span></div></div><p class="note"><b>Correction</b>The first count included cookie-banner “Got it” clicks and put other visitors at 19%. Excluding them changed the estimates, not the decision.</p>
 </div></section>
-<section class="beat" data-step="3" data-name="A fairer comparison"><div class="in">
+<section class="beat" data-step="3" data-name="Same-page comparison"><div class="in">
 <p class="n">03</p><h2>A fairer comparison.</h2>
-<p>Every ad visitor landed on the wholesale page. Most other visitors came in through the homepage, and many already knew the brand. So I compared visitors on the same page.</p><div class="big"><div><b>2.7%</b><span>of ad visitors</span></div><div><b>7.3%</b><span>of others on the wholesale page (2.5 to 19.4)</span></div></div><p>The gap shrinks, but the ad rate is still less than half.</p><p class="note"><b>What this does not claim</b>The difference is not the causal effect of the ads: people who find a brand on their own are different people. The causal check is a holdout by region or by week; the pilot did not justify one.</p>
+<p>All ad traffic landed on the wholesale page, while most other visitors entered through the homepage and many already knew the brand. Restricting to wholesale-page landings controls for part of that selection.</p><div class="big"><div><b>2.7%</b><span>of ad visitors</span></div><div><b>7.3%</b><span>of other visitors on the wholesale page (95% CI 2.5 to 19.4)</span></div></div><p>The gap narrows, but the ad rate remains less than half.</p><p class="note"><b>What this does not claim</b>This is an observational comparison, not the causal effect of the ads. A causal read needs a geo or time-based holdout; the pilot’s budget did not justify one.</p>
 </div></section>
-<section class="beat" data-step="4" data-name="Why"><div class="in">
+<section class="beat" data-step="4" data-name="Search-term mix"><div class="in">
 <p class="n">04</p><h2>Why the clicks were cheap.</h2>
-<p>Two broad-match search terms brought 71% of the ad clicks. The people behind them were looking for a general food distributor, not a specialty maker. Searches for the product itself, the people actually looking for us, were 7% of clicks.</p>
-<p>Put together, it took about <b>37 ad clicks to earn one next step</b>.</p><p class="note"><b>Why the terms have letters</b>The keyword research belongs to the business, so search terms appear here as A and B.</p>
+<p>Two broad-match terms drove 71% of ad clicks, from buyers looking for a general distributor rather than a specialty manufacturer. Product-name searches, the buyers actually looking for us, were 7% of clicks.</p>
+<p>Net: roughly <b>37 ad clicks per next step</b>.</p><p class="note"><b>Disclosure</b>Search terms are anonymised as A and B; the keyword research belongs to the business.</p>
 </div></section>
-<section class="beat dec" data-step="5" data-name="The decision"><div class="in">
+<section class="beat dec" data-step="8" data-name="The decision"><div class="in">
 <p class="n">Decision</p><h2>Pause the broad ads.</h2>
-<p>A cheaper click does not rescue a rate this low, and the other channels were already doing better without spend. If we buy search again, it will be product-name searches only, with a holdout so the result can be read as cause and effect.</p>
+<p>A lower cost per click does not rescue a conversion rate this low, and unpaid channels were already converting better. Any future paid test would be limited to product-name terms and read against a holdout.</p>
 </div></section>
-<section class="beat" data-step="6" data-name="What predicts a next step"><div class="in">
-<p class="n">Then</p><h2>Channel or visitor? <em>Mostly where they came from.</em></h2>
-<p>To learn what drives a next step on the homepage, I trained a gradient-boosted model on what is known at landing plus the first 30 seconds of behaviour.</p><div class="big"><div><b>0.69</b><span>ROC AUC, source alone</span></div><div><b>0.69</b><span>ROC AUC, every feature</span></div></div><p>The extra features added nothing; where a visitor came from carried the signal. Organic-search visitors took a next step at 26.9%, referral visitors at 6.5%, about four times apart, so acquisition moved toward organic search.</p><p><b>Three leaks I removed first</b></p><ul class="list"><li>Largest Contentful Paint: the browser reports it after the visitor interacts, so it encoded the outcome.</li><li>Sessions that landed on the wholesale page: they cannot click the homepage button.</li><li>Behaviour after the first click: early signals are cut strictly before it, at 30 seconds.</li></ul><p class="note"><b>Corrected</b>With cookie-banner clicks counted, the model scored 0.75 and 0.77. Corrected, both are 0.69. The conclusion held.</p>
+<section class="beat" data-step="6" data-name="Where demand comes from"><div class="in">
+<p class="n">Next</p><h2>Channel or visitor? <em>Mostly where they came from.</em></h2>
+<p>To find what predicts a next step on the homepage, I trained a gradient-boosted classifier on landing context and the first 30 seconds of behaviour.</p><div class="big"><div><b>0.69</b><span>ROC AUC, traffic source only</span></div><div><b>0.69</b><span>ROC AUC, all features</span></div></div><p>Additional features added no lift over traffic source. Organic-search visitors converted at 26.9% and referral visitors at 6.5%, about 4× apart, which pointed acquisition toward organic search.</p><p><b>Leakage removed before training</b></p><ul class="list"><li>Largest Contentful Paint, which the browser reports after interaction and so encodes the outcome.</li><li>Sessions landing on the wholesale page, which cannot click the homepage call to action.</li><li>Any behaviour after the first click; early signals are truncated before it, at 30 seconds.</li></ul><p class="note"><b>Correction</b>With cookie-banner clicks in the label, the models scored 0.75 and 0.77. Corrected, both are 0.69; the conclusion held.</p>
 </div></section>
-<section class="beat" data-step="7" data-name="The test I sized"><div class="in">
-<p class="n">And</p><h2>The A/B test I sized, <em>and did not launch.</em></h2>
-<p>Before building a new homepage I sized the test: two-sided, alpha 0.05, power 0.80, looking for a 30% lift.</p><div class="big"><div><b>2,458</b><span>sessions needed on the corrected 13.7% baseline</span></div><div><b>17.8%</b><span>the rate a new page would have to reach</span></div></div><p>At the time, on a 14.2% baseline, the answer was 2,358. Either way it was more than the site could send in a reasonable window, so I documented the design instead of launching a test that could only end inconclusive.</p><a class="next" href="./rider-wait.html"><i>Next case</i><span>Which bus riders is Boston failing? →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
+<section class="beat" data-step="5" data-name="AI search"><div class="in">
+<p class="n">Result</p><h2>Earn the top result instead.</h2>
+<p>With paid search paused, I rebuilt the site for generative engine optimization (GEO): to be read, trusted and cited by AI answer engines, not only ranked by Google.</p><ul class="list"><li>An llms.txt brief for AI crawlers: who the company is, what it makes, and a map of the site.</li><li>Schema.org structured data for the organization, every product, and a 24-question FAQ.</li><li>A reference page that defines the product category and covers every name buyers search for it under, across languages.</li><li>Local press coverage linked as third-party corroboration.</li></ul><div class="big"><div><b>#1</b><span>for the core category search on Google, Gemini and ChatGPT</span></div></div><p class="note"><b>Disclosure</b>The query and the brand are withheld. Rankings checked on all three in September 2026; screenshots available on request.</p>
+</div></section>
+<section class="beat" data-step="7" data-name="Test sizing"><div class="in">
+<p class="n">Also</p><h2>The A/B test I sized, <em>and did not launch.</em></h2>
+<p>Before redesigning the homepage, I sized the test: two-sided, α = 0.05, power 0.80, minimum detectable lift 30%.</p><div class="big"><div><b>2,458</b><span>sessions required on the corrected 13.7% baseline</span></div><div><b>17.8%</b><span>conversion the variant would need to reach</span></div></div><p>On the original 14.2% baseline the requirement was 2,358. Either way it exceeded what the site could deliver in a reasonable window, so I documented the design rather than run a test that could only end inconclusive.</p><a class="next" href="./sales-ai.html"><i>Next case</i><span>Lead research that waits for a person →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
 </div></section>
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260924c"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260924c';mountCase(0)</script>
+<script src="assets/share.js?v=20260925k"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260925k';mountCase(0)</script>
 </body>
 </html>

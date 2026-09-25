@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
 export const FORCE=location.search.includes('force'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;export const mobile=innerWidth<860;
 THREE.ColorManagement.enabled=false;   // colours below are the colours on screen
 const canvas=document.getElementById('gl');
@@ -34,13 +34,13 @@ function Morph(n){const cur=new Float32Array(n),from=new Float32Array(n),to=new 
       for(let j=0;j<stride;j++){const k=i*stride+j;cur[k]=from[k]+(to[k]-from[k])*e+(j<3?sw*Math.sin(i*1.7+j*2.1):0)}}},get done(){return m>=1}}}
 
 // ---------- 1. particles: floors of 100 visitors; the ones who took a next step rise as pillars
-const PCX=mobile?[-.85,.85]:[-1.1,1.15],PFY=-.55,TOWX=[-1.2,-.4,.4,1.2],TOWS=[[.42,'ink'],[.29,'ink'],[.22,'dim'],[.07,'blue']];
+const PCX=mobile?[-.85,.85]:[-1.1,1.15],PFY=-.55,TOWX=[-1.2,-.4,.4,1.2],ENGX=[-1.25,0,1.25],RY=r=>.9-r*.34,TOWS=[[.42,'ink'],[.29,'ink'],[.22,'dim'],[.07,'blue']];
 function Particles(){
   const P=1200,g=new THREE.Group();
   const pos=Morph(P*3),col=Morph(P*3),sc=Morph(P),jit=new Float32Array(P*3);for(let i=0;i<P*3;i++)jit[i]=rnd()-.5;
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos.cur,3));geo.setAttribute('color',new THREE.BufferAttribute(col.cur,3));geo.setAttribute('aS',new THREE.BufferAttribute(sc.cur,1));
   const mat=dotMat(.085);g.add(new THREE.Points(geo,mat));
-  const S=mobile?.14:.17,SZ=[.085,.08,.1,.1,.06,.06,.1,.1];   // the last step keeps the tower size
+  const S=mobile?.14:.17,SZ=[.085,.08,.1,.1,.06,.078,.1,.1,.06];
   // a random order of the 100 floor cells on each side: the first k of that order are the visitors who acted
   const perm=[0,1].map(()=>{const a=[...Array(100).keys()];for(let i=99;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}),
     rank=perm.map(a=>{const r=[];a.forEach((k,i)=>r[k]=i);return r});
@@ -52,15 +52,19 @@ function Particles(){
       put(i,[x,PFY+(on?(layer+1)*.09:0),z],COL.blue(),on?1:0)}}}
   function towers(){let start=0;for(let b=0;b<4;b++){const n=b<3?Math.round(TOWS[b][0]*P):P-start;
     const H=TOWS[b][0]/.42*1.5;for(let k=0;k<n;k++){const i=start+k;put(i,[TOWX[b]+jit[i*3]*.32,PFY+(k/n)*H,jit[i*3+2]*.32],COL[TOWS[b][1]]())}start+=n}}
+  // three result pages side by side, six results each; the first result on every page is ours
+  function ranking(){for(let i=0;i<P;i++){const c=i%18,col=Math.floor(c/6),row=c%6,k=Math.floor(i/18)%66,w=row?.62+.3*((col*7+row*3)%5)/4:.92;
+    put(i,[ENGX[col]-.46+(k%22)/21*w,RY(row)+(Math.floor(k/22)-1)*.05,jit[i*3+2]*.06],row?(row<2?COL.mute():COL.dim()):COL.blue())}}
   const shapes=[
     ()=>{for(let i=0;i<P;i++)put(i,ball(),COL.ink())},
     ()=>{for(let i=0;i<P;i++){const t=i/P,x=-2+4*t,y=.9-1.24*t;put(i,[x+jit[i*3]*.05,y+jit[i*3+1]*.07,jit[i*3+2]*.25],t>.96?COL.blue():COL.ink())}},
     ()=>floors(3,17),
     ()=>floors(3,7),
     towers,
-    ()=>{towers();let start=0;for(let b=0;b<3;b++){const n=Math.round(TOWS[b][0]*P);for(let k=0;k<n;k++){const i=start+k;put(i,[TOWX[b]+jit[i*3]*.5,PFY+Math.abs(jit[i*3+1])*.07,jit[i*3+2]*.5],COL.dim())}start+=n}},
+    ranking,
     ()=>floors(27,7),
-    ()=>floors(14,18)
+    ()=>floors(14,18),
+    ()=>{towers();let start=0;for(let b=0;b<3;b++){const n=Math.round(TOWS[b][0]*P);for(let k=0;k<n;k++){const i=start+k;put(i,[TOWX[b]+jit[i*3]*.5,PFY+Math.abs(jit[i*3+1])*.07,jit[i*3+2]*.5],COL.dim())}start+=n}}
   ];
   return {g,mats:[mat],shape(s,now){shapes[s]();for(const x of [pos,col,sc])now?x.snap():x.start()},
     update(dt,time,step){pos.step(dt,DUR,3,P,.35);col.step(dt,DUR,3,P,0);sc.step(dt,DUR,1,P,0);
@@ -112,7 +116,7 @@ function Blocks(){
     for(let w=0;w<4;w++){const wi=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(.1,.08)),tmat);wi.position.set(x-.24+w*.16,.04,.121);tram.add(wi)}
     tram.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x-.35,-.07,.122),new THREE.Vector3(x+.35,-.07,.122)]),gmat))});
   tram.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,.13,0),new THREE.Vector3(.1,.26,0),new THREE.Vector3(.1,.26,0),new THREE.Vector3(-.08,.3,0)]),tmat));
-  const rmat=tmat.clone();inkMats.push(rmat);const track=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.6,-.14,0),new THREE.Vector3(2.15,-.14,0)]),rmat);tram.position.y=.95;g.add(tram);g.add(track);
+  const rmat=tmat.clone();inkMats.push(rmat);const track=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.6,.98,0),new THREE.Vector3(2.15,.98,0)]),rmat);tram.position.y=1.12;g.add(tram);g.add(track);
   const gridMat=new THREE.LineBasicMaterial({color:0x7d90ff,transparent:true,opacity:0,depthWrite:false}),gl=[],FX=x=>-1.45+(x+2.2)*(3.45/4.4);for(let c=0;c<12;c++){gl.push(new THREE.Vector3(FX(-2.2+c*.4),-1,0),new THREE.Vector3(FX(-2.2+c*.4),1.1,0))}
   g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(gl),gridMat));
   if(mobile)g.position.x=-.45;
@@ -165,6 +169,7 @@ function Papers(){
   // the ending: three drafts side by side, each with a few lines of text
   const DX=[.15,.9,1.65],t3=[];DX.forEach(x=>{for(let r=0;r<6;r++){const w=r===5?.14:.24+rnd()*.1;t3.push(new THREE.Vector3(x-.19,.22-r*.085,.01),new THREE.Vector3(x-.19+w,.22-r*.085,.01))}});
   const tm3=new THREE.LineBasicMaterial({color:0xecebe6,transparent:true,opacity:0,depthWrite:false});inkMats.push(tm3);g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(t3),tm3));
+  const LX=[-1.75,-.6,.55,1.7];
   const pile=i=>[-.35-(i%5)*.03,-.9+(i%9)*.02+Math.floor(i/9)*.35,-(i%4)*.02];
   const shapes=[
     ()=>{for(let i=0;i<NS;i++){const p=ball(1.3);set(i,p[0],p[1],p[2],rnd()*3,1,COL.ink())}},
@@ -172,7 +177,10 @@ function Papers(){
     ()=>{for(let i=0;i<NS;i++){if(i<3)set(i,.85,.7-i*.7,0,0,1,COL.blue());else set(i,-.35-(i%5)*.03,-.9+(i%9)*.02+Math.floor(i/9)*.35,-(i%4)*.02,(rnd()-.5)*.3,.85,COL.dim())}},
     ()=>{for(let i=0;i<NS;i++){if(i<3)set(i,.5,.95-i*.95,0,0,1,COL.blue());else{const p=pile(i);set(i,p[0],p[1],p[2],(rnd()-.5)*.3,.7,COL.dim())}}},
     ()=>{for(let i=0;i<NS;i++){if(i<3)set(i,1.12+i*.02,-.02-i*.02,-i*.01,0,3.1,COL.blue());else{const p=pile(i);set(i,p[0]+.5,p[1]*.9,p[2]-.9,(rnd()-.5)*.3,.6,COL.dim())}}},
-    ()=>{for(let i=0;i<NS;i++){if(i<3)set(i,DX[i],0,0,0,2.2,COL.blue());else{const p=pile(i);set(i,p[0],p[1],p[2],0,0,COL.dim())}}}
+    ()=>{for(let i=0;i<NS;i++){if(i<3)set(i,DX[i],0,0,0,2.2,COL.blue());else{const p=pile(i);set(i,p[0],p[1],p[2],0,0,COL.dim())}}},
+    // code finds, a person decides, models research and draft
+    ()=>{for(let i=0;i<NS;i++){if(i<9){const lane=3-Math.floor(i/3),r=i%3;set(i,LX[lane],.55-r*.55,0,0,.95,lane<2?COL.ink():COL.blue())}
+      else{const j=i-9;set(i,LX[0]-.3+(j%5)*.15,.85-Math.floor(j/5)*.24,0,(rnd()-.5)*.2,.5,COL.dim())}}}
   ];
   const fade=(m,on,max)=>m.opacity=on?Math.min(max,m.opacity+.03):Math.max(0,m.opacity-.05);
   return {g,mats:[mat],shape(s,now){shapes[s]();now?(sp.snap(),sc.snap()):(sp.start(),sc.start())},
@@ -186,37 +194,40 @@ function Papers(){
 }
 
 // ---------- the four cases: question, reasoning chain, camera, and what each tag names
+const ACT=[Particles(),Routes(),Blocks(),Papers()];
 export const CASES=[
-  {actor:Particles(),q:'Ads got 44% cheaper. <em>Should we spend more?</em>',link:'./paid-search.html',steps:[
-    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.2,-0.27,8.6],mlook:[-0.2,-0.47,0]},
-    {say:['What the dashboard said.','Each click cost 44% less by week four.'],cam:[0.11,0.89,8.96],look:[-0.13,0.52,0],mcam:[0.3,0.58,16.13],mlook:[-0.03,-0.51,0],tags:[['100','cost per click, week one',[-2,1.05,0]],['56','week four, 44% less',[2,-.1,0],'blue']]},
-    {say:['What those visitors did.','I matched every ad click to what the visitor did next. Each floor is 100 visitors; the raised ones took a next step.'],cam:[-0.07,1.48,7.58],look:[-0.07,0.05,0],mcam:[-0.07,1.6,11.6],mlook:[-0.02,-0.62,0],tags:[['2.7%','of ad visitors took a next step',[PCX[0],.6,0],'blue'],['17%','of everyone else did',[PCX[1],.6,0],'blue']]},
-    {say:['A fairer comparison.','Every ad visitor landed on the wholesale page. Other visitors on that same page: 7%.'],cam:[0.09,1.5,7.59],look:[-0.07,0.06,0],mcam:[0.17,1.62,11.61],mlook:[-0.03,-0.62,0],tags:[['2.7%','of ad visitors',[PCX[0],.6,0],'blue'],['7%','of others on the same page',[PCX[1],.6,0],'blue']]},
-    {say:['Why.','71% of ad clicks came from two broad search terms. Those people wanted a general distributor, not a specialty maker.'],cam:[0.49,1.66,6.6],look:[-0.01,0.41,0],mcam:[0.74,1.91,10.1],mlook:[-0.02,-0.29,0],tags:[['42%','search term A',[TOWX[0],1.1,0]],['29%','search term B',[TOWX[1],.64,0]],['22%','three other terms',[TOWX[2],.4,0]],['7%','product-name searches',[TOWX[3],-.1,0],'blue']]},
-    {dec:'Pause the broad ads.',note:'If we buy again: product-name searches only, tested with a holdout.',cam:[0.68,1.02,6.6],look:[0.18,-0.23,0],mcam:[0.84,0.95,10.1],mlook:[-0.05,-0.81,0],tags:[['Paused','the broad search terms',[-.4,-.3,0],'sm'],['7%','product-name searches: the only ones to test again',[TOWX[3],-.1,0],'blue']]}],more:[
+  {actor:ACT[0],q:'Ads got 44% cheaper. <em>Should we spend more?</em>',link:'./paid-search.html',steps:[
+    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.01,-0.34,7.47],mlook:[-0.01,-0.52,0]},
+    {say:['What the dashboard said.','Cost per click fell 44% by week four.'],cam:[0.11,0.89,8.96],look:[-0.13,0.52,0],mcam:[0.26,0.47,14.22],mlook:[-0.03,-0.49,0],tags:[['100','cost per click, week one',[-2,1.05,0]],['56','week four, 44% less',[2,-.1,0],'blue']]},
+    {say:['What those visitors did.','I joined every ad click to on-site behaviour. Each grid is 100 visitors; raised dots took a next step: a contact, sample or wholesale request.'],cam:[-0.07,1.48,7.58],look:[-0.07,0.05,0],mcam:[-0.03,1.26,9.86],mlook:[0.01,-0.62,0],tags:[['2.7%','of ad visitors took a next step',[PCX[0],.6,0],'blue'],['17%','of everyone else did',[PCX[1],.6,0],'blue']]},
+    {say:['A fairer comparison.','All ad traffic landed on the wholesale page. Among other visitors on that page, 7% took a next step.'],cam:[0.09,1.5,7.59],look:[-0.07,0.06,0],mcam:[0.16,1.3,9.87],mlook:[-0.01,-0.61,0],tags:[['2.7%','of ad visitors',[PCX[0],.6,0],'blue'],['7%','of others on the same page',[PCX[1],.6,0],'blue']]},
+    {say:['Why.','Two broad-match terms drove 71% of ad clicks, from buyers looking for a general distributor rather than a specialty manufacturer.'],cam:[0.49,1.66,6.6],look:[-0.01,0.41,0],mcam:[0.63,1.6,8.58],mlook:[-0.02,-0.27,0],tags:[['42%','search term A',[TOWX[0],1.1,0]],['29%','search term B',[TOWX[1],.64,0]],['22%','three other terms',[TOWX[2],.4,0]],['7%','product-name searches',[TOWX[3],-.1,0],'blue']]},
+    {dec:'Pause the broad ads. Earn the top result instead.',note:'Rebuilt the site for AI search with structured data and an llms.txt brief. It now ranks first for its core category on Google, Gemini and ChatGPT.',cam:[-0.1,0.1,7.4],look:[-0.1,0,0],mcam:[-0.02,-0.42,10.22],mlook:[-0.02,-0.62,0],tags:[['Google','',[ENGX[0],1.2,0],'sm'],['Gemini','',[ENGX[1],1.2,0],'sm'],['ChatGPT','',[ENGX[2],1.2,0],'sm'],['Ranked first on all three','for the core category search',[ENGX[1],-1.05,0],'blue u']]}],more:[
     {cam:[-0.07,1.48,7.58],look:[-0.07,0.05,0],tags:[['26.9%','of organic-search visitors took a next step',[PCX[0],.6,0],'blue'],['6.5%','of referral visitors did',[PCX[1],.6,0],'blue']]},
-    {cam:[-0.07,1.48,7.58],look:[-0.07,0.05,0],tags:[['13.7%','the homepage rate today',[PCX[0],.6,0]],['17.8%','what a 30% lift would look like',[PCX[1],.6,0],'blue']]}]},
-  {actor:Routes(),q:'A newsroom has 20 million boardings. <em>Which riders are being failed?</em>',link:'./rider-wait.html',steps:[
-    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.2,-0.27,8.6],mlook:[-0.2,-0.47,0]},
-    {say:['What the schedule says.','The standard measure compares each bus with its own timetable, so most routes look on time.'],cam:[-0.09,0.48,8.47],look:[-0.09,0.25,0],mcam:[-0.49,-0.04,16.72],mlook:[-0.41,-0.72,0],tags:[['15 priority routes','one line each',[-1.7,1.62,0],'sm']]},
-    {say:['What riders feel.','Buses bunch up, then leave gaps. I measured from the rider\'s side: arrive on schedule, wait for the next bus that actually leaves. (Illustration.)'],cam:[0.53,0.49,8.46],look:[-0.05,0.02,0],mcam:[0.77,0.01,15.23],mlook:[-0.24,-0.86,0],tags:[['Bunched, then a gap','that gap is the rider\'s wait',[-.1,.28,0],'blue']]},
-    {say:['Route 14.','It runs so few trips that one missed bus is expensive: miss the 1:31 pm and the next one leaves at 3:21 pm.'],cam:[-0.01,0.26,7.75],look:[0.23,0.02,0],mcam:[-0.23,-0.33,13.95],mlook:[0.02,-0.78,0],tags:[['1:31 pm','',[-.55,.3,0],'sm'],['3:21 pm','',[1.55,.3,0],'sm'],['16+ minutes','average wait on Route 14',[.5,-.55,0],'blue']]},
-    {say:['Where.','Ranked by rider wait and joined to neighborhood data, the longest waits cluster on routes through Roxbury and Dorchester.'],cam:[0.02,0.38,7.4],look:[0.02,0.28,0],mcam:[-0.02,-0.14,13.32],mlook:[-0.03,-0.54,0],tags:[['Roxbury and Dorchester','routes with the longest waits',[.25,1.5,0],'blue'],['Other routes','',[1.45,-.6,0],'sm']]},
-    {dec:'Route 14 riders wait 16+ minutes.',note:'GBH\'s project team adopted the rider wait as its main measure.',cam:[0.01,0.39,7.8],look:[0.01,0.29,0],mcam:[-0.16,-0.12,11.93],mlook:[-0.17,-0.47,0],tags:[['Route 14','16+ minutes average wait',[.25,1.5,0],'blue']]}]},
-  {actor:Blocks(),q:'Trains, weather, and events run on three clocks. <em>Can they share one?</em>',link:'./transit-pipeline.html',steps:[
-    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.2,-0.27,8.6],mlook:[-0.2,-0.47,0]},
-    {say:['Three feeds, three clocks.','Green Line B arrivals come in by the minute, weather once an hour, events whenever they start. Raw, they can\'t be joined.'],cam:[0.63,0.72,7.2],look:[0.23,0.42,0],mcam:[0.66,0.51,12.96],mlook:[-0.25,-0.37,0],tags:[['Train arrivals','Green Line B, as they happen',[-1.05,1.5,0],'sm'],['Weather','every hour',[-1.05,.28,0],'sm'],['Events','start and end times',[-1.05,-.52,0],'sm']]},
-    {say:['One clock.','Spark jobs clean each feed and round every record to its hour, so a 5:42 pm arrival meets the 5 pm weather and that hour\'s events.'],cam:[1.68,0.76,7.2],look:[0.28,-0.14,0],mcam:[2.58,0.62,12.96],mlook:[-0.17,-0.89,0],tags:[['One clock','every record snapped to its hour',[.3,-1.2,0],'blue']]},
-    {say:['One table.','One row per arrival: its delay, stop, direction, the hour\'s weather and event count. Analysts query this, never the raw feeds.'],cam:[-0.19,0.06,7.6],look:[-0.19,-0.04,0],mcam:[-0.67,-0.43,8.8],mlook:[-0.57,-0.53,0],tags:[['Arrival','',[-.95,1.12,0],'sm'],['Weather','',[-.4,1.12,0],'sm'],['Events','',[.15,1.12,0],'sm'],['Delay','',[.7,1.12,0],'blue']]},
-    {say:['A model.','XGBoost learns how stop, time, weather and events move delays, then predicts each arrival. Each pair is one arrival: the real delay and the blue prediction.'],cam:[0.57,0.12,7.6],look:[0.57,0.02,0],mcam:[0.49,-0.5,11.63],mlook:[0.1,-0.67,0],tags:[['Inputs','arrival, weather, events',[-.4,1.12,0],'sm'],['3.56 min','average miss per arrival',[1.7,1.12,0],'blue']]},
-    {dec:'One delay table, 3.56 minutes of error.',note:'Events added about half a minute: real, but small. Graduate team project on Azure Data Factory and Spark.',cam:[0.11,0.12,7.6],look:[0.11,0.02,0],mcam:[-0.23,-0.44,9.88],mlook:[-0.29,-0.58,0],tags:[['Arrival','',[-.95,1.12,0],'sm'],['Weather','',[-.4,1.12,0],'sm'],['Events','',[.15,1.12,0],'sm'],['Predicted delay','off by 3.56 min on average',[1.05,1.12,0],'blue']]}]},
-  {actor:Papers(),q:'Each lead took 15 minutes of research. <em>Can AI help without going rogue?</em>',link:'./sales-ai.html',steps:[
-    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.2,-0.27,8.6],mlook:[-0.2,-0.47,0]},
-    {say:['Find candidates.','Plain code searches directories and removes duplicates. No model calls yet.'],cam:[-1.57,0.53,7.2],look:[-1.47,0.23,0],mcam:[-2.16,0.15,9.36],mlook:[-1.18,-0.37,0],tags:[['Candidates','one sheet per lead',[-1.4,1.3,0],'sm']]},
-    {say:['A person decides.','Someone keeps or passes each lead. Spend starts only here.'],cam:[1.62,0.79,7],look:[0.22,0.19,0],mcam:[2.12,0.47,9.1],mlook:[0.17,-0.42,0],tags:[['Kept','3 of 48, for example',[.85,1.25,0],'blue'],['Passed','',[-.4,-1.2,0],'sm']]},
-    {say:['Research with sources.','Every claim links to a public source; unknowns stay blank.'],cam:[2.55,1.43,6.6],look:[0.95,0.33,0],mcam:[4,1.57,10.1],mlook:[0.9,-0.34,0],tags:[['Public sources','',[2.1,1.5,0],'blue']]},
-    {say:['A draft, never sent.','The draft opens in a person\'s own mail. The system cannot send.'],cam:[0.39,0.22,5.6],look:[0.69,0.02,0],mcam:[0.67,-0.11,5.26],mlook:[0.66,-0.31,0],tags:[['2 to 5 min','to review, down from 15',[1.2,-.78,0],'blue']]},
-    {dec:'2 to 5 minutes per lead, not 15.',note:'Claude and OpenAI APIs, MCP, $0.06 to $0.12 per lead.',cam:[-0.04,0.13,6.6],look:[0.56,0.03,0],mcam:[0.09,-0.32,8.58],mlook:[0.54,-0.46,0],tags:[['A draft for each kept lead','',[.9,.6,0],'sm'],['2 to 5 min','to review each one, down from 15',[.9,-.5,0],'blue u']]}]}
+    {cam:[-0.07,1.48,7.58],look:[-0.07,0.05,0],tags:[['13.7%','the homepage rate today',[PCX[0],.6,0]],['17.8%','what a 30% lift would look like',[PCX[1],.6,0],'blue']]},
+    {cam:[0.68,1.02,6.6],look:[0.18,-0.23,0],mcam:[0.84,0.95,10.1],mlook:[-0.05,-0.81,0],tags:[['Paused','the broad search terms',[-.4,-.3,0],'sm'],['7%','product-name searches: the only ones to test again',[TOWX[3],-.1,0],'blue']]}]},
+  {actor:ACT[3],q:'Each lead took 15 minutes of research. <em>Can AI do it without acting on its own?</em>',link:'./sales-ai.html',steps:[
+    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.06,-0.41,8.41],mlook:[-0.06,-0.6,0]},
+    {say:['Find candidates.','Deterministic code queries business directories and de-duplicates. No model calls, so discovery costs almost nothing.'],cam:[-1.57,0.53,7.2],look:[-1.47,0.23,0],mcam:[-2.23,0.07,10.12],mlook:[-1.17,-0.49,0],tags:[['Candidates','one sheet per lead',[-1.4,1.3,0],'sm']]},
+    {say:['A person decides.','A reviewer keeps or passes each lead. Model spend begins only after that approval.'],cam:[1.62,0.79,7],look:[0.22,0.19,0],mcam:[2.28,0.42,9.9],mlook:[0.16,-0.55,0],tags:[['Kept','3 of 48, for example',[.85,1.25,0],'blue'],['Passed','',[-.4,-1.2,0],'sm']]},
+    {say:['Research with sources.','A model with web search enriches approved leads only. Every claim carries a public citation; anything unverifiable stays blank.'],cam:[2.55,1.43,6.6],look:[0.95,0.33,0],mcam:[4.04,1.48,10.1],mlook:[0.94,-0.43,0],tags:[['Public sources','',[2.1,1.5,0],'blue']]},
+    {say:['A draft, never sent.','A separate model call drafts outreach from the saved research. It opens in the reviewer’s own mail client; the system has no send path.'],cam:[0.39,0.22,5.6],look:[0.69,0.02,0],mcam:[0.73,-0.26,7.32],mlook:[0.71,-0.54,0],tags:[['Draft, never sent','opens in the reviewer’s own mail',[1.2,-.78,0],'blue u']]},
+    {dec:'2 to 5 minutes per lead, not 15.',note:'Claude or OpenAI per step, JSON-schema verdicts, capped searches and a monthly budget cap. Validated end to end; outreach begins at product launch.',cam:[-0.04,0.13,6.6],look:[0.56,0.03,0],mcam:[0.16,-0.34,7.29],mlook:[0.54,-0.46,0],tags:[['A draft for each kept lead','',[.9,.6,0],'sm'],['2 to 5 min','to review each one, down from 15',[.9,-.5,0],'blue u']]}],more:[
+    {cam:[-0.19,0.32,7.72],look:[-0.19,0.21,0],mcam:[-0.05,-0.46,14.26],mlook:[-0.05,-0.74,0],tags:[['Code','search, de-duplicate; no AI',[-1.75,1.05,0],'sm'],['Person','keep or pass',[-.6,1.05,0],'sm'],['Model','cited research, verdict',[.55,1.05,0],'sm blue'],['Model','draft, never sent',[1.7,1.05,0],'sm blue']]}]},
+  {actor:ACT[1],q:'Boston’s buses log 20 million boardings. <em>Which riders are being failed?</em>',link:'./rider-wait.html',steps:[
+    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.26,-0.27,7.96],mlook:[-0.26,-0.46,0]},
+    {say:['What the schedule says.','The standard on-time measure compares each bus with its own timetable, so most routes look reliable.'],cam:[-0.09,0.48,8.47],look:[-0.09,0.25,0],mcam:[-0.39,-0.14,14.21],mlook:[-0.32,-0.71,0],tags:[['15 priority routes','one line each',[-2.3,1.62,0],'sm l']]},
+    {say:['What riders experience.','Buses bunch, then leave gaps. I measured from the rider’s side: arrive on schedule, board the next bus that actually departs. (Illustrative.)'],cam:[0.53,0.49,8.46],look:[-0.05,0.02,0],mcam:[0.63,-0.12,13.05],mlook:[-0.23,-0.86,0],tags:[['Bunched, then a gap','that gap is the rider\'s wait',[-.1,.28,0],'blue']]},
+    {say:['Route 14.','Low frequency makes every missed trip costly: miss the 1:31 pm departure and the next leaves at 3:21 pm.'],cam:[-0.01,0.26,7.75],look:[0.23,0.02,0],mcam:[-0.23,-0.46,13.95],mlook:[0.02,-0.91,0],tags:[['1:31 pm','',[-.55,.3,0],'sm'],['3:21 pm','',[1.55,.3,0],'sm'],['16+ minutes','average wait on Route 14',[.5,-.55,0],'blue']]},
+    {say:['Where.','Ranked by rider wait and joined to demographic data, the longest waits concentrate on routes through Roxbury and Dorchester.'],cam:[0.02,0.38,7.4],look:[0.02,0.28,0],mcam:[-0.04,-0.2,11.32],mlook:[-0.04,-0.54,0],tags:[['Roxbury and Dorchester','routes with the longest waits',[.25,1.5,0],'blue'],['Other routes','',[1.45,-.6,0],'sm']]},
+    {dec:'Route 14 riders wait 16+ minutes.',note:'GBH’s project team adopted rider wait as its primary reliability measure.',cam:[0.01,0.27,8.2],look:[0.01,0.17,0],mcam:[-0.21,-0.46,11.93],mlook:[-0.22,-0.81,0],tags:[['Route 14','',[-1.5,1.42,0],'sm l blue'],['Rider wait, ranked','the newsroom’s new reliability measure',[.25,-1.45,0],'blue u']]}]},
+  {actor:ACT[2],q:'Trains, weather and events run on three clocks. <em>Can they share one?</em>',link:'./transit-pipeline.html',steps:[
+    {cam:[-0.08,0.22,9.2],look:[-0.08,0.02,0],mcam:[-0.49,-0.38,8.35],mlook:[-0.49,-0.57,0]},
+    {say:['Three feeds, three clocks.','Green Line B arrivals stream by the minute, weather hourly, events at irregular times. As ingested, they cannot be joined.'],cam:[0.63,0.72,7.2],look:[0.23,0.42,0],mcam:[0.55,0.47,11.02],mlook:[-0.22,-0.28,0],tags:[['Train arrivals','Green Line B, as they happen',[-1.45,1.72,0],'sm l'],['Weather','every hour',[-1.45,.28,0],'sm l'],['Events','start and end times',[-1.45,-.52,0],'sm l']]},
+    {say:['One clock.','Spark jobs clean each feed and bucket every record to the hour, so a 5:42 pm arrival joins the 5 pm weather and that hour’s events.'],cam:[1.68,0.76,7.2],look:[0.28,-0.14,0],mcam:[2.17,0.32,11.02],mlook:[-0.17,-0.96,0],tags:[['One clock','every record snapped to its hour',[.3,-1.12,0],'blue u']]},
+    {say:['One table.','One row per arrival: delay, stop, direction, hourly weather and event count. Analysis runs on this gold table, not the raw feeds.'],cam:[-0.19,0.06,7.6],look:[-0.19,-0.04,0],mcam:[-0.68,-0.55,9.92],mlook:[-0.57,-0.66,0],tags:[['Arrival','',[-.95,1.12,0],'sm'],['Weather','',[-.4,1.12,0],'sm'],['Events','',[.15,1.12,0],'sm'],['Delay','',[.7,1.12,0],'blue']]},
+    {say:['A model.','An XGBoost regressor predicts each arrival’s delay from stop, time, weather and events. Each pair shows the actual delay and, in blue, the prediction.'],cam:[0.57,0.12,7.6],look:[0.57,0.02,0],mcam:[0.57,-0.59,11.63],mlook:[0.18,-0.76,0],tags:[['Inputs','arrival, weather, events',[-.4,1.12,0],'sm'],['Actual vs predicted','each pair is one arrival',[1.7,1.12,0],'blue']]},
+    {dec:'One delay table, 3.56 minutes of error.',note:'Event hours added about half a minute of delay: significant, but small. Master’s team project on Azure Data Factory and Spark.',cam:[0.11,0.12,7.6],look:[0.11,0.02,0],mcam:[-0.33,-0.74,11.49],mlook:[-0.4,-0.9,0],tags:[['Arrival','',[-.95,1.12,0],'sm'],['Weather','',[-.4,1.12,0],'sm'],['Events','',[.15,1.12,0],'sm'],['Predicted delay','off by 3.56 min on average',[.7,-1.42,0],'blue u']]}]}
 ];
 CASES.forEach(c=>{c.actor.shape(0,true);scene.add(c.actor.g)});
 
