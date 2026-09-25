@@ -1,2 +1,4 @@
 .DS_Store
 .claude/
+# design prototypes and reference files stay local; GitHub Pages would serve anything committed
+design-reference/

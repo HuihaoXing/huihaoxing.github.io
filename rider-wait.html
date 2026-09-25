@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<script>try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Which bus riders is Boston failing? | Jack Xing</title>
+<meta name="description" content="A wait-time measure from the rider’s side, across 20M+ MBTA boardings. GBH News adopted it as its main measure of reliability.">
+<meta property="og:title" content="Which bus riders is Boston failing?">
+<meta property="og:description" content="A wait-time measure from the rider’s side, across 20M+ MBTA boardings. GBH News adopted it as its main measure of reliability.">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://huihaoxing.github.io/rider-wait.html">
+<meta property="og:url" content="https://huihaoxing.github.io/rider-wait.html">
+<meta property="og:image" content="https://huihaoxing.github.io/og/rider-wait.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#07080c">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/case.css?v=20260924c">
+</head>
+<body data-layout="case">
+<canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
+<div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
+<header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><button class="theme" type="button" id="theme">Light</button><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a></nav></header>
+<main class="story">
+<section class="beat" data-step="0" data-name="The question"><div class="in">
+<p class="kick">Case study, metric design</p>
+<h1>A newsroom has 20 million boardings. <em>Which riders are being failed?</em></h1>
+<p class="lede">GBH News wanted to know which MBTA bus riders were being failed. With a BU Spark! team, I built a measure of the wait riders actually feel, and the newsroom adopted it.</p><dl class="facts"><dt>Role</dt><dd>Data science research analyst</dd><dt>Partner</dt><dd>GBH News, through BU Spark!</dd><dt>Stack</dt><dd>Python, pandas, Tableau</dd><dt>Data</dt><dd>MBTA arrivals and departures for 2019 and 2022, ridership by trip, the 2023 passenger survey</dd></dl>
+</div></section>
+<section class="beat" data-step="1" data-name="The schedule’s view"><div class="in">
+<p class="n">01</p><h2>What the schedule says.</h2>
+<p>The standard measure compares each bus with its own timetable, and by that measure most routes look on time. It breaks down when buses bunch or pass each other, and it counts a bus that leaves a minute early as on time, even though a rider who arrived on schedule just missed it.</p>
+</div></section>
+<section class="beat" data-step="2" data-name="The rider’s view"><div class="in">
+<p class="n">02</p><h2>What riders feel.</h2>
+<p>So I measured from the rider’s side. A rider arrives at the scheduled time and boards the next bus that actually leaves; the wait is the gap between the two. Leaving within 60 seconds of schedule counts as on time, and a bus that leaves early is a missed bus.</p><div class="big"><div><b>7.3 min</b><span>average wait when the bus was late</span></div><div><b>under 30 s</b><span>when it was on time</span></div></div><p class="note"><b>About the picture</b>The bunched buses on the right are an illustration, not real departures.</p>
+</div></section>
+<section class="beat" data-step="3" data-name="Route 14"><div class="in">
+<p class="n">03</p><h2>Route 14.</h2>
+<p>Route 14 stood out in 2019 and again in 2022. It runs so few trips that one missed bus is expensive: miss the 1:31 pm and the next one leaves at 3:21 pm.</p><div class="big"><div><b>16+ min</b><span>average wait on Route 14, in both years</span></div></div><p class="note"><b>Read with care</b>The average is driven by a few very long gaps, so a median or percentile view belongs beside it.</p>
+</div></section>
+<section class="beat" data-step="4" data-name="Where"><div class="in">
+<p class="n">04</p><h2>Where the waits fall.</h2>
+<p>Joining route delays to rider demographics, the longest waits clustered on routes through Environmental Justice neighborhoods such as Roxbury and Dorchester.</p><p class="note"><b>A limit</b>The passenger survey covered only some routes, so the demographic comparison rests on routes 15, 22, 23, 28, 29 and 111.</p>
+</div></section>
+<section class="beat dec" data-step="5" data-name="The decision"><div class="in">
+<p class="n">Decision</p><h2>Route 14 riders wait 16+ minutes.</h2>
+<p>The project team and a senior GBH editor adopted the rider wait as their main measure of service reliability, and I walked reporters through the findings each week in Tableau.</p>
+</div></section>
+<section class="beat" data-step="1" data-name="Data and limits"><div class="in">
+<p class="n">Behind it</p><h2>Data, cleaning and limits.</h2><ul class="list"><li>MBTA bus arrival and departure times for 2019 and 2022, one year before the pandemic and one after.</li><li>Ridership by trip, season, route and stop, fall 2016 to fall 2022.</li><li>The 2023 system-wide passenger survey, for rider demographics by route.</li><li>Missing trip, time-point and actual-time fields affected under 5% of rows and were handled before any comparison.</li><li>Buses that left out of order were matched to riders by actual departure, which is the point of the measure.</li></ul><p class="note"><b>The limit I would flag first</b>The measure assumes riders arrive at the scheduled time. That fits infrequent routes; on frequent routes riders arrive at random, and a headway-based measure is better.</p><a class="next" href="./transit-pipeline.html"><i>Next case</i><span>Three feeds on three clocks, one delay table →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
+</div></section>
+</main>
+<nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
+<div class="toast" role="status" aria-live="polite"></div>
+<script src="assets/share.js?v=20260924c"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260924c';mountCase(1)</script>
+</body>
+</html>

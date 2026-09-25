@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<script>try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Three feeds on three clocks, one delay table | Jack Xing</title>
+<meta name="description" content="Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model off by 3.56 minutes on average.">
+<meta property="og:title" content="Three feeds on three clocks, one delay table">
+<meta property="og:description" content="Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model off by 3.56 minutes on average.">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://huihaoxing.github.io/transit-pipeline.html">
+<meta property="og:url" content="https://huihaoxing.github.io/transit-pipeline.html">
+<meta property="og:image" content="https://huihaoxing.github.io/og/transit-pipeline.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#07080c">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/case.css?v=20260924c">
+</head>
+<body data-layout="case">
+<canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
+<div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
+<header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><button class="theme" type="button" id="theme">Light</button><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a></nav></header>
+<main class="story">
+<section class="beat" data-step="0" data-name="The question"><div class="in">
+<p class="kick">Case study, data engineering</p>
+<h1>Trains, weather and events run on three clocks. <em>Can they share one?</em></h1>
+<p class="lede">Does weather or a big event make the Green Line late? Answering that means joining data that was never meant to meet. In a graduate team project we built the pipeline that puts all three on one clock, then measured what actually moves delays.</p><dl class="facts"><dt>Project</dt><dd>Graduate team project, spring 2025</dd><dt>Stack</dt><dd>Azure Data Factory, Azure Data Lake, Spark, XGBoost</dd><dt>Data</dt><dd>GTFS schedules and actual arrivals for the Green Line B branch, OpenWeather hourly history, Ticketmaster and TD Garden listings</dd></dl>
+</div></section>
+<section class="beat" data-step="1" data-name="Bronze"><div class="in">
+<p class="n">01, bronze</p><h2>Three feeds, three clocks.</h2>
+<p>A year of archived schedules and actual arrivals, hourly weather history and event listings, landed raw in Azure Data Lake by Data Factory and Python collectors. Arrivals come by the minute, weather once an hour, events whenever they start. Each has its own keys, time zones and gaps.</p>
+</div></section>
+<section class="beat" data-step="2" data-name="Silver"><div class="in">
+<p class="n">02, silver</p><h2>One clock.</h2>
+<p>Spark jobs parse and type every source, merge scheduled stop times with actual arrivals, and round every record to its hour, so a 5:42 pm arrival meets the 5 pm weather and that hour’s events.</p>
+</div></section>
+<section class="beat" data-step="3" data-name="Gold"><div class="in">
+<p class="n">03, gold</p><h2>One table.</h2>
+<p>One row per scheduled arrival: the delay in minutes, stop, direction, the hour’s weather and the number of events that hour. Analysts query this table, never the raw feeds.</p><p class="note"><b>Why three layers</b>Each layer is a checkpoint. When a feed breaks, it is fixed in bronze or silver and the gold table rebuilds; nothing downstream has to know.</p>
+</div></section>
+<section class="beat" data-step="4" data-name="The model"><div class="in">
+<p class="n">04</p><h2>A model.</h2>
+<p>An XGBoost model learns how stop, direction, time, weather and events move delays, then predicts each arrival’s delay from 15 features. On the right, each pair is one arrival: the real delay and the blue prediction.</p><div class="big"><div><b>3.56 min</b><span>mean absolute error</span></div><div><b>+0.5 min</b><span>average extra delay in event hours</span></div></div><p>An ANOVA across weather conditions and a t-test on event hours tested each factor. The event effect was significant but small.</p>
+</div></section>
+<section class="beat dec" data-step="5" data-name="The decision"><div class="in">
+<p class="n">Result</p><h2>One delay table, 3.56 minutes of error.</h2>
+<p>The answer is modest and useful: events add about half a minute, so they are not where delay mostly comes from. The lasting result is the table. The next question can be asked without rebuilding the joins.</p>
+</div></section>
+<section class="beat" data-step="4" data-name="What I would change"><div class="in">
+<p class="n">In review</p><h2>What I would change.</h2><ul class="list"><li>Delays were trimmed with an IQR rule before modeling, so the error is measured on typical delays and flatters the model on the bad days that matter most.</li><li>Events were joined city-wide by hour rather than by distance to a stop, so a concert near one station counts against every station.</li></ul><p>Both are fixable with the same gold table.</p><a class="next" href="./sales-ai.html"><i>Next case</i><span>Lead research that waits for a person →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
+</div></section>
+</main>
+<nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
+<div class="toast" role="status" aria-live="polite"></div>
+<script src="assets/share.js?v=20260924c"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260924c';mountCase(2)</script>
+</body>
+</html>
