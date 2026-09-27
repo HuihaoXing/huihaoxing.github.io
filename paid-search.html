@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260925k">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ads got 44% cheaper. Should we spend more?","description":"A search-ads pilot measured against on-site conversion, the decision to pause it, and the shift to AI search that followed.","url":"https://huihaoxing.github.io/paid-search.html","image":"https://huihaoxing.github.io/og/paid-search.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Takes a tangled problem and turns it into a decision, with data, pipelines and AI."},"inLanguage":"en"}</script>
+<link rel="stylesheet" href="assets/case.css?v=20260927j">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ads got 44% cheaper. Should we spend more?","description":"A search-ads pilot measured against on-site conversion, the decision to pause it, and the shift to AI search that followed.","url":"https://huihaoxing.github.io/paid-search.html","image":"https://huihaoxing.github.io/og/paid-search.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Turns tangled problems into decisions, then builds the data and AI systems that carry them out."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
 <canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
@@ -30,22 +30,22 @@
 <header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">Case study, analytics and growth</p>
+<p class="kick">WY Industries, analytics and growth</p>
 <h1>Ads got 44% cheaper. <em>Should we spend more?</em></h1>
-<p class="lede">A B2B food brand ran a four-week search-ads pilot. I tuned bids and search terms until cost per click fell 44%. The dashboard said scale; before touching the budget, I measured what the clicks actually did.</p><dl class="glance"><div><dt>2.7%</dt><dd>of ad visitors took a next step, vs 17% of everyone else</dd></div><div><dt>Paused</dt><dd>the broad-match ads</dd></div><div><dt>#1</dt><dd>in AI search afterwards, on Google, Gemini and ChatGPT</dd></div></dl><dl class="facts"><dt>Role</dt><dd>Sole analyst and engineer</dd><dt>Stack</dt><dd>SQL, Python, statsmodels, scikit-learn</dd><dt>Data</dt><dd>First-party event logs, ad click IDs, UTM parameters</dd><dt>Disclosure</dt><dd>All figures are rates or ratios. Volumes, dates, spend and the brand are withheld.</dd></dl>
+<p class="lede">A B2B food brand ran a four-week search-ads pilot. I tuned bids and search terms until cost per click fell 44%. The dashboard said scale; before touching the budget, I measured what the clicks actually did.</p><dl class="glance"><div><dt>2.7%</dt><dd>of ad visitors took a next step, vs 7% of other visitors on the same page</dd></div><div><dt>Paused</dt><dd>the broad-match ads</dd></div><div><dt>#1</dt><dd>in AI search afterwards, on Google, Gemini and ChatGPT</dd></div></dl><dl class="facts"><dt>Role</dt><dd>Sole analyst and engineer</dd><dt>Stack</dt><dd>SQL, Python, statsmodels, scikit-learn</dd><dt>Data</dt><dd>First-party event logs, ad click IDs, UTM parameters</dd><dt>Disclosure</dt><dd>All figures are rates or ratios. Volumes, dates, spend and the brand are withheld.</dd></dl>
 </div></section>
 <section class="beat" data-step="1" data-name="The dashboard"><div class="in">
 <p class="n">01</p><h2>What the dashboard said.</h2>
-<p>Cost per click fell every week, 44% by week four, and the default next move was a larger budget. A cheaper click is only good news if it converts, and the dashboard did not measure that.</p>
+<p>Indexed to week one, cost per click fell every week, 44% by week four, and the default next move was a larger budget. A cheaper click is only good news if it converts, and the dashboard did not measure that.</p>
 </div></section>
 <section class="beat" data-step="2" data-name="Conversion by source"><div class="in">
 <p class="n">02</p><h2>What those visitors did.</h2>
-<p>I joined every ad click ID and UTM parameter to site sessions in SQL, then measured the share of sessions that took a next step.</p>
-<dl class="defs"><div><dt>Session</dt><dd>One visit. Bots removed by user agent; internal traffic removed by IP.</dd></div><div><dt>Ad visitor</dt><dd>A session whose first page view carries an ad click ID or a cpc tag.</dd></div><div><dt>Next step</dt><dd>A contact, wholesale, product or sample click, or opening the wholesale form.</dd></div></dl><div class="big"><div><b>2.7%</b><span>of ad visitors took a next step (95% CI 1.6 to 4.5)</span></div><div><b>17%</b><span>of all other visitors (95% CI 11.2 to 24.1)</span></div></div><p class="note"><b>Correction</b>The first count included cookie-banner “Got it” clicks and put other visitors at 19%. Excluding them changed the estimates, not the decision.</p>
+<p>I joined every ad click ID and UTM parameter to site sessions in SQL, then measured the share of sessions that took a next step. On the right, each grid is 100 visitors; a raised dot is one visitor who acted.</p>
+<dl class="defs"><div><dt>Session</dt><dd>One visit. Bots removed by user agent; internal traffic removed by IP.</dd></div><div><dt>Ad visitor</dt><dd>A session whose first page view carries an ad click ID or a cpc tag.</dd></div><div><dt>Next step</dt><dd>A contact, wholesale, product or sample click, or opening the wholesale form.</dd></div></dl><div class="big"><div><b>2.7%</b><span>of ad visitors took a next step (95% CI 1.6 to 4.5)</span></div><div><b>17%</b><span>of all other visitors took one (95% CI 11.2 to 24.1)</span></div></div><p class="note"><b>Correction</b>The first count included cookie-banner “Got it” clicks and put other visitors at 19%. Excluding them changed the estimates, not the decision.</p>
 </div></section>
 <section class="beat" data-step="3" data-name="Same-page comparison"><div class="in">
 <p class="n">03</p><h2>A fairer comparison.</h2>
-<p>All ad traffic landed on the wholesale page, while most other visitors entered through the homepage and many already knew the brand. Restricting to wholesale-page landings controls for part of that selection.</p><div class="big"><div><b>2.7%</b><span>of ad visitors</span></div><div><b>7.3%</b><span>of other visitors on the wholesale page (95% CI 2.5 to 19.4)</span></div></div><p>The gap narrows, but the ad rate remains less than half.</p><p class="note"><b>What this does not claim</b>This is an observational comparison, not the causal effect of the ads. A causal read needs a geo or time-based holdout; the pilot’s budget did not justify one.</p>
+<p>All ad traffic landed on the wholesale page, while most other visitors entered through the homepage and many already knew the brand. Restricting to wholesale-page landings controls for part of that selection.</p><div class="big"><div><b>2.7%</b><span>of ad visitors took a next step</span></div><div><b>7.3%</b><span>of other wholesale-page visitors took one (95% CI 2.5 to 19.4)</span></div></div><p>The gap narrows, but the ad rate remains less than half.</p><p class="note"><b>What this does not claim</b>This is an observational comparison, not the causal effect of the ads. A causal read needs a geo or time-based holdout; the pilot’s budget did not justify one.</p>
 </div></section>
 <section class="beat" data-step="4" data-name="Search-term mix"><div class="in">
 <p class="n">04</p><h2>Why the clicks were cheap.</h2>
@@ -71,7 +71,7 @@
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260925k"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260925k';mountCase(0)</script>
+<script src="assets/share.js?v=20260927j"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260927j';mountCase(0)</script>
 </body>
 </html>

@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260925k">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Three feeds on three clocks, one delay table","description":"A master’s team project: Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model with a mean absolute error of 3.56 minutes.","url":"https://huihaoxing.github.io/transit-pipeline.html","image":"https://huihaoxing.github.io/og/transit-pipeline.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Takes a tangled problem and turns it into a decision, with data, pipelines and AI."},"inLanguage":"en"}</script>
+<link rel="stylesheet" href="assets/case.css?v=20260927j">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Three feeds on three clocks, one delay table","description":"A master’s team project: Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model with a mean absolute error of 3.56 minutes.","url":"https://huihaoxing.github.io/transit-pipeline.html","image":"https://huihaoxing.github.io/og/transit-pipeline.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Turns tangled problems into decisions, then builds the data and AI systems that carry them out."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
 <canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
@@ -30,9 +30,9 @@
 <header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">Case study, data engineering</p>
+<p class="kick">Boston University, data engineering</p>
 <h1>Trains, weather and events run on three clocks. <em>Can they share one?</em></h1>
-<p class="lede">Do weather and major events delay the Green Line? Answering that requires joining sources that were never designed to meet. In a master’s team project, we built the pipeline that puts all three on one clock, then measured what actually moves delays.</p><dl class="glance"><div><dt>3 → 1</dt><dd>feeds joined into one delay table</dd></div><div><dt>3.56 min</dt><dd>mean absolute error of the delay model</dd></div><div><dt>+0.5 min</dt><dd>average effect of event hours</dd></div></dl><dl class="facts"><dt>Project</dt><dd>Master’s team project, spring 2025</dd><dt>Stack</dt><dd>Azure Data Factory, Azure Data Lake, Spark, XGBoost</dd><dt>Data</dt><dd>GTFS schedules and actual arrivals for the Green Line B branch; OpenWeather hourly history; Ticketmaster and TD Garden event listings</dd></dl>
+<p class="lede">Do weather and major events delay the Green Line? Answering that requires joining sources that were never designed to meet. In a master’s team project, we built the pipeline that puts all three on one clock, then measured what actually moves delays.</p><dl class="glance"><div><dt>3 → 1</dt><dd>feeds joined into one reusable table</dd></div><div><dt>+0.5 min</dt><dd>average effect of event hours</dd></div><div><dt>3.56 min</dt><dd>model error on trimmed delays</dd></div></dl><dl class="facts"><dt>Project</dt><dd>Master’s team project, spring 2025</dd><dt>Stack</dt><dd>Azure Data Factory, Azure Data Lake, Spark, XGBoost</dd><dt>Data</dt><dd>GTFS schedules and actual arrivals for the Green Line B branch; OpenWeather hourly history; Ticketmaster and TD Garden event listings</dd></dl>
 </div></section>
 <section class="beat" data-step="1" data-name="Bronze"><div class="in">
 <p class="n">01, bronze</p><h2>Three feeds, three clocks.</h2>
@@ -44,15 +44,15 @@
 </div></section>
 <section class="beat" data-step="3" data-name="Gold"><div class="in">
 <p class="n">03, gold</p><h2>One table.</h2>
-<p>One row per scheduled arrival: delay in minutes, stop, direction, hourly weather and the number of events that hour. Analysis runs on this table, never on the raw feeds.</p><p class="note"><b>Why a medallion architecture</b>Each layer is a checkpoint. When a source breaks, it is repaired in bronze or silver and gold is rebuilt; downstream consumers are unaffected.</p>
+<p>One row per scheduled arrival: delay in minutes, stop, direction, hourly weather and the number of events that hour. Follow one arrival in the hour highlighted in the previous step: its weather and that hour’s events join it in one row. Analysis runs on this table, never on the raw feeds.</p><p class="note"><b>Why a medallion architecture</b>Each layer is a checkpoint. When a source breaks, it is repaired in bronze or silver and gold is rebuilt; downstream consumers are unaffected.</p>
 </div></section>
 <section class="beat" data-step="4" data-name="The model"><div class="in">
 <p class="n">04</p><h2>A model.</h2>
-<p>An XGBoost regressor predicts each arrival’s delay from 15 features: stop, direction, time, weather and events. Each pair in the scene is one arrival, the actual delay beside the prediction in blue.</p><div class="big"><div><b>3.56 min</b><span>mean absolute error</span></div><div><b>+0.5 min</b><span>average additional delay in event hours</span></div></div><p>An ANOVA across weather conditions and a t-test on event hours tested each factor. The event effect was statistically significant but small.</p>
+<p>An XGBoost regressor predicts each arrival’s delay from 15 features: stop, direction, time, weather and events. The pairs in the scene illustrate actual delay beside the prediction in blue; they are not model output.</p><div class="big"><div><b>3.56 min</b><span>mean absolute error</span></div><div><b>+0.5 min</b><span>average additional delay in event hours</span></div></div><p>An ANOVA across weather conditions and a t-test on event hours tested each factor. The event effect was statistically significant but small.</p>
 </div></section>
 <section class="beat dec" data-step="5" data-name="The result"><div class="in">
-<p class="n">Result</p><h2>One delay table, 3.56 minutes of error.</h2>
-<p>The substantive answer is modest: events add about half a minute, so they are not the main driver of delay. The durable output is the table, which lets the next question be asked without rebuilding the joins.</p>
+<p class="n">Result</p><h2>Three feeds, one reusable table.</h2>
+<p>The durable output is the table: the next question can be asked without rebuilding the joins. A model on it reached a 3.56-minute mean absolute error on trimmed delays, and events added about half a minute, so they are not the main driver of delay.</p>
 </div></section>
 <section class="beat" data-step="4" data-name="What I would change"><div class="in">
 <p class="n">In review</p><h2>What I would change.</h2><ul class="list"><li>Delays were trimmed with an IQR rule before modeling, so the error is measured on typical delays and flatters the model on the worst days.</li><li>Events were joined city-wide by hour rather than by distance to a stop, so a concert near one station counts against every station.</li></ul><p>Both are fixable on the same gold table.</p><a class="next" href="./paid-search.html"><i>Next case</i><span>Ads got 44% cheaper. Should we spend more? →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
@@ -60,7 +60,7 @@
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260925k"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260925k';mountCase(3)</script>
+<script src="assets/share.js?v=20260927j"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260927j';mountCase(3)</script>
 </body>
 </html>

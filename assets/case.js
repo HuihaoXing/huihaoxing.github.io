@@ -1,13 +1,13 @@
 // Case pages: whichever beat sits across the reading line sets the scene. The rail shows where you are and jumps.
-import {CASES,state,show,setLight,setAdjust,mobile,debug} from './engine.js?v=20260925k';
+import {CASES,state,show,setLight,setAdjust,bandAdjust,mobile,debug} from './engine.js?v=20260927j';
 
 export function mountCase(k){
   const story=document.querySelector('.story'),inner=mobile&&getComputedStyle(story).overflowY==='auto',beats=[...document.querySelectorAll('.beat')],rail=document.querySelector('.rail .segs'),label=document.querySelector('.rail small');
   beats.forEach((b,i)=>{const btn=document.createElement('button');btn.type='button';btn.setAttribute('aria-label',b.dataset.name||('Part '+(i+1)));
     btn.onclick=()=>b.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:inner?'start':'center'});rail.appendChild(btn)});
   const segs=[...rail.children];
-  // on phones the scene has only the top half, under the header: pull the shot back a little for breathing room
-  if(inner)setAdjust((camTo,lookTo)=>{camTo.sub(lookTo).multiplyScalar(1.1).add(lookTo)});
+  // on phones the scene has only the top half, between the header and the article
+  if(inner)setAdjust(bandAdjust(()=>[document.querySelector('header .mark').getBoundingClientRect().bottom+14,story.getBoundingClientRect().top-14]));
   let cur=-1;
   function pick(){const line=inner?story.getBoundingClientRect().top+story.clientHeight*.35:innerHeight*.5;let best=0,bd=Infinity;
     beats.forEach((b,i)=>{const r=b.getBoundingClientRect(),d=r.top<=line&&r.bottom>=line?0:Math.min(Math.abs(r.top-line),Math.abs(r.bottom-line));if(d<bd){bd=d;best=i}});

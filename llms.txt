@@ -1,6 +1,6 @@
 # Jack Xing
 
-> Jack (Huihao) Xing takes a tangled problem and turns it into a decision, with data, pipelines and AI. M.S. Data Science, Boston University. Currently at WY Industries.
+> Jack (Huihao) Xing turns tangled problems into decisions, then builds the data and AI systems that carry them out. M.S. Data Science, Boston University. Currently at WY Industries.
 
 This site presents four case studies, each traced from the first question to what changed. Figures are rates or ratios; business volumes, spend and client names are withheld.
 
@@ -8,8 +8,8 @@ This site presents four case studies, each traced from the first question to wha
 
 - [Ads got 44% cheaper. Should we spend more?](https://huihaoxing.github.io/paid-search.html): Search-ads pilot measured against on-site conversion. 2.7% of ad visitors took a next step versus 17% of other visitors (7.3% on the same page). The broad-match ads were paused and the site was rebuilt for generative engine optimization; it now ranks first for its core category search on Google, Gemini and ChatGPT.
 - [Lead research that waits for a person](https://huihaoxing.github.io/sales-ai.html): LLM prospecting pipeline on Claude and OpenAI, exposed as an MCP server. A human approves every model spend; outputs are JSON-schema verdicts with public citations; the system has no send path. Review time per lead fell from about 15 minutes to 2 to 5.
-- [Which bus riders is Boston failing?](https://huihaoxing.github.io/rider-wait.html): Rider-side wait-time measure across 20M+ MBTA boardings on 15 routes, built with a BU Spark! team for GBH News, which adopted it as its primary reliability measure. Route 14 riders waited 16+ minutes on average.
-- [Three feeds on three clocks, one delay table](https://huihaoxing.github.io/transit-pipeline.html): Master's team project. Green Line arrivals, weather and events joined on one hourly clock with Azure Data Factory and Spark (bronze, silver, gold), then an XGBoost delay model with a mean absolute error of 3.56 minutes.
+- [Which bus riders is Boston failing?](https://huihaoxing.github.io/rider-wait.html): Rider-side wait-time measure across 20M+ MBTA boardings on 15 routes, built with a BU Spark! team for GBH News; the project team adopted it as its primary reliability measure. Route 14 riders averaged 16+ minutes.
+- [Three feeds on three clocks, one delay table](https://huihaoxing.github.io/transit-pipeline.html): Master's team project. Green Line arrivals, weather and events joined on one hourly clock with Azure Data Factory and Spark (bronze, silver, gold), one reusable delay table; a model on it reached a 3.56-minute mean absolute error.
 
 ## Contact
 

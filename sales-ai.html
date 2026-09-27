@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260925k">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Lead research that waits for a person","description":"An LLM prospecting pipeline on Claude and OpenAI with a human gate before any model spend and no send path. Review per lead fell from about 15 minutes to 2 to 5.","url":"https://huihaoxing.github.io/sales-ai.html","image":"https://huihaoxing.github.io/og/sales-ai.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Takes a tangled problem and turns it into a decision, with data, pipelines and AI."},"inLanguage":"en"}</script>
+<link rel="stylesheet" href="assets/case.css?v=20260927j">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Lead research that waits for a person","description":"An LLM prospecting pipeline on Claude and OpenAI with a human gate before any model spend and no send path. Review per lead fell from about 15 minutes to 2 to 5.","url":"https://huihaoxing.github.io/sales-ai.html","image":"https://huihaoxing.github.io/og/sales-ai.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Turns tangled problems into decisions, then builds the data and AI systems that carry them out."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
 <canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
@@ -30,7 +30,7 @@
 <header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">Case study, applied AI</p>
+<p class="kick">WY Industries, applied AI</p>
 <h1>Each lead took 15 minutes of research. <em>Can AI do it without acting on its own?</em></h1>
 <p class="lede">A pre-launch B2B food brand needed importers and specialty distributors, with one person owning everything technical. I designed and built the prospecting system that finds them, researches them and drafts the outreach.</p><dl class="glance"><div><dt>2–5 min</dt><dd>reviewer time per lead, down from about 15</dd></div><div><dt>0</dt><dd>emails the system can send on its own</dd></div><div><dt>$0.06–0.12</dt><dd>model cost per researched lead</dd></div></dl><dl class="facts"><dt>Role</dt><dd>Sole designer and engineer</dd><dt>Stack</dt><dd>TypeScript, Next.js, Claude and OpenAI APIs, MCP, Supabase, HubSpot</dd><dt>Status</dt><dd>Validated end to end; outreach begins at product launch</dd></dl>
 </div></section>
@@ -42,7 +42,7 @@
 </div></section>
 <section class="beat" data-step="1" data-name="Discover"><div class="in">
 <p class="n">01</p><h2>Find candidates.</h2>
-<p>Deterministic code queries the Google Places API and de-duplicates against every lead already seen. No model calls, so widening the candidate pool costs almost nothing.</p>
+<p>Deterministic code queries the Google Places API and de-duplicates against every lead already seen. No model calls, so widening the candidate pool costs almost nothing. On the right, we follow one lead, in blue.</p>
 </div></section>
 <section class="beat" data-step="2" data-name="Gate"><div class="in">
 <p class="n">02</p><h2>A person decides.</h2>
@@ -50,7 +50,7 @@
 </div></section>
 <section class="beat" data-step="3" data-name="Research"><div class="in">
 <p class="n">03</p><h2>Research with sources.</h2>
-<p>Approved leads are enriched by Claude or OpenAI with provider-hosted web search. Every claim carries a public citation; anything unverifiable stays blank.</p>
+<p>Only approved leads are enriched, by Claude or OpenAI with provider-hosted web search. Every claim carries a public citation; anything unverifiable stays blank.</p>
 <p>The model then returns structured verdicts a reviewer can check: buyer or competitor, product-spec fit, and the reason.</p><p class="note"><b>Blank beats plausible</b>An honest gap costs a follow-up question. A confident hallucination in a first email costs the relationship.</p>
 </div></section>
 <section class="beat" data-step="4" data-name="Draft"><div class="in">
@@ -66,7 +66,7 @@
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260925k"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260925k';mountCase(1)</script>
+<script src="assets/share.js?v=20260927j"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20260927j';mountCase(1)</script>
 </body>
 </html>
