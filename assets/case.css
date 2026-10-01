@@ -11,6 +11,8 @@ a{color:inherit}
 
 canvas#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
 .vignette{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at 64% 50%,transparent 45%,var(--bg) 100%);opacity:.75}
+/* desktop: the scene never runs under the words; it fades out before the text column */
+@media (min-width:861px){.mask{position:fixed;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0,var(--bg) calc(var(--gut) + var(--col) + 8px),transparent calc(var(--gut) + var(--col) + 120px))}}
 .tag{position:fixed;z-index:3;left:0;top:0;pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .2s;text-shadow:0 0 10px var(--bg),0 0 3px var(--bg)}
 .tag b{display:block;font:500 clamp(1.1rem,1.7vw,1.55rem)/1.05 var(--serif);letter-spacing:-.015em}
 .tag span{display:block;margin-top:2px;font-size:.8rem;color:var(--soft)}
@@ -33,7 +35,7 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 .beat:not(.on)>*{opacity:.28}
 .kick{font:italic 400 1rem var(--serif);color:var(--faint);display:flex;gap:10px;align-items:center}
 .kick::before{content:"";width:26px;height:1px;background:currentColor}
-h1{margin-top:14px;font:400 clamp(2.2rem,3.6vw,3.4rem)/1.05 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.028em}
+h1{margin-top:14px;font:400 clamp(1.9rem,2.7vw,2.6rem)/1.08 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.028em}
 h1 em,h2 em{color:var(--blue);display:block}
 h1,h2,.next span{text-wrap:balance}
 .lede{margin-top:22px;font-size:1.08rem;color:var(--soft)}
@@ -85,7 +87,37 @@ h2{margin-top:10px;font:400 clamp(1.8rem,2.7vw,2.5rem)/1.08 var(--serif);font-va
 .toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,14px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:3px;font-size:.92rem;transition:.35s var(--ease)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-@media (min-width:861px) and (max-height:820px){h1{font-size:clamp(2rem,3vw,2.8rem)}.beat p{font-size:.95rem}}
+/* 30-second summary at the top of each case */
+.t30{margin-top:22px;font:italic 400 .95rem var(--serif);color:var(--faint)}
+.tldr{margin-top:8px;display:grid;grid-template-columns:6.6em minmax(0,1fr);gap:9px 16px;padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:.93rem;line-height:1.5}
+.tldr dt{font-size:.8rem;letter-spacing:.02em;color:var(--faint);padding-top:2px}
+.tldr dd{color:var(--soft)}.tldr b{color:var(--ink);font-weight:500}
+.tldr+.facts{border-top:0;margin-top:2px;padding-top:12px;font-size:.86rem}.tldr+.facts dt{font-size:.9rem}
+/* real code, folded away until asked for */
+.code{margin-top:18px}
+.code summary{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.86rem;color:var(--blue);list-style:none}
+.code summary::-webkit-details-marker{display:none}
+.code summary::before{content:"{ }";font:500 .8rem ui-monospace,SFMono-Regular,Menlo,monospace}
+.code[open] summary{margin-bottom:10px}
+.code figure+figure{margin-top:10px}
+.code figcaption{font-size:.8rem;color:var(--faint);margin-bottom:8px;max-width:60ch}
+.code pre{overflow:auto;max-height:340px;padding:14px 16px;border:1px solid var(--rule);border-radius:3px;background:color-mix(in srgb,var(--ink) 4%,var(--bg));font:400 .74rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);tab-size:4}
+/* the interactive comparison */
+.viz{margin-top:22px}
+.vt{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:2px;margin-bottom:16px}
+.vt button{padding:5px 12px;border-radius:999px;font-size:.8rem;color:var(--faint);transition:background .3s,color .3s}
+.vt button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.vr{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr) 3.4em;gap:12px;align-items:center;margin:10px 0;font-size:.84rem;color:var(--soft)}
+.vr .vl{line-height:1.25}
+.vtrack{position:relative;height:18px;border-left:1px solid var(--rule)}
+.vbar{position:absolute;left:0;top:4px;height:10px;background:var(--faint);opacity:.55;transition:width .6s var(--ease)}
+.vr.ad .vbar{background:var(--blue);opacity:1}
+.vci{position:absolute;top:8px;height:2px;background:var(--ink);transition:left .6s var(--ease),width .6s var(--ease)}
+.vci::before,.vci::after{content:"";position:absolute;top:-4px;width:1px;height:10px;background:var(--ink)}.vci::before{left:0}.vci::after{right:0}
+.vn{font:500 .95rem var(--serif);color:var(--ink);text-align:right}
+.vaxis{display:flex;justify-content:space-between;margin-left:calc(9.5em + 12px);margin-right:calc(3.4em + 12px);font-size:.7rem;color:var(--faint)}
+.viz figcaption{margin-top:10px;font-size:.8rem;color:var(--faint);max-width:60ch}
+@media (min-width:861px) and (max-height:820px){h1{font-size:clamp(1.7rem,2.4vw,2.3rem)}.beat p{font-size:.95rem}}
 /* phones: the scene holds the top of the screen; each beat's text rises from below on a solid panel */
 @media (max-width:860px){
   :root{--col:auto}

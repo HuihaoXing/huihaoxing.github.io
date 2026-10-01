@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Which bus riders is Boston failing? | Jack Xing</title>
+<title>Boston’s buses look on time. Why do some riders wait so long? | Jack Xing</title>
 <meta name="description" content="A rider-side wait-time measure across 20M+ MBTA boardings, adopted by the GBH project team as its primary measure of reliability.">
 <meta property="og:title" content="Which bus riders is Boston failing?">
 <meta property="og:description" content="A rider-side wait-time measure across 20M+ MBTA boardings, adopted by the GBH project team as its primary measure of reliability.">
@@ -21,18 +21,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260927j">
+<link rel="stylesheet" href="assets/case.css?v=20261001g">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Which bus riders is Boston failing?","description":"A rider-side wait-time measure across 20M+ MBTA boardings, adopted by the GBH project team as its primary measure of reliability.","url":"https://huihaoxing.github.io/rider-wait.html","image":"https://huihaoxing.github.io/og/rider-wait.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Turns tangled problems into decisions, then builds the data and AI systems that carry them out."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
-<canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
+<canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div><div class="mask"></div>
 <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
 <header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">GBH News with BU Spark!, metric design</p>
-<h1>Boston’s buses log 20 million boardings. <em>Which riders are being failed?</em></h1>
-<p class="lede">GBH News wanted to know which MBTA bus riders were being failed. With a BU Spark! team, I built a rider-side measure of wait time, and the GBH project team adopted it.</p><dl class="glance"><div><dt>Adopted</dt><dd>by the GBH project team as its primary reliability measure</dd></div><div><dt>16+ min</dt><dd>average rider wait on Route 14</dd></div><div><dt>20M+</dt><dd>boardings analyzed across 15 routes</dd></div></dl><dl class="facts"><dt>Role</dt><dd>Data science research analyst</dd><dt>Partner</dt><dd>GBH News, through BU Spark!</dd><dt>Stack</dt><dd>Python, pandas, Tableau</dd><dt>Data</dt><dd>MBTA arrivals and departures for 2019 and 2022, ridership by trip, the 2023 passenger survey</dd></dl>
+<p class="kick">Rider wait-time metric · GBH News, with BU Spark!</p>
+<h1>On the timetable, Boston’s buses look on time. <em>So why do some riders wait so long?</em></h1>
+<p class="t30">In 30 seconds</p><dl class="tldr" aria-label="In 30 seconds"><dt>Context</dt><dd>GBH News asked which Boston bus riders were being failed. The standard on-time measure made most routes look reliable.</dd><dt>What I did</dt><dd>With a BU Spark! team, built a measure of how long riders actually wait from 5+ years of schedule, GPS and ridership data in Python, and walked reporters through it weekly in Tableau.</dd><dt>Result</dt><dd>The GBH project team and a senior editor adopted it as their <b>primary reliability measure</b>. Route 14 riders averaged <b>16+ minutes</b>.</dd><dt>Limits</dt><dd>Assumes riders arrive at scheduled times, which suits low-frequency routes, not frequent ones.</dd></dl><dl class="facts"><dt>Role</dt><dd>Data science research analyst</dd><dt>Partner</dt><dd>GBH News, through BU Spark!</dd><dt>Stack</dt><dd>Python, pandas, Tableau</dd><dt>Data</dt><dd>MBTA arrivals and departures for 2019 and 2022, ridership by trip, the 2023 passenger survey</dd></dl>
 </div></section>
 <section class="beat" data-step="1" data-name="The schedule view"><div class="in">
 <p class="n">01</p><h2>What the schedule says.</h2>
@@ -55,12 +55,13 @@
 <p>The project team and a senior GBH editor adopted rider wait as their primary measure of service reliability, and I briefed reporters on the findings weekly in Tableau.</p>
 </div></section>
 <section class="beat" data-step="1" data-name="Data and limits"><div class="in">
-<p class="n">Method</p><h2>Data, cleaning and limits.</h2><ul class="list"><li>MBTA bus arrival and departure times for 2019 and 2022, one year before the pandemic and one after.</li><li>Ridership by trip, season, route and stop, fall 2016 to fall 2022.</li><li>The 2023 system-wide passenger survey, for rider demographics by route.</li><li>Missing trip, time-point and actual-time fields affected under 5% of rows and were resolved before any comparison.</li><li>Buses departing out of order were matched to riders by actual departure, which is the premise of the measure.</li></ul><p class="note"><b>Primary limitation</b>The measure assumes riders arrive at the scheduled time, which suits low-frequency routes. On high-frequency routes arrivals are closer to random, and a headway-based measure is more appropriate.</p><a class="next" href="./transit-pipeline.html"><i>Next case</i><span>Three feeds on three clocks, one delay table →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
+<p class="n">Method</p><h2>Data, cleaning and limits.</h2><ul class="list"><li>MBTA bus arrival and departure times for 2019 and 2022, one year before the pandemic and one after.</li><li>Ridership by trip, season, route and stop, fall 2016 to fall 2022.</li><li>The 2023 system-wide passenger survey, for rider demographics by route.</li><li>Missing trip, time-point and actual-time fields affected under 5% of rows and were resolved before any comparison.</li><li>Buses departing out of order were matched to riders by actual departure, which is the premise of the measure.</li></ul><p class="note"><b>Primary limitation</b>The measure assumes riders arrive at the scheduled time, which suits low-frequency routes. On high-frequency routes arrivals are closer to random, and a headway-based measure is more appropriate.</p><a class="next" href="./sales-ai.html"><i>Next case</i><span>AI lead research, with a person in control →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
 </div></section>
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260927j"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260927j';mountCase(2)</script>
+<script src="assets/share.js?v=20261001g"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20261001g';mountCase(1)</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ae39708d3175400ea3c3bda9d620d3c1"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

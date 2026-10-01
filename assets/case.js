@@ -1,5 +1,5 @@
 // Case pages: whichever beat sits across the reading line sets the scene. The rail shows where you are and jumps.
-import {CASES,state,show,setLight,setAdjust,bandAdjust,mobile,debug} from './engine.js?v=20260927j';
+import {CASES,state,show,setLight,setAdjust,bandAdjust,mobile,debug} from './engine.js?v=20261001g';
 
 export function mountCase(k){
   const story=document.querySelector('.story'),inner=mobile&&getComputedStyle(story).overflowY==='auto',beats=[...document.querySelectorAll('.beat')],rail=document.querySelector('.rail .segs'),label=document.querySelector('.rail small');

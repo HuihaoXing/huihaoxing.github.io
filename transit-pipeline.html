@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Three feeds on three clocks, one delay table | Jack Xing</title>
+<title>Weather, events and Green Line delays in one table | Jack Xing</title>
 <meta name="description" content="A master’s team project: Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model with a mean absolute error of 3.56 minutes.">
 <meta property="og:title" content="Three feeds on three clocks, one delay table">
 <meta property="og:description" content="A master’s team project: Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model with a mean absolute error of 3.56 minutes.">
@@ -21,18 +21,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css?v=20260927j">
+<link rel="stylesheet" href="assets/case.css?v=20261001g">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Three feeds on three clocks, one delay table","description":"A master’s team project: Green Line arrivals, weather and events joined on one clock with Spark and Azure, then a delay model with a mean absolute error of 3.56 minutes.","url":"https://huihaoxing.github.io/transit-pipeline.html","image":"https://huihaoxing.github.io/og/transit-pipeline.png","author":{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Turns tangled problems into decisions, then builds the data and AI systems that carry them out."},"inLanguage":"en"}</script>
 </head>
 <body data-layout="case">
-<canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div>
+<canvas id="gl" aria-hidden="true"></canvas><div class="vignette"></div><div class="mask"></div>
 <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
 <header><a class="mark" href="./">J. Xing</a><nav><a class="wide" href="./#work">All work</a><span class="share"><button type="button" data-share>Share</button><span class="share-menu" role="menu"></span></span><a class="wide" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 <main class="story">
 <section class="beat" data-step="0" data-name="The question"><div class="in">
-<p class="kick">Boston University, data engineering</p>
-<h1>Trains, weather and events run on three clocks. <em>Can they share one?</em></h1>
-<p class="lede">Do weather and major events delay the Green Line? Answering that requires joining sources that were never designed to meet. In a master’s team project, we built the pipeline that puts all three on one clock, then measured what actually moves delays.</p><dl class="glance"><div><dt>3 → 1</dt><dd>feeds joined into one reusable table</dd></div><div><dt>+0.5 min</dt><dd>average effect of event hours</dd></div><div><dt>3.56 min</dt><dd>model error on trimmed delays</dd></div></dl><dl class="facts"><dt>Project</dt><dd>Master’s team project, spring 2025</dd><dt>Stack</dt><dd>Azure Data Factory, Azure Data Lake, Spark, XGBoost</dd><dt>Data</dt><dd>GTFS schedules and actual arrivals for the Green Line B branch; OpenWeather hourly history; Ticketmaster and TD Garden event listings</dd></dl>
+<p class="kick">Transit data pipeline · Boston University</p>
+<h1>Do weather and big events go with Green Line delays? <em>First, three data sources had to line up.</em></h1>
+<p class="t30">In 30 seconds</p><dl class="tldr" aria-label="In 30 seconds"><dt>Context</dt><dd>A master’s team project: do weather and big events go with longer delays on Boston’s Green Line light rail?</dd><dt>What I did</dt><dd>Built an Azure Data Factory and Spark pipeline that joins train arrivals, hourly weather and events into one table; tested the effects with a t-test and ANOVA; modeled delay with XGBoost.</dd><dt>Result</dt><dd>A <b>3.56-minute</b> mean absolute error on trimmed delays. Event hours added about <b>half a minute</b>: significant, but small.</dd><dt>Limits</dt><dd>Trimmed delays flatter the model on the worst days; events were joined city-wide, not by distance to a stop.</dd></dl><dl class="facts"><dt>Project</dt><dd>Master’s team project, spring 2025</dd><dt>Stack</dt><dd>Azure Data Factory, Azure Data Lake, Spark, SQL, XGBoost, Power BI</dd><dt>Data</dt><dd>GTFS schedules and actual arrivals for the Green Line B branch; OpenWeather hourly history; Ticketmaster and TD Garden event listings</dd></dl>
 </div></section>
 <section class="beat" data-step="1" data-name="Bronze"><div class="in">
 <p class="n">01, bronze</p><h2>Three feeds, three clocks.</h2>
@@ -52,15 +52,16 @@
 </div></section>
 <section class="beat dec" data-step="5" data-name="The result"><div class="in">
 <p class="n">Result</p><h2>Three feeds, one reusable table.</h2>
-<p>The durable output is the table: the next question can be asked without rebuilding the joins. A model on it reached a 3.56-minute mean absolute error on trimmed delays, and events added about half a minute, so they are not the main driver of delay.</p>
+<p>The durable output is the table: the next question can be asked without rebuilding the joins. A model on it reached a 3.56-minute mean absolute error on trimmed delays, and events added about half a minute, so they are not the main driver of delay. A Power BI dashboard sits on the same table.</p>
 </div></section>
 <section class="beat" data-step="4" data-name="What I would change"><div class="in">
-<p class="n">In review</p><h2>What I would change.</h2><ul class="list"><li>Delays were trimmed with an IQR rule before modeling, so the error is measured on typical delays and flatters the model on the worst days.</li><li>Events were joined city-wide by hour rather than by distance to a stop, so a concert near one station counts against every station.</li></ul><p>Both are fixable on the same gold table.</p><a class="next" href="./paid-search.html"><i>Next case</i><span>Ads got 44% cheaper. Should we spend more? →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
+<p class="n">In review</p><h2>What I would change.</h2><ul class="list"><li>Delays were trimmed with an IQR rule before modeling, so the error is measured on typical delays and flatters the model on the worst days.</li><li>Events were joined city-wide by hour rather than by distance to a stop, so a concert near one station counts against every station.</li></ul><p>Both are fixable on the same gold table.</p><a class="next" href="./paid-search.html"><i>Next case</i><span>Search ads got 44% cheaper. Should the brand spend more? →</span></a><p class="foot"><a href="./#work">All work</a><span>Jack (Huihao) Xing, 2026</span></p>
 </div></section>
 </main>
 <nav class="rail" aria-label="Parts of this case"><div class="segs"></div><small></small></nav>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260927j"></script>
-<script type="module">import {mountCase} from './assets/case.js?v=20260927j';mountCase(3)</script>
+<script src="assets/share.js?v=20261001g"></script>
+<script type="module">import {mountCase} from './assets/case.js?v=20261001g';mountCase(3)</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ae39708d3175400ea3c3bda9d620d3c1"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

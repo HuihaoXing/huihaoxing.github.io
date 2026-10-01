@@ -4,11 +4,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jack Xing | Data, pipelines and AI</title>
-<meta name="description" content="Jack (Huihao) Xing turns tangled problems into decisions, then builds the data and AI systems that carry them out.">
+<title>Jack Xing | Data science and analytics</title>
+<meta name="description" content="Jack (Huihao) Xing works in data science and analytics: define the metric, test what the data can support, and turn it into a decision.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Jack Xing">
-<meta property="og:description" content="I turn tangled problems into decisions, then build the data and AI systems that carry them out.">
+<meta property="og:description" content="Data science and analytics: I define the metric, test what the data can support, and turn it into a decision.">
 <link rel="canonical" href="https://huihaoxing.github.io/">
 <meta property="og:url" content="https://huihaoxing.github.io/">
 <meta property="og:image" content="https://huihaoxing.github.io/og-image.png">
@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07080c;--ink:#ecebe6;--soft:#9a9890;--faint:#7e7c75;--rule:#23232a;--blue:#7d90ff;--serif:"Newsreader",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--gut:clamp(18px,3.4vw,52px)}
+:root{--bg:#07080c;--ink:#ecebe6;--soft:#9a9890;--faint:#7e7c75;--rule:#23232a;--blue:#7d90ff;--serif:"Newsreader",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--gut:clamp(18px,3.4vw,52px);--col:min(35vw,490px)}
 html[data-theme="light"]{--bg:#F3F3EF;--ink:#141312;--soft:#5b5852;--faint:#706c65;--rule:#d9d6ce;--blue:#1F2BD1}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--ink);transition:background .6s,color .6s}
@@ -45,24 +45,28 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 .mode button{padding:4px 11px;border-radius:999px;font-size:.8rem;color:var(--faint);transition:background .3s,color .3s}
 .mode button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 
-.left{position:absolute;z-index:4;left:var(--gut);top:50%;transform:translateY(-52%);width:min(35vw,490px)}
+.left{position:absolute;z-index:4;left:var(--gut);top:clamp(88px,12vh,140px);width:var(--col)}
+/* desktop: the scene never runs under the words; it fades out before the text column */
+@media (min-width:861px){.mask{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0,var(--bg) calc(var(--gut) + var(--col) + 8px),transparent calc(var(--gut) + var(--col) + 120px))}}
+
 .who{font-size:.95rem;color:var(--soft)}.who b{color:var(--ink);font-weight:500}
 .sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .brand{display:flex;align-items:baseline;gap:18px}.tagline{font-size:.88rem;color:var(--soft)}
 .ctx{margin-top:28px;font-size:.84rem;letter-spacing:.01em;color:var(--soft)}
 .ctx+.kick{margin-top:8px!important}
-@media (min-width:861px){.who{display:none}.ctx{margin-top:0}}
+.who span{display:block;margin-top:4px}.who .deg{margin-top:0;color:var(--faint)}
+@media (min-width:861px){.who{margin-bottom:26px}.ctx{margin-top:0}}
 @media (max-width:860px){.ctx{margin-top:12px;font-size:.78rem}}
 @media (max-width:1100px){.tagline{display:none}}
 @media (max-width:860px) and (max-height:760px){.rolling .who{display:none}.rolling .ctx{margin-top:0}}
 .kick{margin-top:28px;font:italic 400 1rem var(--serif);color:var(--faint);display:flex;gap:10px;align-items:center}
 .kick i{width:26px;height:1px;background:currentColor}
-.q{margin-top:12px;font:400 clamp(1.9rem,3.1vw,3rem)/1.07 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.025em}
+.q{margin-top:12px;font:400 clamp(1.7rem,2.5vw,2.45rem)/1.08 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.025em}
 .q em{color:var(--blue);display:block}
 .q,.shead h2,.row h3,.close h2,.chain li.dec{text-wrap:balance}
 .swap{transition:opacity .55s var(--ease),filter .55s var(--ease),transform .55s var(--ease)}
 .swap.out{opacity:0;filter:blur(6px);transform:translateY(8px)}
-.chain{list-style:none;margin-top:24px;display:grid;gap:10px;min-height:11em}
+.chain{list-style:none;margin-top:24px;display:grid;align-content:start;gap:10px;min-height:14em}
 .chain li{display:grid;grid-template-columns:1.6rem 1fr;gap:8px;font-size:.98rem;line-height:1.42;color:var(--faint);opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease),color .5s}
 .chain li.seen{opacity:1;transform:none}
 .chain .d{font-style:normal}.chain li:not(.now) .d,.chain li.dec:not(.now) small{display:none}
@@ -151,7 +155,7 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 .foot .it{font:italic 400 .98rem var(--serif)}
 :focus-visible{outline:1.5px solid var(--blue);outline-offset:4px}
 @media (max-width:860px){.shead{grid-template-columns:1fr;gap:10px}.shead p{grid-column:1}.grid3{grid-template-columns:1fr;gap:6px}.row>div{grid-column:1}.row .meta,.xp summary em{text-align:left}.row{padding:26px 0}}
-@media (min-width:861px) and (max-height:820px){.q{font-size:clamp(1.7rem,2.6vw,2.4rem)}.kick{margin-top:18px}.chain{margin-top:16px;gap:7px}.chain li{font-size:.9rem}}
+@media (min-width:861px) and (max-height:820px){.q{font-size:clamp(1.5rem,2.2vw,2rem)}.who .deg{display:none}.kick{margin-top:18px}.chain{margin-top:16px;gap:7px}.chain li{font-size:.9rem}}
 @media (max-width:860px){
   .left{top:80px;transform:none;width:auto;right:var(--gut)}.q{font-size:1.5rem}.kick{margin-top:12px}.chain{min-height:0;margin-top:10px;gap:4px}.chain li{font-size:.84rem}.chain li:not(.now){display:none}.chain small{display:none}
   .bar{flex-direction:column-reverse;align-items:stretch;gap:12px}.ctl{justify-content:flex-end}
@@ -162,32 +166,32 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
   .cases{grid-template-columns:repeat(4,1fr);column-gap:10px}.cases .name{display:none}.bar{gap:10px;bottom:14px}.tag b{font-size:1rem}.tag.sm b{font-size:.84rem}.tag span{font-size:.72rem;margin-top:1px}
 }
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Turns tangled problems into decisions, then builds the data and AI systems that carry them out."},{"@type":"WebSite","url":"https://huihaoxing.github.io/","name":"Jack Xing","author":{"@id":"https://huihaoxing.github.io/#jack"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Works in data science and analytics: defines the metric, tests what the data can support, and turns it into a decision."},{"@type":"WebSite","url":"https://huihaoxing.github.io/","name":"Jack Xing","author":{"@id":"https://huihaoxing.github.io/#jack"}}]}</script>
 </head>
 <body>
 <section class="stage" id="stage">
   <canvas id="gl" aria-hidden="true"></canvas>
-  <div class="vignette"></div>
-  <header><span class="brand"><a class="mark" href="./">J. Xing</a><span class="tagline">I turn tangled problems into decisions, then build the data and AI systems that carry them out.</span></span><nav><a href="#work">Work</a><a href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
+  <div class="vignette"></div><div class="mask"></div>
+  <header><span class="brand"><a class="mark" href="./">J. Xing</a></span><nav><a href="#work">Work</a><a href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 
-  <h1 class="sr">Jack Xing: I turn tangled problems into decisions, then build the data and AI systems that carry them out.</h1>
+  <h1 class="sr">Jack Xing: Data science and analytics: I define the metric, test what the data can support, and turn it into a decision.</h1>
   <div class="left">
-    <p class="who"><b>Jack Xing</b>. I turn tangled problems into decisions, then build the data and AI systems that carry them out.</p>
-    <p class="ctx swap" id="ctx">At WY Industries</p>
+    <p class="who"><b>Jack Xing</b> · AI Solutions Engineer, Data and Growth, WY Industries<span class="deg">M.S. Data Science, Boston University</span><span>Data science and analytics: I define the metric, test what the data can support, and turn it into a decision.</span></p>
+    <p class="ctx swap" id="ctx">Paid search and conversion analysis · WY Industries</p>
     <p class="kick swap" id="kick"><i></i><span>The problem</span></p>
-    <h2 class="q swap" id="q">Ads got 44% cheaper. <em>Should we spend more?</em></h2>
+    <h2 class="q swap" id="q">A new food brand’s ads got 44% cheaper per click. <em>Should it spend more?</em></h2>
     <ol class="chain" id="chain"></ol>
   </div>
 
   <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
 
-  <a class="cue" href="#work">Selected work<span>↓</span></a>
+  <a class="cue" href="#work">Skip the animation: all four cases<span>↓</span></a>
   <div class="bar">
-    <div class="cases" role="group" aria-label="Problems">
-      <div data-k="0"><button type="button" class="name">Should we spend more on ads?<small>Ads paused; first in AI search</small></button></div>
-      <div data-k="1"><button type="button" class="name">15 minutes per lead?<small>Research reviewed in 2 to 5 min</small></button></div>
-      <div data-k="2"><button type="button" class="name">Which riders are being failed?<small>A rider-side reliability measure</small></button></div>
-      <div data-k="3"><button type="button" class="name">Three clocks, one table?<small>Three feeds, one delay table</small></button></div>
+    <div class="cases" role="group" aria-label="Cases">
+      <div data-k="0"><button type="button" class="name">Paid search analysis<small>SQL, Python, test sizing</small></button></div>
+      <div data-k="1"><button type="button" class="name">Rider wait-time metric<small>Python, Tableau, for GBH</small></button></div>
+      <div data-k="2"><button type="button" class="name">LLM lead research<small>Claude, OpenAI, MCP</small></button></div>
+      <div data-k="3"><button type="button" class="name">Transit data pipeline<small>Spark, Azure, XGBoost</small></button></div>
     </div>
     <div class="ctl"><button type="button" id="prev" aria-label="Previous step">←</button><button type="button" id="next" aria-label="Next step">→</button><span class="mode" id="play" role="group" aria-label="Playback"><button type="button" data-play="auto" aria-pressed="true">Auto</button><button type="button" data-play="manual" aria-pressed="false">Manual</button></span></div>
   </div>
@@ -196,16 +200,16 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 <main class="page">
   <section class="section" id="work" aria-labelledby="w-t">
     <div class="shead"><h2 id="w-t">Selected work</h2><p>Four problems, each traced from the first question to what changed. Each case reports its denominators and states what it cannot claim.</p></div>
-    <a class="row grid3" href="./paid-search.html"><span class="n">#1<small>in AI search</small></span><div><p class="eyebrow"><i>Analyze, Grow</i>WY Industries · SQL, attribution, GEO</p><h3>Ads got 44% cheaper.<br>Should we spend more?</h3><p>Ad visitors took a next step at 2.7%, against 7% for other visitors on the same page. I paused the broad ads; the site now ranks first in AI search.</p><span class="go">Read the case →</span></div></a>
-    <a class="row grid3" href="./sales-ai.html"><span class="n">2–5<small>min per lead</small></span><div><p class="eyebrow"><i>Build with AI</i>WY Industries · Claude, OpenAI, MCP</p><h3>Lead research that waits for a person</h3><p>An LLM pipeline with a human gate before any model spend. Review per lead fell from about 15 minutes to 2 to 5.</p><span class="go">Read the case →</span></div></a>
-    <a class="row grid3" href="./rider-wait.html"><span class="n">16+<small>min on Route 14</small></span><div><p class="eyebrow"><i>Analyze</i>GBH News, with BU Spark! · Python, pandas, Tableau</p><h3>Which bus riders is Boston failing?</h3><p>A rider-side wait measure across 20M+ boardings, adopted by the GBH project team as its primary reliability measure.</p><span class="go">Read the case →</span></div></a>
-    <a class="row grid3" href="./transit-pipeline.html"><span class="n">3 → 1<small>feeds to one table</small></span><div><p class="eyebrow"><i>Engineer</i>Boston University · Spark, Azure Data Factory, XGBoost</p><h3>Three feeds on three clocks, one delay table</h3><p>A master’s team project: Green Line arrivals, weather and events joined on one clock into one reusable delay table.</p><span class="go">Read the case →</span></div></a>
+    <a class="row grid3" href="./paid-search.html"><span class="n">2.7%<small>vs 7% on the same page</small></span><div><p class="eyebrow"><i>Paid search and conversion analysis</i>WY Industries · SQL, Python, statsmodels</p><h3>Search ads got 44% cheaper. Should the brand spend more?</h3><p>Ad visitors took a next step at 2.7%, against 7% for other visitors on the same page. On that analysis, management paused the broad ads and acquisition moved to organic and AI search.</p><span class="go">Read the case →</span></div></a>
+    <a class="row grid3" href="./rider-wait.html"><span class="n">16+<small>min on Route 14</small></span><div><p class="eyebrow"><i>Rider wait-time metric</i>GBH News, with BU Spark! · Python, pandas, Tableau</p><h3>Boston’s buses look on time. Why do some riders wait so long?</h3><p>A measure of how long riders actually wait, not whether buses keep the timetable, across 20M+ boardings; adopted by the GBH project team as its primary reliability measure.</p><span class="go">Read the case →</span></div></a>
+    <a class="row grid3" href="./sales-ai.html"><span class="n">2–5<small>min per lead</small></span><div><p class="eyebrow"><i>LLM lead-research tool</i>WY Industries · Claude, OpenAI, MCP</p><h3>AI lead research, with a person in control</h3><p>An LLM pipeline that finds and researches potential buyers; a person keeps or passes each lead before any model runs and sends every email by hand. Review per lead fell from about 15 minutes to 2 to 5.</p><span class="go">Read the case →</span></div></a>
+    <a class="row grid3" href="./transit-pipeline.html"><span class="n">3 → 1<small>feeds to one table</small></span><div><p class="eyebrow"><i>Transit data pipeline</i>Boston University · Spark, Azure Data Factory, XGBoost, Power BI</p><h3>Weather, events and Green Line delays in one table</h3><p>A master’s team project: Green Line train arrivals, hourly weather and event listings joined on one hourly clock into one reusable delay table.</p><span class="go">Read the case →</span></div></a>
   </section>
 
   <section class="section" id="experience" aria-labelledby="x-t">
     <div class="shead"><h2 id="x-t">Experience</h2><p>Select a row for details.</p></div>
     <details class="xp"><summary class="grid3"><h3>WY Industries</h3><span>AI Solutions Engineer, Data and Growth</span><em>2026 to now</em></summary>
-      <div class="grid3"><span></span><ul><li>Designed a user-level homepage A/B test and set a 2,458-session launch threshold with a power analysis.</li><li>Instrumented 16K+ product events and built SQL funnels; a conversion model showed organic-search visitors converting about 4× as often as referrals, shifting acquisition toward organic.</li><li>Built an LLM research pipeline on Claude and OpenAI that cut review from about 15 minutes to 2 to 5.</li></ul></div></details>
+      <div class="grid3"><span></span><ul><li>Defined the traffic, next-step and lead metrics the business reports on; instrumented 16K+ events and built the SQL funnels behind a daily report.</li><li>Showed paid-search visitors taking a next step at 2.7% against 7% for comparable visitors; management paused the broad ads.</li><li>A conversion model showed organic-search visitors converting about 4× as often as referrals; sized a homepage A/B test at 2,458 sessions with a power analysis (designed, not launched).</li><li>Built an LLM research pipeline on Claude and OpenAI that cut review from about 15 minutes to 2 to 5.</li></ul></div></details>
     <details class="xp"><summary class="grid3"><h3>GBH</h3><span>Data Science Research Analyst, BU Spark!</span><em>2024</em></summary>
       <div class="grid3"><span></span><ul><li>Built a passenger-centered wait-time metric the project team and a senior editor adopted.</li><li>Analyzed 5+ years of ridership, schedule, and GPS data across 20M+ boardings on 15 routes.</li><li>Found longer waits in Roxbury and Dorchester and walked reporters through it weekly in Tableau.</li></ul></div></details>
     <details class="xp"><summary class="grid3"><h3>Tencent News</h3><span>Operations Intern</span><em>2023 to 2024</em></summary>
@@ -220,12 +224,12 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
   <footer class="foot"><span class="it">Set in Newsreader and Hanken Grotesk. Drawn live with three.js.</span><span>Jack (Huihao) Xing, 2026</span></footer>
 </main>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20260927j"></script>
+<script src="assets/share.js?v=20261001g"></script>
 
 <script type="module">
-import {CASES,state,show,reframe,setAdjust,bandAdjust,CAM_SECS,onTick,setLight,setOnscreen,mobile,debug} from './assets/engine.js?v=20260927j';
-const dwell=(k,s)=>{const S=CASES[k].steps[s];return CAM_SECS+(S.read??(s===0?1.6:S.dec?4.2:2.6))},kick=document.getElementById('kick'),ctx=document.getElementById('ctx'),q=document.getElementById('q'),chain=document.getElementById('chain'),tabs=[...document.querySelectorAll('.cases>div')];
-let playing=true;
+import {CASES,state,show,reframe,setAdjust,bandAdjust,CAM_SECS,onTick,setLight,setOnscreen,mobile,debug} from './assets/engine.js?v=20261001g';
+const dwell=(k,s)=>{const S=CASES[k].steps[s];return CAM_SECS+1.3*(S.read??(s===0?2:S.dec?4.6:2.8))},kick=document.getElementById('kick'),ctx=document.getElementById('ctx'),q=document.getElementById('q'),chain=document.getElementById('chain'),tabs=[...document.querySelectorAll('.cases>div')];
+let playing=!matchMedia('(prefers-reduced-motion: reduce)').matches;
 function setCase(k){const c=CASES[k];if(q.innerHTML!==c.q){q.classList.add('out');ctx.classList.add('out');setTimeout(()=>{q.innerHTML=c.q;ctx.textContent=c.ctx;q.classList.remove('out');ctx.classList.remove('out');if(mobile)reframe()},350)}
   chain.innerHTML=c.steps.slice(1).map((s,i)=>s.dec?`<li class="dec" data-s="${i+1}"><i></i><span>${s.dec}<a href="${c.link}">Open the case</a><small>${s.note}</small></span></li>`:`<li data-s="${i+1}"><i>${i+1}</i><span><b>${s.say[0]}</b><em class="d"> ${s.say[1]}</em></span></li>`).join('');
   tabs.forEach((b,i)=>b.classList.toggle('on',i===k));mark(0,k);show(k,0,state.ck<0)}
@@ -241,7 +245,7 @@ function jump(k,s){if(state.ck!==k){setCase(k);if(s)goStep(s)}else goStep(s)}
 const user=f=>(...a)=>{setPlaying(false);f(...a)};
 document.getElementById('next').onclick=user(next);document.getElementById('prev').onclick=user(prev);
 tabs.forEach((el,k)=>{const segs=document.createElement('div');segs.className='segs';
-  CASES[k].steps.forEach((S,s)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`${el.textContent.split('?')[0]}? ${s===0?'the problem':S.dec?'the decision':'step '+s}`);b.onclick=user(()=>jump(k,s));segs.appendChild(b)});
+  CASES[k].steps.forEach((S,s)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`${el.querySelector('.name').firstChild.textContent}: ${s===0?'the problem':S.dec?'the decision':'step '+s}`);b.onclick=user(()=>jump(k,s));segs.appendChild(b)});
   el.prepend(segs);el.querySelector('.name').onclick=user(()=>jump(k,0))});
 const segBtns=tabs.map(el=>[...el.querySelectorAll('.segs button')]);
 addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,summary'))return;if(e.key==='ArrowRight')user(next)();else if(e.key==='ArrowLeft')user(prev)();else if(e.key===' '&&e.target===document.body&&scrollY<innerHeight*.5){e.preventDefault();setPlaying(!playing)}});
@@ -251,9 +255,10 @@ onTick(()=>{const t=state.t,step=state.step;if(playing&&t>dwell(state.ck,step))n
 const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
 function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
 document.querySelector('header .mode').onclick=()=>theme(document.documentElement.dataset.theme!=='light');
-setCase(0);if(document.documentElement.dataset.theme==='light')theme(true);
+setCase(0);setPlaying(playing);if(document.documentElement.dataset.theme==='light')theme(true);
 new IntersectionObserver(e=>setOnscreen(e[0].isIntersecting)).observe(document.getElementById('stage'));
 window.__story={cases:CASES,camera:debug.camera,ff:debug.ff,go:(k,s)=>{if(state.ck!==k){setCase(k);q.innerHTML=CASES[k].q;q.classList.remove('out')}goStep(s);setPlaying(false)},state:()=>({...state})};
 </script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ae39708d3175400ea3c3bda9d620d3c1"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
