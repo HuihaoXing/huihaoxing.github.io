@@ -263,6 +263,9 @@ setCase(0);setPlaying(playing);if(document.documentElement.dataset.theme==='ligh
 new IntersectionObserver(e=>setOnscreen(e[0].isIntersecting)).observe(document.getElementById('stage'));
 window.__story={cases:CASES,camera:debug.camera,ff:debug.ff,go:(k,s)=>{if(state.ck!==k){setCase(k);q.innerHTML=CASES[k].q;q.classList.remove('out')}goStep(s);setPlaying(false)},state:()=>({...state})};
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ae39708d3175400ea3c3bda9d620d3c1"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics, skipped in the owner's own browsers: open any page with ?me=1 once per browser (?me=0 undoes it) -->
+<script>(()=>{try{const q=new URLSearchParams(location.search);if(q.has('me')){if(q.get('me')==='0')localStorage.removeItem('notrack');else localStorage.setItem('notrack','1');q.delete('me');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash)}if(localStorage.getItem('notrack')==='1')return}catch(e){}
+const s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon','{"token": "ae39708d3175400ea3c3bda9d620d3c1"}');document.body.appendChild(s)})()</script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
