@@ -1,5 +1,5 @@
 // Case pages: whichever beat sits across the reading line sets the scene. The rail shows where you are and jumps.
-import {CASES,state,show,setLight,setAdjust,bandAdjust,mobile,debug} from './engine.js?v=20261001g';
+import {CASES,state,show,setLight,setAdjust,bandAdjust,mobile,debug} from './engine.js?v=20261001i';
 
 export function mountCase(k){
   const story=document.querySelector('.story'),inner=mobile&&getComputedStyle(story).overflowY==='auto',beats=[...document.querySelectorAll('.beat')],rail=document.querySelector('.rail .segs'),label=document.querySelector('.rail small');
@@ -19,7 +19,7 @@ export function mountCase(k){
 
   const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
   function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
-  document.querySelector('header .mode').onclick=()=>theme(document.documentElement.dataset.theme!=='light');
+  document.querySelector('header .mode').onclick=()=>(l=>{const h=document.documentElement,go=()=>theme(l);if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches)return go();h.classList.add('theming');const vt=document.startViewTransition(go);vt.ready.catch(()=>{});vt.finished.catch(()=>{}).finally(()=>h.classList.remove('theming'))})(document.documentElement.dataset.theme!=='light');
   if(document.documentElement.dataset.theme==='light')theme(true);
 
   addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,button,a'))return;

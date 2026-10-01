@@ -8,7 +8,7 @@ renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.outputColorSpace=T
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,200);
 let seed=11;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
 const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
-let light=false;
+let light=document.documentElement.dataset.theme==='light';
 const COL={ink:()=>light?[.08,.08,.075]:[.84,.84,.88],blue:()=>light?[.12,.17,.82]:[.45,.53,1],dim:()=>light?[.7,.69,.65]:[.3,.31,.36],mute:()=>light?[.42,.41,.38]:[.5,.5,.54],green:()=>light?[.1,.5,.28]:[.3,.85,.5],bg:()=>light?[.953,.953,.937]:[.027,.031,.047]};
 function ball(r=1.25){const u=rnd()*6.283,v=Math.acos(2*rnd()-1),k=Math.cbrt(rnd())*r;return [k*Math.sin(v)*Math.cos(u),k*Math.cos(v),k*Math.sin(v)*Math.sin(u)]}
 function sphereCurve(fx,fy,fz,px,py,pz,r,t){const X=Math.sin(fx*t+px)*.85,Y=Math.sin(fy*t+py)*.85,Z=Math.sin(fz*t+pz)*.85;

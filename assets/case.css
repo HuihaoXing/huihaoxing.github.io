@@ -2,7 +2,11 @@
 :root{--bg:#07080c;--ink:#ecebe6;--soft:#9a9890;--faint:#7e7c75;--rule:#23232a;--blue:#7d90ff;--serif:"Newsreader",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--gut:clamp(18px,3.4vw,52px);--col:min(35vw,490px)}
 html[data-theme="light"]{--bg:#F3F3EF;--ink:#141312;--soft:#5b5852;--faint:#706c65;--rule:#d9d6ce;--blue:#1F2BD1}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--ink);transition:background .6s,color .6s}
+html,body{background:var(--bg);color:var(--ink)}
+/* theme switch: one even cross-fade for the whole page (view transition), no element fading on its own clock */
+html.theming *,html.theming *::before,html.theming *::after{transition:none!important}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+
 body{font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 a{color:inherit}
