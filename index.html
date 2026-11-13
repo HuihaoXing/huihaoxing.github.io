@@ -4,14 +4,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jack Xing | Data science and analytics</title>
-<meta name="description" content="Jack (Huihao) Xing works in data science and analytics: define the metric, test what the data can support, and turn it into a decision.">
+<title>Jack Xing | Systems integration, data and AI</title>
+<meta name="description" content="Jack (Huihao) Xing connects systems, data and the people who rely on them: mapping data across sources, connecting APIs and tools, and working with each side until it runs. English and Chinese.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Jack Xing">
-<meta property="og:description" content="Data science and analytics: I define the metric, test what the data can support, and turn it into a decision.">
+<meta property="og:description" content="I connect systems, and the people who rely on them: mapping data across sources, connecting APIs and tools, and working with each side until it runs.">
 <link rel="canonical" href="https://huihaoxing.github.io/">
+<link rel="alternate" hreflang="en" href="https://huihaoxing.github.io/">
+<link rel="alternate" hreflang="zh-Hans" href="https://huihaoxing.github.io/zh.html">
 <meta property="og:url" content="https://huihaoxing.github.io/">
-<meta property="og:image" content="https://huihaoxing.github.io/og-image.png">
+<meta property="og:image" content="https://huihaoxing.github.io/og-image.png?v=20261113">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -44,6 +46,8 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
 header{position:absolute;inset:0 0 auto;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:22px var(--gut)}
 .mark{font:italic 500 1.3rem var(--serif);text-decoration:none}
 header nav{display:flex;gap:24px;font-size:.93rem;color:var(--soft);align-items:center}
+.mark,header nav a{white-space:nowrap}
+@media (max-width:860px){header nav{gap:16px}header nav .wide{display:none}}
 header nav a,header nav button{text-decoration:none;transition:color .2s}header nav a:hover,header nav button:hover{color:var(--ink)}
 .mode{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:2px}
 .mode button{padding:4px 11px;border-radius:999px;font-size:.8rem;color:var(--faint);transition:background .3s,color .3s}
@@ -59,10 +63,25 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 .ctx{margin-top:28px;font-size:.84rem;letter-spacing:.01em;color:var(--soft)}
 .ctx+.kick{margin-top:8px!important}
 .who span{display:block;margin-top:4px}.who .deg{margin-top:0;color:var(--faint)}
-@media (min-width:861px){.who{margin-bottom:26px}.ctx{margin-top:0}}
+@media (min-width:861px){.play .ctx{margin-top:26px}}
 @media (max-width:860px){.ctx{margin-top:12px;font-size:.78rem}}
 @media (max-width:1100px){.tagline{display:none}}
-@media (max-width:860px) and (max-height:760px){.rolling .who{display:none}.rolling .ctx{margin-top:0}}
+@media (max-width:860px) and (max-height:760px){.rolling .who{display:none}.rolling .ctx{margin-top:0}.sub{display:none}}
+/* intro: who he is, before the cases play */
+.lead{margin-top:14px;font:400 clamp(2.3rem,3.5vw,3.35rem)/1.03 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.03em;text-wrap:balance}
+.lead em{color:var(--blue);display:block}
+.sub{margin-top:20px;color:var(--soft);max-width:44ch;line-height:1.55}
+.proof{list-style:none;margin-top:30px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.proof b{display:block;font:400 clamp(1.35rem,1.9vw,1.7rem)/1 var(--serif);letter-spacing:-.02em;color:var(--blue);white-space:nowrap}
+.proof span{display:block;margin-top:8px;font-size:.8rem;line-height:1.4;color:var(--soft)}
+.start{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin-top:32px}
+.intro,.play{transition:opacity .45s var(--ease),filter .45s var(--ease),transform .45s var(--ease)}
+.intro.out,.play.out{opacity:0;filter:blur(6px);transform:translateY(8px)}
+.intro[hidden],.play[hidden]{display:none}
+.about{padding:34px 0;border-bottom:1px solid var(--rule)}
+.about i{font:italic 400 1.02rem var(--serif);color:var(--faint)}
+.about p{font:400 clamp(1.15rem,1.5vw,1.35rem)/1.5 var(--serif);max-width:52ch}
+.about p b{font-weight:500}
 .kick{margin-top:28px;font:italic 400 1rem var(--serif);color:var(--faint);display:flex;gap:10px;align-items:center}
 .kick i{width:26px;height:1px;background:currentColor}
 .q{margin-top:12px;font:400 clamp(1.7rem,2.5vw,2.45rem)/1.08 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.025em}
@@ -140,7 +159,7 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 .xp li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--faint)}
 .edu{padding:24px 0;color:var(--soft)}.edu i{font:italic 400 1.02rem var(--serif);color:var(--faint)}.edu b{color:var(--ink);font-weight:500}
 .close{padding-top:clamp(110px,13vw,180px)}
-.close h2{font:400 clamp(2.4rem,5.4vw,4.8rem)/1.02 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.035em;max-width:14ch}
+.close h2{font:400 clamp(2.4rem,5.4vw,4.8rem)/1.02 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.035em;max-width:16ch}
 .close h2 em{color:var(--blue)}
 .actions{display:flex;flex-wrap:wrap;gap:28px;align-items:center;margin-top:36px}
 .btn{display:inline-flex;align-items:center;min-height:46px;padding:0 20px;border-radius:3px;background:var(--ink);color:var(--bg);font-weight:500;text-decoration:none;transition:background .3s,color .3s}
@@ -159,32 +178,44 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 .foot .it{font:italic 400 .98rem var(--serif)}
 :focus-visible{outline:1.5px solid var(--blue);outline-offset:4px}
 @media (max-width:860px){.shead{grid-template-columns:1fr;gap:10px}.shead p{grid-column:1}.grid3{grid-template-columns:1fr;gap:6px}.row>div{grid-column:1}.row .meta,.xp summary em{text-align:left}.row{padding:26px 0}}
-@media (min-width:861px) and (max-height:820px){.q{font-size:clamp(1.5rem,2.2vw,2rem)}.who .deg{display:none}.kick{margin-top:18px}.chain{margin-top:16px;gap:7px}.chain li{font-size:.9rem}}
+@media (min-width:861px) and (max-height:820px){.lead{font-size:clamp(2rem,3vw,2.7rem)}.sub{margin-top:14px;font-size:.94rem}.proof{margin-top:20px;padding-top:14px}.start{margin-top:22px}.q{font-size:clamp(1.5rem,2.2vw,2rem)}.who .deg{display:none}.kick{margin-top:18px}.chain{margin-top:16px;gap:7px}.chain li{font-size:.9rem}}
 @media (max-width:860px){
   .left{top:80px;transform:none;width:auto;right:var(--gut)}.q{font-size:1.5rem}.kick{margin-top:12px}.chain{min-height:0;margin-top:10px;gap:4px}.chain li{font-size:.84rem}.chain li:not(.now){display:none}.chain small{display:none}
   .bar{flex-direction:column-reverse;align-items:stretch;gap:12px}.ctl{justify-content:flex-end}
   .cases{grid-template-columns:1fr 1fr;row-gap:8px}.cases small{display:none}
+  .lead{font-size:clamp(1.9rem,8vw,2.4rem);margin-top:8px}.sub{margin-top:12px;font-size:.92rem}.proof{margin-top:16px;padding-top:12px;gap:12px}.proof b{font-size:1.15rem}.proof span{font-size:.72rem;margin-top:5px}.start{margin-top:18px}.start .link{display:none}
 }
 /* short phones: the controls shrink to one row of segments, leaving the scene room between the text and the buttons */
 @media (max-width:860px) and (max-height:760px){
   .cases{grid-template-columns:repeat(4,1fr);column-gap:10px}.cases .name{display:none}.bar{gap:10px;bottom:14px}.tag b{font-size:1rem}.tag.sm b{font-size:.84rem}.tag span{font-size:.72rem;margin-top:1px}
 }
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Data science","Product analytics","Experiment design","Data engineering","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Works in data science and analytics: defines the metric, tests what the data can support, and turns it into a decision."},{"@type":"WebSite","url":"https://huihaoxing.github.io/","name":"Jack Xing","author":{"@id":"https://huihaoxing.github.io/#jack"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://huihaoxing.github.io/#jack","name":"Jack Xing","alternateName":"Huihao Xing","url":"https://huihaoxing.github.io/","sameAs":["https://www.linkedin.com/in/huihao/"],"worksFor":{"@type":"Organization","name":"WY Industries"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Boston University"},{"@type":"CollegeOrUniversity","name":"Syracuse University"}],"knowsAbout":["Systems integration","APIs","Data integration","Data engineering","Data science","Product analytics","Generative engine optimization","LLM applications","Model Context Protocol"],"description":"Connects systems, data and the people who rely on them: maps data across sources, connects APIs and tools, and works with each side until it runs.","knowsLanguage":["en","zh"]},{"@type":"WebSite","url":"https://huihaoxing.github.io/","name":"Jack Xing","author":{"@id":"https://huihaoxing.github.io/#jack"}}]}</script>
 </head>
 <body>
 <section class="stage" id="stage">
   <canvas id="gl" aria-hidden="true"></canvas>
   <div class="vignette"></div><div class="mask"></div>
-  <header><span class="brand"><a class="mark" href="./">J. Xing</a></span><nav><a href="#work">Work</a><a href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
+  <header><span class="brand"><a class="mark" href="./">J. Xing</a></span><nav><a href="#work">Work</a><a class="wide" href="#about">About</a><a href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><a href="./zh.html" hreflang="zh-Hans" lang="zh-Hans">中文</a><span class="mode" role="group" aria-label="Color theme"><button type="button" data-mode="dark" aria-pressed="true">Dark</button><button type="button" data-mode="light" aria-pressed="false">Light</button></span></nav></header>
 
-  <h1 class="sr">Jack Xing: Data science and analytics: I define the metric, test what the data can support, and turn it into a decision.</h1>
   <div class="left">
-    <p class="who"><b>Jack Xing</b> · AI Solutions Engineer, Data and Growth, WY Industries<span class="deg">M.S. Data Science, Boston University</span><span>Data science and analytics: I define the metric, test what the data can support, and turn it into a decision.</span></p>
-    <p class="ctx swap" id="ctx">Paid search and conversion analysis · WY Industries</p>
-    <p class="kick swap" id="kick"><i></i><span>The problem</span></p>
-    <h2 class="q swap" id="q">A new food brand’s ads got 44% cheaper per click. <em>Should it spend more?</em></h2>
-    <ol class="chain" id="chain"></ol>
+    <p class="who"><b>Jack Xing</b> · AI Solutions Engineer, Data and Growth, WY Industries</p>
+    <div class="intro" id="intro">
+      <h1 class="lead">I connect systems, <em>and the people who rely on them.</em></h1>
+      <p class="sub">Mapping data across sources, connecting APIs and tools, and working with each side until it runs. In English and Chinese. M.S. Data Science, Boston University.</p>
+      <ul class="proof">
+        <li><b>3 → 1</b><span>feeds on different clocks (arrivals, weather, events) aligned into one hourly table</span></li>
+        <li><b>16K+</b><span>site events instrumented; website inquiries flow into the CRM</span></li>
+        <li><b>15 → 2–5 min</b><span>to research a potential buyer, with a person approving each step</span></li>
+      </ul>
+      <div class="start"><button class="btn" type="button" id="begin">See the work</button><a class="link" href="https://linkedin.com/in/huihao/" rel="noopener">Message me on LinkedIn</a></div>
+    </div>
+    <div class="play" id="playtext" hidden>
+      <p class="ctx swap" id="ctx"></p>
+      <p class="kick swap" id="kick"><i></i><span>The problem</span></p>
+      <h2 class="q swap" id="q"></h2>
+      <ol class="chain" id="chain"></ol>
+    </div>
   </div>
 
   <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
@@ -192,10 +223,10 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
   <a class="cue" href="#work">Skip the animation: all four cases<span>↓</span></a>
   <div class="bar">
     <div class="cases" role="group" aria-label="Cases">
+      <div data-k="2"><button type="button" class="name">LLM lead research<small>Claude, OpenAI, MCP</small></button></div>
+      <div data-k="3"><button type="button" class="name">Transit data pipeline<small>Spark, Azure Data Factory</small></button></div>
       <div data-k="0"><button type="button" class="name">Paid search analysis<small>SQL, Python, test sizing</small></button></div>
       <div data-k="1"><button type="button" class="name">Rider wait-time metric<small>Python, Tableau, for GBH</small></button></div>
-      <div data-k="2"><button type="button" class="name">LLM lead research<small>Claude, OpenAI, MCP</small></button></div>
-      <div data-k="3"><button type="button" class="name">Transit data pipeline<small>Spark, Azure, XGBoost</small></button></div>
     </div>
     <div class="ctl"><button type="button" id="prev" aria-label="Previous step">←</button><button type="button" id="next" aria-label="Next step">→</button><span class="mode" id="play" role="group" aria-label="Playback"><button type="button" data-play="auto" aria-pressed="true">Auto</button><button type="button" data-play="manual" aria-pressed="false">Manual</button></span></div>
   </div>
@@ -204,10 +235,10 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 <main class="page">
   <section class="section" id="work" aria-labelledby="w-t">
     <div class="shead"><h2 id="w-t">Selected work</h2><p>Four problems, each traced from the first question to what changed. Each case reports its denominators and states what it cannot claim.</p></div>
-    <a class="row grid3" href="./paid-search.html"><span class="n">2.7%<small>vs 7% on the same page</small></span><div><p class="eyebrow"><i>Paid search and conversion analysis</i>WY Industries · SQL, Python, statsmodels</p><h3>Search ads got 44% cheaper. Should the brand spend more?</h3><p>Ad visitors took a next step at 2.7%, against 7% for other visitors on the same page. On that analysis, management paused the broad ads and acquisition moved to organic and AI search.</p><span class="go">Read the case →</span></div></a>
-    <a class="row grid3" href="./rider-wait.html"><span class="n">16+<small>min on Route 14</small></span><div><p class="eyebrow"><i>Rider wait-time metric</i>GBH News, with BU Spark! · Python, pandas, Tableau</p><h3>Boston’s buses look on time. Why do some riders wait so long?</h3><p>A measure of how long riders actually wait, not whether buses keep the timetable, across 20M+ boardings; adopted by the GBH project team as its primary reliability measure.</p><span class="go">Read the case →</span></div></a>
     <a class="row grid3" href="./sales-ai.html"><span class="n">2–5<small>min per lead</small></span><div><p class="eyebrow"><i>LLM lead-research tool</i>WY Industries · Claude, OpenAI, MCP</p><h3>AI lead research, with a person in control</h3><p>An LLM pipeline that finds and researches potential buyers; a person keeps or passes each lead before any model runs and sends every email by hand. Review per lead fell from about 15 minutes to 2 to 5.</p><span class="go">Read the case →</span></div></a>
     <a class="row grid3" href="./transit-pipeline.html"><span class="n">3 → 1<small>feeds to one table</small></span><div><p class="eyebrow"><i>Transit data pipeline</i>Boston University · Spark, Azure Data Factory, XGBoost, Power BI</p><h3>Weather, events and Green Line delays in one table</h3><p>A master’s team project: Green Line train arrivals, hourly weather and event listings joined on one hourly clock into one reusable delay table.</p><span class="go">Read the case →</span></div></a>
+    <a class="row grid3" href="./paid-search.html"><span class="n">2.7%<small>vs 7% on the same page</small></span><div><p class="eyebrow"><i>Paid search and conversion analysis</i>WY Industries · SQL, Python, statsmodels</p><h3>Search ads got 44% cheaper. Should the brand spend more?</h3><p>Ad visitors took a next step at 2.7%, against 7% for other visitors on the same page. On that analysis, management paused the broad ads and acquisition moved to organic and AI search.</p><span class="go">Read the case →</span></div></a>
+    <a class="row grid3" href="./rider-wait.html"><span class="n">16+<small>min on Route 14</small></span><div><p class="eyebrow"><i>Rider wait-time metric</i>GBH News, with BU Spark! · Python, pandas, Tableau</p><h3>Boston’s buses look on time. Why do some riders wait so long?</h3><p>A measure of how long riders actually wait, not whether buses keep the timetable, across 20M+ boardings; adopted by the GBH project team as its primary reliability measure.</p><span class="go">Read the case →</span></div></a>
   </section>
 
   <section class="section" id="experience" aria-labelledby="x-t">
@@ -221,47 +252,62 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
     <div class="edu grid3"><i>Education</i><span><b>Boston University</b>, M.S. Data Science, Merit Scholarship<br><b>Syracuse University</b>, B.S. Business Analytics, CS minor, magna cum laude</span></div>
   </section>
 
+  <section class="section" id="about" aria-labelledby="a-t">
+    <div class="shead"><h2 id="a-t">About</h2></div>
+    <div class="about grid3"><i>In short</i><p><b>I connect the systems, then make sure people can use them.</b> At WY Industries I connected the website, its database and the HubSpot CRM, instrumented the events the business reports on, and built an LLM research tool with a person approving each step. Before that: transit reliability with GBH News, and content operations at Tencent News. I work in English and Chinese.</p></div>
+  </section>
+
   <section class="close" aria-labelledby="c-t">
-    <h2 id="c-t">Know someone who should <em>see this?</em></h2>
-    <div class="actions"><span class="share"><button class="btn" type="button" data-share>Share this page</button><span class="share-menu" role="menu"></span></span><a class="link" href="https://linkedin.com/in/huihao/" rel="noopener">Message me on LinkedIn</a><button class="link" type="button" data-email>Copy email</button></div>
+    <h2 id="c-t">Reach me <em>on LinkedIn or by email.</em></h2>
+    <div class="actions"><a class="btn" href="https://linkedin.com/in/huihao/" rel="noopener">Message me on LinkedIn</a><button class="link" type="button" data-email>Copy email</button><span class="share"><button class="link" type="button" data-share>Share this page</button><span class="share-menu" role="menu"></span></span></div>
   </section>
   <footer class="foot"><span class="it">Set in Newsreader and Hanken Grotesk. Drawn live with three.js.</span><span>Jack (Huihao) Xing, 2026</span></footer>
 </main>
 <div class="toast" role="status" aria-live="polite"></div>
-<script src="assets/share.js?v=20261001i"></script>
+<script src="assets/share.js?v=20261113"></script>
 
 <script type="module">
 import {CASES,state,show,reframe,setAdjust,bandAdjust,CAM_SECS,onTick,setLight,setOnscreen,mobile,debug} from './assets/engine.js?v=20261001i';
-const dwell=(k,s)=>{const S=CASES[k].steps[s];return CAM_SECS+1.3*(S.read??(s===0?2:S.dec?4.6:2.8))},kick=document.getElementById('kick'),ctx=document.getElementById('ctx'),q=document.getElementById('q'),chain=document.getElementById('chain'),tabs=[...document.querySelectorAll('.cases>div')];
+// ORDER is the homepage running order (engine case indices); the bar's data-k must match it
+const ORDER=[...document.querySelectorAll('.cases>div')].map(el=>+el.dataset.k),INTRO_SECS=9;
+const dwell=(k,s)=>{const S=CASES[k].steps[s];return CAM_SECS+1.3*(S.read??(s===0?2:S.dec?4.6:2.8))},kick=document.getElementById('kick'),ctx=document.getElementById('ctx'),q=document.getElementById('q'),chain=document.getElementById('chain'),tabs=[...document.querySelectorAll('.cases>div')],tabOf=k=>tabs[ORDER.indexOf(k)];
+const intro=document.getElementById('intro'),playtext=document.getElementById('playtext');let inIntro=true;
 let playing=!matchMedia('(prefers-reduced-motion: reduce)').matches;
-function setCase(k){const c=CASES[k];if(q.innerHTML!==c.q){q.classList.add('out');ctx.classList.add('out');setTimeout(()=>{q.innerHTML=c.q;ctx.textContent=c.ctx;q.classList.remove('out');ctx.classList.remove('out');if(mobile)reframe()},350)}
+function fill(k){const c=CASES[k];q.innerHTML=c.q;ctx.textContent=c.ctx}
+function setCase(k){const c=CASES[k];if(!inIntro&&q.innerHTML!==c.q){q.classList.add('out');ctx.classList.add('out');setTimeout(()=>{fill(k);q.classList.remove('out');ctx.classList.remove('out');if(mobile)reframe()},350)}else fill(k);
   chain.innerHTML=c.steps.slice(1).map((s,i)=>s.dec?`<li class="dec" data-s="${i+1}"><i></i><span>${s.dec}<a href="${c.link}">Open the case</a><small>${s.note}</small></span></li>`:`<li data-s="${i+1}"><i>${i+1}</i><span><b>${s.say[0]}</b><em class="d"> ${s.say[1]}</em></span></li>`).join('');
-  tabs.forEach((b,i)=>b.classList.toggle('on',i===k));mark(0,k);show(k,0,state.ck<0)}
+  tabs.forEach(el=>el.classList.toggle('on',+el.dataset.k===k));mark(0,k);show(k,0,state.ck<0)}
+// leave the intro: its words give way to the first case, which starts from its opening shot
+function leave(){if(!inIntro)return;inIntro=false;document.body.classList.remove('opening');intro.classList.add('out');
+  setTimeout(()=>{intro.hidden=true;playtext.hidden=false;playtext.classList.add('out');requestAnimationFrame(()=>playtext.classList.remove('out'));if(mobile)reframe()},350);goStep(0)}
 function goStep(s){mark(s);show(state.ck,s)}
 function mark(s,k=state.ck){const S=CASES[k].steps[s];[...chain.children].forEach(li=>{const n=+li.dataset.s;li.classList.toggle('seen',n<=s);li.classList.toggle('now',n===s)});
-  if(s>0||k>0)document.body.classList.add('rolling');
+  if(s>0||ORDER.indexOf(k)>0)document.body.classList.add('rolling');
   kick.querySelector('span').textContent=s===0?'The problem':S.dec?'The decision':'Step '+s}
 // on phones the scene gets whatever is left between the text and the controls
 const left=document.querySelector('.left'),bar=document.querySelector('.bar');
 setAdjust(bandAdjust(()=>[left.getBoundingClientRect().bottom+14,bar.getBoundingClientRect().top-14]));
-const next=()=>{if(state.step<5)goStep(state.step+1);else setCase((state.ck+1)%4)},prev=()=>{if(state.step>0)goStep(state.step-1);else{setCase((state.ck+3)%4);goStep(5)}};
-function jump(k,s){if(state.ck!==k){setCase(k);if(s)goStep(s)}else goStep(s)}
+const pos=()=>ORDER.indexOf(state.ck);
+const next=()=>{if(inIntro)return leave();if(state.step<5)goStep(state.step+1);else setCase(ORDER[(pos()+1)%4])},prev=()=>{if(inIntro)return;if(state.step>0)goStep(state.step-1);else{setCase(ORDER[(pos()+3)%4]);goStep(5)}};
+function jump(k,s){leave();if(state.ck!==k){setCase(k);if(s)goStep(s)}else goStep(s)}
 const user=f=>(...a)=>{setPlaying(false);f(...a)};
 document.getElementById('next').onclick=user(next);document.getElementById('prev').onclick=user(prev);
-tabs.forEach((el,k)=>{const segs=document.createElement('div');segs.className='segs';
+document.getElementById('begin').onclick=()=>{leave();setPlaying(true)};
+tabs.forEach(el=>{const k=+el.dataset.k,segs=document.createElement('div');segs.className='segs';
   CASES[k].steps.forEach((S,s)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`${el.querySelector('.name').firstChild.textContent}: ${s===0?'the problem':S.dec?'the decision':'step '+s}`);b.onclick=user(()=>jump(k,s));segs.appendChild(b)});
   el.prepend(segs);el.querySelector('.name').onclick=user(()=>jump(k,0))});
 const segBtns=tabs.map(el=>[...el.querySelectorAll('.segs button')]);
 addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,summary'))return;if(e.key==='ArrowRight')user(next)();else if(e.key==='ArrowLeft')user(prev)();else if(e.key===' '&&e.target===document.body&&scrollY<innerHeight*.5){e.preventDefault();setPlaying(!playing)}});
 const playBtns=[...document.querySelectorAll('#play button')];function setPlaying(p){playing=p;playBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.play==='auto')===p)))}document.getElementById('play').onclick=()=>setPlaying(!playing);
-onTick(()=>{const t=state.t,step=state.step;if(playing&&t>dwell(state.ck,step))next();
-  segBtns.forEach((row,i)=>row.forEach((b,j)=>b.style.setProperty('--f',i!==state.ck?0:j<step?1:j>step?0:playing?Math.min(1,t/dwell(state.ck,step)):1)))});
+onTick(()=>{const t=state.t,step=state.step;if(inIntro){if(playing&&t>INTRO_SECS)leave();segBtns.forEach(row=>row.forEach(b=>b.style.setProperty('--f',0)));return}
+  if(playing&&t>dwell(state.ck,step))next();
+  segBtns.forEach((row,i)=>row.forEach((b,j)=>b.style.setProperty('--f',+tabs[i].dataset.k!==state.ck?0:j<step?1:j>step?0:playing?Math.min(1,t/dwell(state.ck,step)):1)))});
 const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
 function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
 document.querySelector('header .mode').onclick=()=>(l=>{const h=document.documentElement,go=()=>theme(l);if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches)return go();h.classList.add('theming');const vt=document.startViewTransition(go);vt.ready.catch(()=>{});vt.finished.catch(()=>{}).finally(()=>h.classList.remove('theming'))})(document.documentElement.dataset.theme!=='light');
-setCase(0);setPlaying(playing);if(document.documentElement.dataset.theme==='light')theme(true);
+document.body.classList.add('opening');setCase(ORDER[0]);setPlaying(playing);if(document.documentElement.dataset.theme==='light')theme(true);
 new IntersectionObserver(e=>setOnscreen(e[0].isIntersecting)).observe(document.getElementById('stage'));
-window.__story={cases:CASES,camera:debug.camera,ff:debug.ff,go:(k,s)=>{if(state.ck!==k){setCase(k);q.innerHTML=CASES[k].q;q.classList.remove('out')}goStep(s);setPlaying(false)},state:()=>({...state})};
+window.__story={cases:CASES,camera:debug.camera,ff:debug.ff,go:(k,s)=>{leave();if(state.ck!==k){setCase(k);fill(k);q.classList.remove('out')}goStep(s);setPlaying(false)},state:()=>({...state})};
 </script>
 <!-- Cloudflare Web Analytics, skipped in the owner's own browsers: open any page with ?me=1 once per browser (?me=0 undoes it) -->
 <script>(()=>{try{const q=new URLSearchParams(location.search);if(q.has('me')){if(q.get('me')==='0')localStorage.removeItem('notrack');else localStorage.setItem('notrack','1');q.delete('me');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash)}if(localStorage.getItem('notrack')==='1')return}catch(e){}

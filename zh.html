@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-Hans" data-theme="light">
+<script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jack Xing | 系统集成、数据与 AI</title>
+<meta name="description" content="Jack（Huihao）Xing：把系统、数据和使用它们的人连接起来。梳理多源数据、打通接口和工具，和每一方沟通到它跑通为止。中英双语。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jack Xing">
+<meta property="og:description" content="把系统接起来，也让用它的人接得上：梳理多源数据、打通接口和工具，和每一方沟通到它跑通为止。">
+<link rel="canonical" href="https://huihaoxing.github.io/zh.html">
+<link rel="alternate" hreflang="en" href="https://huihaoxing.github.io/">
+<link rel="alternate" hreflang="zh-Hans" href="https://huihaoxing.github.io/zh.html">
+<meta property="og:url" content="https://huihaoxing.github.io/zh.html">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://huihaoxing.github.io/og-image.png?v=20261113">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#F3F3EF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Hanken+Grotesk:wght@300..700&family=Noto+Serif+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080c;--ink:#ecebe6;--soft:#9a9890;--faint:#7e7c75;--rule:#23232a;--blue:#7d90ff;--serif:"Newsreader","Noto Serif SC","Songti SC",Georgia,serif;--sans:"Hanken Grotesk","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1);--gut:clamp(18px,3.4vw,52px);--col:min(35vw,490px)}
+html[data-theme="light"]{--bg:#F3F3EF;--ink:#141312;--soft:#5b5852;--faint:#706c65;--rule:#d9d6ce;--blue:#1F2BD1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink)}
+/* theme switch: one even cross-fade for the whole page (view transition), no element fading on its own clock */
+html.theming *,html.theming *::before,html.theming *::after{transition:none!important}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+
+html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font:400 16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+.stage{position:relative;height:100svh;min-height:680px;overflow:hidden;overflow:clip}
+.cue{position:absolute;z-index:5;left:50%;bottom:10px;transform:translateX(-50%);font-size:.76rem;letter-spacing:.02em;color:var(--faint);text-decoration:none;transition:color .2s}
+.cue:hover{color:var(--ink)}.cue span{display:inline-block;margin-left:6px;animation:nudge 2.4s var(--ease) infinite}
+@keyframes nudge{0%,60%,100%{transform:none}30%{transform:translateY(3px)}}
+@media (min-width:861px){.stage .bar{bottom:40px}}
+@media (max-width:860px){.cue{display:none}}
+canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 64% 50%,transparent 45%,var(--bg) 100%);opacity:.75}
+header{position:absolute;inset:0 0 auto;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:22px var(--gut)}
+.mark{font:italic 500 1.3rem var(--serif);text-decoration:none}
+header nav{display:flex;gap:24px;font-size:.93rem;color:var(--soft);align-items:center}
+.mark,header nav a{white-space:nowrap}
+@media (max-width:860px){header nav{gap:16px}header nav .wide{display:none}}
+header nav a,header nav button{text-decoration:none;transition:color .2s}header nav a:hover,header nav button:hover{color:var(--ink)}
+.mode{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:2px}
+.mode button{padding:4px 11px;border-radius:999px;font-size:.8rem;color:var(--faint);transition:background .3s,color .3s}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+.left{position:absolute;z-index:4;left:var(--gut);top:clamp(88px,12vh,140px);width:var(--col)}
+/* desktop: the scene never runs under the words; it fades out before the text column */
+@media (min-width:861px){.mask{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0,var(--bg) calc(var(--gut) + var(--col) + 8px),transparent calc(var(--gut) + var(--col) + 120px))}}
+
+.who{font-size:.95rem;color:var(--soft)}.who b{color:var(--ink);font-weight:500}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.brand{display:flex;align-items:baseline;gap:18px}.tagline{font-size:.88rem;color:var(--soft)}
+.ctx{margin-top:28px;font-size:.84rem;letter-spacing:.01em;color:var(--soft)}
+.ctx+.kick{margin-top:8px!important}
+.who span{display:block;margin-top:4px}.who .deg{margin-top:0;color:var(--faint)}
+@media (min-width:861px){.play .ctx{margin-top:26px}}
+@media (max-width:860px){.ctx{margin-top:12px;font-size:.78rem}}
+@media (max-width:1100px){.tagline{display:none}}
+@media (max-width:860px) and (max-height:760px){.rolling .who{display:none}.rolling .ctx{margin-top:0}.sub{display:none}}
+/* intro: who he is, before the cases play */
+.lead{margin-top:14px;font:400 clamp(2.3rem,3.5vw,3.35rem)/1.03 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.03em;text-wrap:balance}
+.lead em{color:var(--blue);display:block}
+.sub{margin-top:20px;color:var(--soft);max-width:44ch;line-height:1.55}
+.proof{list-style:none;margin-top:30px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.proof b{display:block;font:400 clamp(1.35rem,1.9vw,1.7rem)/1 var(--serif);letter-spacing:-.02em;color:var(--blue);white-space:nowrap}
+.proof span{display:block;margin-top:8px;font-size:.8rem;line-height:1.4;color:var(--soft)}
+.start{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin-top:32px}
+.intro,.play{transition:opacity .45s var(--ease),filter .45s var(--ease),transform .45s var(--ease)}
+.intro.out,.play.out{opacity:0;filter:blur(6px);transform:translateY(8px)}
+.intro[hidden],.play[hidden]{display:none}
+.about{padding:34px 0;border-bottom:1px solid var(--rule)}
+.about i{font:italic 400 1.02rem var(--serif);color:var(--faint)}
+.about p{font:400 clamp(1.15rem,1.5vw,1.35rem)/1.5 var(--serif);max-width:52ch}
+.about p b{font-weight:500}
+.kick{margin-top:28px;font:italic 400 1rem var(--serif);color:var(--faint);display:flex;gap:10px;align-items:center}
+.kick i{width:26px;height:1px;background:currentColor}
+.q{margin-top:12px;font:400 clamp(1.7rem,2.5vw,2.45rem)/1.08 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.025em}
+.q em{color:var(--blue);display:block}
+.q,.shead h2,.row h3,.close h2,.chain li.dec{text-wrap:balance}
+.swap{transition:opacity .55s var(--ease),filter .55s var(--ease),transform .55s var(--ease)}
+.swap.out{opacity:0;filter:blur(6px);transform:translateY(8px)}
+.chain{list-style:none;margin-top:24px;display:grid;align-content:start;gap:10px;min-height:14em}
+.chain li{display:grid;grid-template-columns:1.6rem 1fr;gap:8px;font-size:.98rem;line-height:1.42;color:var(--faint);opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease),color .5s}
+.chain li.seen{opacity:1;transform:none}
+.chain .d{font-style:normal}.chain li:not(.now) .d,.chain li.dec:not(.now) small{display:none}
+.chain li.now{color:var(--ink)}
+.chain li i{font:italic 400 .95rem var(--serif);color:var(--faint)}
+.chain li.now i{color:var(--blue)}
+.chain li b{font-weight:500}
+.chain li.dec{font:500 1.3rem/1.2 var(--serif);letter-spacing:-.01em}
+.chain li.dec.now{color:var(--blue)}
+.chain a{display:inline-block;margin-top:6px;font-size:.88rem;color:var(--blue);text-underline-offset:4px;font-family:var(--sans)}
+.chain li.dec span>a{display:table}
+.chain small{display:block;font:italic 400 .85rem var(--serif);color:var(--faint);margin-top:4px}
+
+.tag{position:absolute;z-index:4;left:0;top:0;pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .2s;text-shadow:0 0 10px var(--bg),0 0 3px var(--bg)}
+.tag b{display:block;font:500 clamp(1.1rem,1.7vw,1.55rem)/1.05 var(--serif);letter-spacing:-.015em}
+.tag span{display:block;margin-top:2px;font-size:.8rem;color:var(--soft)}
+.tag.blue b{color:var(--blue)}
+.tag.sm b{font:400 .95rem var(--sans);letter-spacing:0}
+.no-gl .tag{display:none}
+
+.bar{position:absolute;z-index:5;left:var(--gut);right:var(--gut);bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.cases{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;flex:1;max-width:900px}
+.segs{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.segs button{height:16px;position:relative}
+.segs button::before,.segs button::after{content:"";position:absolute;left:0;right:0;top:7px;height:2px;background:var(--rule);transition:background .2s}
+.segs button::after{background:var(--blue);transform-origin:left;transform:scaleX(var(--f,0));transition:none}
+.segs button:hover::before{background:var(--soft)}
+.cases .name{display:block;width:100%;text-align:left;padding-top:2px;color:var(--faint);font-size:.88rem;line-height:1.35;transition:color .3s}
+.cases .on .name,.cases .name:hover{color:var(--ink)}
+.cases small{display:block;font:italic 400 .8rem var(--serif);color:var(--faint)}
+.ctl{display:flex;gap:10px;align-items:center;font-size:.9rem;white-space:nowrap}
+.ctl button{background:var(--bg);border:1px solid var(--rule);border-radius:999px;min-width:38px;height:38px;padding:0 12px;color:var(--soft);transition:color .2s,border-color .2s}
+.ctl button:hover{color:var(--ink);border-color:var(--soft)}
+.ctl .mode{height:38px;align-items:center;background:var(--bg)}
+.ctl .mode button{border:0;min-width:0;height:32px;padding:0 13px;background:none;color:var(--faint)}
+.ctl .mode button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+.page{padding:0 var(--gut)}
+.section{padding-top:clamp(96px,11vw,150px)}
+.shead{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,6fr) minmax(0,3fr);gap:22px 32px;padding-bottom:30px;border-bottom:1px solid var(--ink)}
+.shead h2{grid-column:1/-1}.shead p{grid-column:2}
+.shead h2{font:500 clamp(2.2rem,4.4vw,3.9rem)/1 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.03em}
+.shead p{color:var(--soft);max-width:46ch}
+.grid3{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,6fr) minmax(0,3fr);gap:32px}
+.row{padding:48px 0;border-bottom:1px solid var(--rule);text-decoration:none;align-items:start}
+.row>div{grid-column:2/-1;max-width:62ch}
+.row .eyebrow{font-size:.84rem;color:var(--faint);margin:0 0 14px}
+.row .eyebrow i{font:italic 400 1rem var(--serif);color:var(--soft);margin-right:10px}
+.row .n{font:400 clamp(2.3rem,4vw,3.5rem)/.82 var(--serif);letter-spacing:-.03em;color:var(--blue);white-space:nowrap}
+.row .n small{display:block;margin-top:12px;font:italic 400 1rem/1.3 var(--serif);letter-spacing:0;color:var(--soft)}
+.row h3{font:500 1.45rem/1.25 var(--serif);letter-spacing:-.01em;transition:color .3s}
+.row p{color:var(--soft);margin-top:14px;max-width:56ch;line-height:1.65}
+.row .meta{font-size:.88rem;color:var(--faint);text-align:right}
+.row .meta i{display:block;font:italic 400 1.02rem var(--serif);color:var(--soft)}
+.row .go{display:inline-block;margin-top:20px;font-size:.9rem;color:var(--blue);transition:transform .4s var(--ease)}
+.row:hover h3{color:var(--blue)}.row:hover .go{transform:translateX(6px)}
+.xp{border-bottom:1px solid var(--rule)}
+.xp summary{list-style:none;padding:24px 0;cursor:pointer;align-items:baseline}
+.xp summary::-webkit-details-marker{display:none}
+.xp h3{font:500 1.35rem/1.2 var(--serif)}
+.xp summary span{color:var(--soft)}
+.xp summary em{font:italic 400 1rem var(--serif);color:var(--faint);text-align:right}
+.xp summary em::after{content:"+";font-style:normal;margin-left:14px;color:var(--soft);display:inline-block;transition:transform .3s}
+.xp[open] summary em::after{transform:rotate(45deg)}
+.xp ul{list-style:none;padding:0;margin:0 0 28px;display:grid;gap:8px}
+.xp li{color:var(--soft);max-width:64ch;padding-left:18px;position:relative}
+.xp li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--faint)}
+.edu{padding:24px 0;color:var(--soft)}.edu i{font:italic 400 1.02rem var(--serif);color:var(--faint)}.edu b{color:var(--ink);font-weight:500}
+.close{padding-top:clamp(110px,13vw,180px)}
+.close h2{font:400 clamp(2.4rem,5.4vw,4.8rem)/1.02 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.035em;max-width:16ch}
+.close h2 em{color:var(--blue)}
+.actions{display:flex;flex-wrap:wrap;gap:28px;align-items:center;margin-top:36px}
+.btn{display:inline-flex;align-items:center;min-height:46px;padding:0 20px;border-radius:3px;background:var(--ink);color:var(--bg);font-weight:500;text-decoration:none;transition:background .3s,color .3s}
+.btn:hover{background:var(--blue);color:#fff}
+.link{position:relative;font-weight:500;text-decoration:none;padding-bottom:3px}
+.link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform-origin:right;transition:transform .5s var(--ease)}
+.link:hover::after{transform:scaleX(0)}
+.share{position:relative}
+.share-menu{position:absolute;left:0;top:calc(100% + 10px);min-width:200px;background:var(--bg);border:1px solid var(--ink);padding:6px;display:none;z-index:20}
+.share-menu.open{display:block}
+.share-menu button,.share-menu a{display:block;width:100%;text-align:left;padding:9px 10px;font-size:.93rem;text-decoration:none;color:var(--ink)}
+.share-menu button:hover,.share-menu a:hover{background:var(--rule)}
+.toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,14px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:3px;font-size:.92rem;transition:.35s var(--ease)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:26px 0 40px;margin-top:clamp(90px,10vw,140px);border-top:1px solid var(--rule);font-size:.88rem;color:var(--faint)}
+.foot .it{font:italic 400 .98rem var(--serif)}
+:focus-visible{outline:1.5px solid var(--blue);outline-offset:4px}
+@media (max-width:860px){.shead{grid-template-columns:1fr;gap:10px}.shead p{grid-column:1}.grid3{grid-template-columns:1fr;gap:6px}.row>div{grid-column:1}.row .meta,.xp summary em{text-align:left}.row{padding:26px 0}}
+@media (min-width:861px) and (max-height:820px){.lead{font-size:clamp(2rem,3vw,2.7rem)}.sub{margin-top:14px;font-size:.94rem}.proof{margin-top:20px;padding-top:14px}.start{margin-top:22px}.q{font-size:clamp(1.5rem,2.2vw,2rem)}.who .deg{display:none}.kick{margin-top:18px}.chain{margin-top:16px;gap:7px}.chain li{font-size:.9rem}}
+@media (max-width:860px){
+  .left{top:80px;transform:none;width:auto;right:var(--gut)}.q{font-size:1.5rem}.kick{margin-top:12px}.chain{min-height:0;margin-top:10px;gap:4px}.chain li{font-size:.84rem}.chain li:not(.now){display:none}.chain small{display:none}
+  .bar{flex-direction:column-reverse;align-items:stretch;gap:12px}.ctl{justify-content:flex-end}
+  .cases{grid-template-columns:1fr 1fr;row-gap:8px}.cases small{display:none}
+  .lead{font-size:clamp(1.9rem,8vw,2.4rem);margin-top:8px}.sub{margin-top:12px;font-size:.92rem}.proof{margin-top:16px;padding-top:12px;gap:12px}.proof b{font-size:1.15rem}.proof span{font-size:.72rem;margin-top:5px}.start{margin-top:18px}.start .link{display:none}
+}
+/* short phones: the controls shrink to one row of segments, leaving the scene room between the text and the buttons */
+@media (max-width:860px) and (max-height:760px){
+  .cases{grid-template-columns:repeat(4,1fr);column-gap:10px}.cases .name{display:none}.bar{gap:10px;bottom:14px}.tag b{font-size:1rem}.tag.sm b{font-size:.84rem}.tag span{font-size:.72rem;margin-top:1px}
+}
+/* Chinese: CJK has no italics; keep the serif upright and give it more air */
+em,i,.lead em,.q em,.close h2 em{font-style:normal}
+.lead{line-height:1.2;letter-spacing:0;font-size:clamp(2rem,2.9vw,2.8rem);text-wrap:wrap}@media (max-width:860px){.lead{font-size:clamp(1.7rem,7.6vw,2.2rem)}}.q{line-height:1.3;letter-spacing:0}.close h2{line-height:1.2;letter-spacing:0}.shead h2{letter-spacing:0}
+.row h3,.xp h3{letter-spacing:0;line-height:1.4}.chain li.dec{line-height:1.4}
+</style>
+</head>
+<body>
+<section class="stage" id="stage">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="vignette"></div><div class="mask"></div>
+  <header><span class="brand"><a class="mark" href="./">J. Xing</a></span><nav><a href="#work">案例</a><a class="wide" href="#about">关于</a><a href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn</a><a href="./" hreflang="en" lang="en">EN</a><span class="mode" role="group" aria-label="颜色主题"><button type="button" data-mode="dark" aria-pressed="true">深色</button><button type="button" data-mode="light" aria-pressed="false">浅色</button></span></nav></header>
+
+  <div class="left">
+    <p class="who"><b>Jack Xing（Huihao Xing）</b> · WY Industries AI 解决方案工程师</p>
+    <div class="intro" id="intro">
+      <h1 class="lead">把系统接起来，<em>也让用它的人接得上。</em></h1>
+      <p class="sub">梳理多源数据、打通接口和工具，和每一方沟通到它跑通为止。中英双语。波士顿大学数据科学硕士。</p>
+      <ul class="proof">
+        <li><b>3 → 1</b><span>到站、天气、活动三个时间粒度不同的数据源，按小时对齐成一张表</span></li>
+        <li><b>16K+</b><span>条网站事件完成埋点，网站询盘自动进入 CRM</span></li>
+        <li><b>15 → 2–5 分钟</b><span>调研一家潜在买家的用时，每一步由人确认</span></li>
+      </ul>
+      <div class="start"><button class="btn" type="button" id="begin">查看案例</button><a class="link" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn 联系我</a></div>
+    </div>
+    <div class="play" id="playtext" hidden>
+      <p class="ctx swap" id="ctx"></p>
+      <p class="kick swap" id="kick"><i></i><span>问题</span></p>
+      <h2 class="q swap" id="q"></h2>
+      <ol class="chain" id="chain"></ol>
+    </div>
+  </div>
+
+  <div class="tag" id="t0"></div><div class="tag" id="t1"></div><div class="tag" id="t2"></div><div class="tag" id="t3"></div>
+
+  <a class="cue" href="#work">跳过动画，直接看四个案例<span>↓</span></a>
+  <div class="bar">
+    <div class="cases" role="group" aria-label="案例">
+      <div data-k="2"><button type="button" class="name">LLM 客户调研<small>Claude, OpenAI, MCP</small></button></div>
+      <div data-k="3"><button type="button" class="name">绿线延误数据管道<small>Spark, Azure Data Factory</small></button></div>
+      <div data-k="0"><button type="button" class="name">付费搜索分析<small>SQL, Python, 样本量估算</small></button></div>
+      <div data-k="1"><button type="button" class="name">公交候车时间指标<small>Python, Tableau, GBH</small></button></div>
+    </div>
+    <div class="ctl"><button type="button" id="prev" aria-label="上一步">←</button><button type="button" id="next" aria-label="下一步">→</button><span class="mode" id="play" role="group" aria-label="播放"><button type="button" data-play="auto" aria-pressed="true">自动</button><button type="button" data-play="manual" aria-pressed="false">手动</button></span></div>
+  </div>
+</section>
+
+<main class="page">
+  <section class="section" id="work" aria-labelledby="w-t">
+    <div class="shead"><h2 id="w-t">案例</h2><p>四个问题，每个都从最初的问题追到最后改变了什么。每个案例都写明分母，也写明它不能说明什么。案例全文为英文。</p></div>
+    <a class="row grid3" href="./sales-ai.html" hreflang="en"><span class="n">2–5<small>分钟 / 每条线索</small></span><div><p class="eyebrow"><i>LLM 客户调研工具</i>WY Industries · Claude, OpenAI, MCP</p><h3>AI 做客户调研，由人把关</h3><p>一条寻找并调研潜在买家的 LLM 流水线：每条线索在任何模型运行之前，都由人决定保留还是放弃；每封邮件都由人手动发出。每条线索的审核时间从约 15 分钟降到 2 到 5 分钟。</p><span class="go">阅读案例（英文）→</span></div></a>
+    <a class="row grid3" href="./transit-pipeline.html" hreflang="en"><span class="n">3 → 1<small>个数据源合成一张表</small></span><div><p class="eyebrow"><i>交通数据管道</i>Boston University · Spark, Azure Data Factory, XGBoost, Power BI</p><h3>把天气、活动和绿线延误放进一张表</h3><p>硕士团队项目：把绿线列车到站、每小时天气和活动列表按同一个小时时钟关联起来，做成一张可复用的延误表。</p><span class="go">阅读案例（英文）→</span></div></a>
+    <a class="row grid3" href="./paid-search.html" hreflang="en"><span class="n">2.7%<small>同一页面其他访客为 7%</small></span><div><p class="eyebrow"><i>付费搜索与转化分析</i>WY Industries · SQL, Python, statsmodels</p><h3>搜索广告便宜了 44%，品牌该多投吗？</h3><p>广告访客迈出下一步的比例是 2.7%，同一页面的其他访客是 7%。管理层据此暂停了宽泛广告，获客转向自然搜索和 AI 搜索。</p><span class="go">阅读案例（英文）→</span></div></a>
+    <a class="row grid3" href="./rider-wait.html" hreflang="en"><span class="n">16+<small>分钟，14 路公交</small></span><div><p class="eyebrow"><i>乘客候车时间指标</i>GBH News，与 BU Spark! 合作 · Python, pandas, Tableau</p><h3>波士顿的公交看起来准点，为什么有些乘客要等那么久？</h3><p>衡量乘客实际等了多久，而不是车有没有按时刻表跑；覆盖 2,000 万+ 次上车，被 GBH 项目组采用为主要的可靠性指标。</p><span class="go">阅读案例（英文）→</span></div></a>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="x-t">
+    <div class="shead"><h2 id="x-t">经历</h2><p>点击一行展开详情。</p></div>
+    <details class="xp"><summary class="grid3"><h3>WY Industries</h3><span>AI 解决方案工程师（数据与增长）</span><em>2026 年至今</em></summary>
+      <div class="grid3"><span></span><ul><li>定义了业务汇报用的流量、下一步和线索指标；完成 16K+ 个事件的埋点，搭建了每日报表背后的 SQL 漏斗。</li><li>发现付费搜索访客迈出下一步的比例是 2.7%，可比访客是 7%；管理层据此暂停了宽泛广告。</li><li>转化模型显示，自然搜索访客的转化率约是推荐流量的 4 倍；用功效分析把首页 A/B 测试的样本量定为 2,458 个会话（已设计，未上线）。</li><li>基于 Claude 和 OpenAI 搭建 LLM 调研流水线，每条线索的审核时间从约 15 分钟降到 2 到 5 分钟。</li></ul></div></details>
+    <details class="xp"><summary class="grid3"><h3>GBH</h3><span>数据科学研究分析师，BU Spark!</span><em>2024</em></summary>
+      <div class="grid3"><span></span><ul><li>构建以乘客为中心的候车时间指标，被项目组和一位资深编辑采用。</li><li>分析了 5 年以上的客流、时刻表和 GPS 数据，覆盖 15 条线路、2,000 万+ 次上车。</li><li>发现 Roxbury 和 Dorchester 的等待更长，每周用 Tableau 给记者讲解。</li></ul></div></details>
+    <details class="xp"><summary class="grid3"><h3>腾讯新闻</h3><span>运营实习生</span><em>2023 至 2024</em></summary>
+      <div class="grid3"><span></span><ul><li>按播放量、互动和匹配度给海外科技视频打分；本地化的选题获得 30 万+ 播放。</li><li>根据播放量、完播率、点击率和互动做每周选题复盘。</li><li>用 GPT-3.5 自动生成初稿、由编辑把关，准备时间缩短约 30%。</li></ul></div></details>
+    <div class="edu grid3"><i>教育</i><span><b>波士顿大学</b>，数据科学硕士，优秀奖学金<br><b>雪城大学</b>，商业分析学士，计算机辅修，magna cum laude</span></div>
+  </section>
+
+  <section class="section" id="about" aria-labelledby="a-t">
+    <div class="shead"><h2 id="a-t">关于</h2></div>
+    <div class="about grid3"><i>简单说</i><p><b>先把系统接起来，再确保人用得上。</b>在 WY Industries，我把网站、数据库和 HubSpot CRM 接通，给业务要看的事件做了埋点，还做了一个每一步都由人确认的 LLM 调研工具。在此之前，和 GBH News 做公交可靠性研究，在腾讯新闻做内容运营。中英文都能工作。</p></div>
+  </section>
+
+  <section class="close" aria-labelledby="c-t">
+    <h2 id="c-t">在 LinkedIn 或邮件里<em>找到我。</em></h2>
+    <div class="actions"><a class="btn" href="https://linkedin.com/in/huihao/" rel="noopener">LinkedIn 联系我</a><button class="link" type="button" data-email>复制邮箱</button><span class="share"><button class="link" type="button" data-share>分享此页</button><span class="share-menu" role="menu"></span></span></div>
+  </section>
+  <footer class="foot"><span class="it">字体：Newsreader、Hanken Grotesk、Noto Serif SC。场景由 three.js 实时绘制。</span><span>Jack (Huihao) Xing, 2026</span></footer>
+</main>
+<div class="toast" role="status" aria-live="polite"></div>
+<script src="assets/share.js?v=20261113"></script>
+
+<script type="module">
+import {ZH} from './assets/cases-zh.js?v=20261113';
+import {CASES,state,show,reframe,setAdjust,bandAdjust,CAM_SECS,onTick,setLight,setOnscreen,mobile,debug} from './assets/engine.js?v=20261001i';
+ZH.forEach((z,k)=>{const c=CASES[k];c.ctx=z.ctx;c.q=z.q;z.steps.forEach((t,i)=>{const S=c.steps[i+1];if(t.say)S.say=t.say;if(t.dec){S.dec=t.dec;S.note=t.note}(t.tags||[]).forEach((g,j)=>{const T=S.tags[j];T[0]=g[0];T[1]=g[1]??T[1];if(g[2]!==undefined&&T.length>4)T[4]=g[2]})})});
+// ORDER is the homepage running order (engine case indices); the bar's data-k must match it
+const ORDER=[...document.querySelectorAll('.cases>div')].map(el=>+el.dataset.k),INTRO_SECS=9;
+const dwell=(k,s)=>{const S=CASES[k].steps[s];return CAM_SECS+1.3*(S.read??(s===0?2:S.dec?4.6:2.8))},kick=document.getElementById('kick'),ctx=document.getElementById('ctx'),q=document.getElementById('q'),chain=document.getElementById('chain'),tabs=[...document.querySelectorAll('.cases>div')],tabOf=k=>tabs[ORDER.indexOf(k)];
+const intro=document.getElementById('intro'),playtext=document.getElementById('playtext');let inIntro=true;
+let playing=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+function fill(k){const c=CASES[k];q.innerHTML=c.q;ctx.textContent=c.ctx}
+function setCase(k){const c=CASES[k];if(!inIntro&&q.innerHTML!==c.q){q.classList.add('out');ctx.classList.add('out');setTimeout(()=>{fill(k);q.classList.remove('out');ctx.classList.remove('out');if(mobile)reframe()},350)}else fill(k);
+  chain.innerHTML=c.steps.slice(1).map((s,i)=>s.dec?`<li class="dec" data-s="${i+1}"><i></i><span>${s.dec}<a href="${c.link}" hreflang="en">查看完整案例（英文）</a><small>${s.note}</small></span></li>`:`<li data-s="${i+1}"><i>${i+1}</i><span><b>${s.say[0]}</b><em class="d"> ${s.say[1]}</em></span></li>`).join('');
+  tabs.forEach(el=>el.classList.toggle('on',+el.dataset.k===k));mark(0,k);show(k,0,state.ck<0)}
+// leave the intro: its words give way to the first case, which starts from its opening shot
+function leave(){if(!inIntro)return;inIntro=false;document.body.classList.remove('opening');intro.classList.add('out');
+  setTimeout(()=>{intro.hidden=true;playtext.hidden=false;playtext.classList.add('out');requestAnimationFrame(()=>playtext.classList.remove('out'));if(mobile)reframe()},350);goStep(0)}
+function goStep(s){mark(s);show(state.ck,s)}
+function mark(s,k=state.ck){const S=CASES[k].steps[s];[...chain.children].forEach(li=>{const n=+li.dataset.s;li.classList.toggle('seen',n<=s);li.classList.toggle('now',n===s)});
+  if(s>0||ORDER.indexOf(k)>0)document.body.classList.add('rolling');
+  kick.querySelector('span').textContent=s===0?'问题':S.dec?'结论':'第 '+s+' 步'}
+// on phones the scene gets whatever is left between the text and the controls
+const left=document.querySelector('.left'),bar=document.querySelector('.bar');
+setAdjust(bandAdjust(()=>[left.getBoundingClientRect().bottom+14,bar.getBoundingClientRect().top-14]));
+const pos=()=>ORDER.indexOf(state.ck);
+const next=()=>{if(inIntro)return leave();if(state.step<5)goStep(state.step+1);else setCase(ORDER[(pos()+1)%4])},prev=()=>{if(inIntro)return;if(state.step>0)goStep(state.step-1);else{setCase(ORDER[(pos()+3)%4]);goStep(5)}};
+function jump(k,s){leave();if(state.ck!==k){setCase(k);if(s)goStep(s)}else goStep(s)}
+const user=f=>(...a)=>{setPlaying(false);f(...a)};
+document.getElementById('next').onclick=user(next);document.getElementById('prev').onclick=user(prev);
+document.getElementById('begin').onclick=()=>{leave();setPlaying(true)};
+tabs.forEach(el=>{const k=+el.dataset.k,segs=document.createElement('div');segs.className='segs';
+  CASES[k].steps.forEach((S,s)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`${el.querySelector('.name').firstChild.textContent}: ${s===0?'问题':S.dec?'结论':'第 '+s+' 步'}`);b.onclick=user(()=>jump(k,s));segs.appendChild(b)});
+  el.prepend(segs);el.querySelector('.name').onclick=user(()=>jump(k,0))});
+const segBtns=tabs.map(el=>[...el.querySelectorAll('.segs button')]);
+addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,summary'))return;if(e.key==='ArrowRight')user(next)();else if(e.key==='ArrowLeft')user(prev)();else if(e.key===' '&&e.target===document.body&&scrollY<innerHeight*.5){e.preventDefault();setPlaying(!playing)}});
+const playBtns=[...document.querySelectorAll('#play button')];function setPlaying(p){playing=p;playBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.play==='auto')===p)))}document.getElementById('play').onclick=()=>setPlaying(!playing);
+onTick(()=>{const t=state.t,step=state.step;if(inIntro){if(playing&&t>INTRO_SECS)leave();segBtns.forEach(row=>row.forEach(b=>b.style.setProperty('--f',0)));return}
+  if(playing&&t>dwell(state.ck,step))next();
+  segBtns.forEach((row,i)=>row.forEach((b,j)=>b.style.setProperty('--f',+tabs[i].dataset.k!==state.ck?0:j<step?1:j>step?0:playing?Math.min(1,t/dwell(state.ck,step)):1)))});
+const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
+function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
+document.querySelector('header .mode').onclick=()=>(l=>{const h=document.documentElement,go=()=>theme(l);if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches)return go();h.classList.add('theming');const vt=document.startViewTransition(go);vt.ready.catch(()=>{});vt.finished.catch(()=>{}).finally(()=>h.classList.remove('theming'))})(document.documentElement.dataset.theme!=='light');
+document.body.classList.add('opening');setCase(ORDER[0]);setPlaying(playing);if(document.documentElement.dataset.theme==='light')theme(true);
+new IntersectionObserver(e=>setOnscreen(e[0].isIntersecting)).observe(document.getElementById('stage'));
+window.__story={cases:CASES,camera:debug.camera,ff:debug.ff,go:(k,s)=>{leave();if(state.ck!==k){setCase(k);fill(k);q.classList.remove('out')}goStep(s);setPlaying(false)},state:()=>({...state})};
+</script>
+<!-- Cloudflare Web Analytics, skipped in the owner's own browsers: open any page with ?me=1 once per browser (?me=0 undoes it) -->
+<script>(()=>{try{const q=new URLSearchParams(location.search);if(q.has('me')){if(q.get('me')==='0')localStorage.removeItem('notrack');else localStorage.setItem('notrack','1');q.delete('me');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash)}if(localStorage.getItem('notrack')==='1')return}catch(e){}
+const s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon','{"token": "ae39708d3175400ea3c3bda9d620d3c1"}');document.body.appendChild(s)})()</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
