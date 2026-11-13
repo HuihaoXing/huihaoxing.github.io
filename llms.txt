@@ -14,4 +14,3 @@ This site presents four case studies, each traced from the first question to wha
 ## Contact
 
 - [LinkedIn](https://www.linkedin.com/in/huihao/)
-- [中文版](https://huihaoxing.github.io/zh.html)

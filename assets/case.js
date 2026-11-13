@@ -19,7 +19,7 @@ export function mountCase(k){
 
   const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
   function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
-  document.querySelector('header .mode').onclick=()=>(l=>{const h=document.documentElement,go=()=>theme(l);if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches)return go();h.classList.add('theming');const vt=document.startViewTransition(go);vt.ready.catch(()=>{});vt.finished.catch(()=>{}).finally(()=>h.classList.remove('theming'))})(document.documentElement.dataset.theme!=='light');
+  document.querySelector('header .mode').onclick=e=>(l=>{if(l===(document.documentElement.dataset.theme==='light'))return;const h=document.documentElement,go=()=>theme(l);if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches)return go();h.classList.add('theming');const vt=document.startViewTransition(go);vt.ready.catch(()=>{});vt.finished.catch(()=>{}).finally(()=>h.classList.remove('theming'))})((b=>b?b.dataset.mode==='light':document.documentElement.dataset.theme!=='light')(e.target.closest('button[data-mode]')));
   if(document.documentElement.dataset.theme==='light')theme(true);
 
   addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,button,a'))return;
