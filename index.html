@@ -69,7 +69,9 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
 /* intro: who he is, before the cases play */
 .lead{margin-top:14px;font:400 clamp(2.3rem,3.5vw,3.35rem)/1.03 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.03em;text-wrap:balance}
 .lead em{color:var(--blue);display:block}
-.sub{margin-top:20px;color:var(--soft);max-width:44ch;line-height:1.55}
+.sub{margin-top:20px;color:var(--soft);line-height:1.55}
+@media (min-width:861px){.cred{white-space:nowrap}}
+body:not(.opening) .left{transition:top .6s var(--ease)}
 .proof{list-style:none;margin-top:30px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .proof b{display:block;font:400 clamp(1.35rem,1.9vw,1.7rem)/1 var(--serif);letter-spacing:-.02em;color:var(--blue);white-space:nowrap}
 .proof span{display:block;margin-top:8px;font-size:.8rem;line-height:1.4;color:var(--soft)}
@@ -201,7 +203,7 @@ header nav a,header nav button{text-decoration:none;transition:color .2s}header 
     <p class="who"><b>Jack Xing</b> · AI Solutions Engineer, Data and Growth, WY Industries</p>
     <div class="intro" id="intro">
       <h1 class="lead">I connect systems, <em>and the people who rely on them.</em></h1>
-      <p class="sub">Data mapping, APIs, and the people on both ends. English and Chinese · M.S. Data Science, Boston University.</p>
+      <p class="sub">Data mapping, APIs, and the people on both ends.<br><span class="cred">English and Chinese · M.S. Data Science, Boston University</span></p>
       <ul class="proof">
         <li><b>3 → 1</b><span>data feeds aligned into one hourly table</span></li>
         <li><b>2 → 1</b><span>systems synced into HubSpot through its API</span></li>
@@ -279,9 +281,10 @@ function setCase(k){const c=CASES[k];if(!inIntro&&q.innerHTML!==c.q){q.classList
   chain.innerHTML=c.steps.slice(1).map((s,i)=>s.dec?`<li class="dec" data-s="${i+1}"><i></i><span>${s.dec}<a href="${c.link}">Open the case</a><small>${s.note}</small></span></li>`:`<li data-s="${i+1}"><i>${i+1}</i><span><b>${s.say[0]}</b><em class="d"> ${s.say[1]}</em></span></li>`).join('');
   tabs.forEach(el=>el.classList.toggle('on',+el.dataset.k===k));mark(0,k);show(k,0,state.ck<0)}
 // leave the intro: its words give way to the first case, which starts from its opening shot
-function leave(){if(!inIntro)return;inIntro=false;document.body.classList.remove('opening');intro.classList.add('out');
+function leave(){if(!inIntro)return;inIntro=false;document.body.classList.remove('opening');place();intro.classList.add('out');
   setTimeout(()=>{intro.hidden=true;playtext.hidden=false;playtext.classList.add('out');requestAnimationFrame(()=>playtext.classList.remove('out'));if(mobile)reframe()},350);goStep(0)}
 function goStep(s){mark(s);show(state.ck,s)}
+function place(){if(mobile||!inIntro){left.style.top='';return}left.style.top='';const top=left.getBoundingClientRect().top,h=left.offsetHeight,hb=document.querySelector('header').getBoundingClientRect().bottom,bt=bar.getBoundingClientRect().top;left.style.top=Math.max(top,Math.round((hb+bt-h)/2))+'px'}
 function mark(s,k=state.ck){const S=CASES[k].steps[s];[...chain.children].forEach(li=>{const n=+li.dataset.s;li.classList.toggle('seen',n<=s);li.classList.toggle('now',n===s)});
   if(s>0||ORDER.indexOf(k)>0)document.body.classList.add('rolling');
   kick.querySelector('span').textContent=s===0?'The problem':S.dec?'The decision':'Step '+s}
@@ -306,7 +309,7 @@ onTick(()=>{const t=state.t,step=state.step;if(inIntro){if(playing&&!reading&&t>
 const modeBtns=[...document.querySelectorAll('.mode button[data-mode]')];
 function theme(l){setLight(l);document.documentElement.dataset.theme=l?'light':'dark';modeBtns.forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.mode==='light')===l)));try{localStorage.setItem('theme',l?'light':'dark')}catch(e){}}
 document.querySelector('header .mode').onclick=e=>(l=>{if(l===(document.documentElement.dataset.theme==='light'))return;const h=document.documentElement,go=()=>theme(l);if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches)return go();h.classList.add('theming');const vt=document.startViewTransition(go);vt.ready.catch(()=>{});vt.finished.catch(()=>{}).finally(()=>h.classList.remove('theming'))})((b=>b?b.dataset.mode==='light':document.documentElement.dataset.theme!=='light')(e.target.closest('button[data-mode]')));
-document.body.classList.add('opening');setCase(ORDER[0]);setPlaying(playing);if(document.documentElement.dataset.theme==='light')theme(true);
+document.body.classList.add('opening');setCase(ORDER[0]);place();addEventListener('resize',place);document.fonts&&document.fonts.ready.then(place);setPlaying(playing);if(document.documentElement.dataset.theme==='light')theme(true);
 new IntersectionObserver(e=>setOnscreen(e[0].isIntersecting)).observe(document.getElementById('stage'));
 window.__story={cases:CASES,camera:debug.camera,ff:debug.ff,go:(k,s)=>{leave();if(state.ck!==k){setCase(k);fill(k);q.classList.remove('out')}goStep(s);setPlaying(false)},state:()=>({...state})};
 </script>
